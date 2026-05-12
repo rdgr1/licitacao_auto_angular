@@ -1,0 +1,804 @@
+{
+  "info": {
+    "_postman_id": "licitacao-automate-api-v2",
+    "name": "licitacao-automate API",
+    "description": "Collection completa — sistema de automação de licitações.\n\n**Variáveis de coleção:**\n- `base_url` → http://localhost:8080\n- `edital_id` → ID de edital para testes\n- `regra_id` → ID de regra para testes\n\n**Módulos:**\n1. 📋 Editais — feed, busca, filtros\n2. 🏆 Leads — leads qualificados por score\n3. ⚙️ Scraping — disparo manual, reprocessamento, reclassificação\n4. 🔔 Notificações — histórico SSE + teste de webhook\n5. 📐 Regras de Análise — CRUD configurável\n6. 🩺 Health & Métricas — actuator\n7. ✅ Testes de Integração — fluxo ponta a ponta com assertions",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080", "type": "string" },
+    { "key": "edital_id", "value": "1", "type": "string" },
+    { "key": "edital_numero", "value": "", "type": "string" },
+    { "key": "regra_id", "value": "1", "type": "string" },
+    { "key": "total_inicial", "value": "0", "type": "string" },
+    { "key": "total_processados", "value": "0", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "📋 Editais",
+      "description": "Consulta e gestão de editais de licitação.",
+      "item": [
+        {
+          "name": "Listar todos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais"]
+            },
+            "description": "Lista todos os editais (todos os status)."
+          }
+        },
+        {
+          "name": "Filtrar — PROCESSADO",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais?status=PROCESSADO",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais"],
+              "query": [{ "key": "status", "value": "PROCESSADO" }]
+            }
+          }
+        },
+        {
+          "name": "Filtrar — ANTECIPADO (Radar DOU/DODF)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais?status=ANTECIPADO",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais"],
+              "query": [{ "key": "status", "value": "ANTECIPADO" }]
+            },
+            "description": "Editais detectados via DOU/DODF antes de aparecerem no PNCP.\nStatus disponíveis: ANTECIPADO | PENDENTE | PROCESSANDO | PROCESSADO | ERRO | ARQUIVADO"
+          }
+        },
+        {
+          "name": "Filtrar — PENDENTE",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais?status=PENDENTE",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais"],
+              "query": [{ "key": "status", "value": "PENDENTE" }]
+            }
+          }
+        },
+        {
+          "name": "Filtrar — ERRO",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais?status=ERRO",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais"],
+              "query": [{ "key": "status", "value": "ERRO" }]
+            }
+          }
+        },
+        {
+          "name": "Buscar por número",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/{{edital_numero}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "{{edital_numero}}"]
+            }
+          }
+        },
+        {
+          "name": "Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/id/{{edital_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "id", "{{edital_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Busca textual",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/search?q=vigilancia",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "search"],
+              "query": [{ "key": "q", "value": "vigilancia", "description": "Busca no número e no objeto" }]
+            }
+          }
+        },
+        {
+          "name": "Próximos (abertura futura)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/proximos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "proximos"]
+            },
+            "description": "Editais com data de abertura no futuro, ordenados por data crescente."
+          }
+        },
+        {
+          "name": "Com erros de processamento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/erros",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "erros"]
+            }
+          }
+        },
+        {
+          "name": "Estatísticas do sistema",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "stats"]
+            },
+            "description": "Retorna: totalEditais, processados, pendentes, erros, valorTotalEstimado, ultimaExecucao."
+          }
+        },
+        {
+          "name": "Deletar edital",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/{{edital_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "{{edital_id}}"]
+            },
+            "description": "⚠️ Irreversível."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏆 Leads",
+      "description": "Editais classificados como leads qualificados pelo motor de análise.",
+      "item": [
+        {
+          "name": "Listar todos os leads (score ≥ 30)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/leads",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "leads"]
+            },
+            "description": "Score mínimo padrão: 30. Ordenado por score desc."
+          }
+        },
+        {
+          "name": "Leads — score mínimo 50",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/leads?scoreMinimo=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "leads"],
+              "query": [{ "key": "scoreMinimo", "value": "50" }]
+            }
+          }
+        },
+        {
+          "name": "Leads — VIGILANCIA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/leads?scoreMinimo=30&categoria=VIGILANCIA",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "leads"],
+              "query": [
+                { "key": "scoreMinimo", "value": "30" },
+                { "key": "categoria", "value": "VIGILANCIA" }
+              ]
+            },
+            "description": "Categorias: VIGILANCIA | MAO_DE_OBRA | LIMPEZA | BRIGADA | COPEIRAGEM"
+          }
+        },
+        {
+          "name": "Leads — MAO_DE_OBRA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/leads?categoria=MAO_DE_OBRA",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "leads"],
+              "query": [{ "key": "categoria", "value": "MAO_DE_OBRA" }]
+            }
+          }
+        },
+        {
+          "name": "Leads — LIMPEZA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/leads?categoria=LIMPEZA",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "leads"],
+              "query": [{ "key": "categoria", "value": "LIMPEZA" }]
+            }
+          }
+        },
+        {
+          "name": "Leads — BRIGADA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/leads?categoria=BRIGADA",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "leads"],
+              "query": [{ "key": "categoria", "value": "BRIGADA" }]
+            }
+          }
+        },
+        {
+          "name": "Leads — COPEIRAGEM",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/leads?categoria=COPEIRAGEM",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "leads"],
+              "query": [{ "key": "categoria", "value": "COPEIRAGEM" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "⚙️ Scraping",
+      "description": "Disparo manual do pipeline de coleta, reprocessamento e reclassificação.",
+      "item": [
+        {
+          "name": "Disparar scraping (PNCP + scrapers)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/processar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "processar"]
+            },
+            "description": "Executa o pipeline completo: PNCP + DODF + outros scrapers ativos.\nRetorna: { success, total, processados, erros, mensagensErro }\n\n⚠️ Lança 409 se já houver uma execução em andamento."
+          }
+        },
+        {
+          "name": "Reprocessar edital com erro",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/{{edital_id}}/reprocessar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "{{edital_id}}", "reprocessar"]
+            },
+            "description": "Só funciona para editais com status ERRO ou PENDENTE."
+          }
+        },
+        {
+          "name": "Reclassificar todos os leads",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/editais/reclassificar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "editais", "reclassificar"]
+            },
+            "description": "Recalcula score e categoria de todos os editais PROCESSADO com as regras atuais.\nUsar após editar regras de análise para aplicar ao histórico."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔔 Notificações",
+      "description": "Feed de eventos em tempo real (SSE) e webhook de saída.",
+      "item": [
+        {
+          "name": "Histórico de notificações",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notificacoes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notificacoes"]
+            },
+            "description": "Últimos 100 eventos NOVO_LEAD em memória (ordem cronológica).\nCada evento: { tipo, timestamp, editalId, numero, objeto, orgao, valorEstimado, leadScore, categoria, urlPncp }"
+          }
+        },
+        {
+          "name": "Testar webhook",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notificacoes/teste",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notificacoes", "teste"]
+            },
+            "description": "Dispara evento de teste no webhook configurado (env WEBHOOK_URL).\nÚtil para validar integração com n8n / Slack / WhatsApp / Zapier."
+          }
+        },
+        {
+          "name": "SSE stream (tempo real)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "text/event-stream" }],
+            "url": {
+              "raw": "{{base_url}}/api/notificacoes/stream",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notificacoes", "stream"]
+            },
+            "description": "Server-Sent Events — mantém conexão aberta.\n\n⚠️ Postman suporta SSE parcialmente. Teste com:\n  curl -N http://localhost:8080/api/notificacoes/stream\n\nNo Angular:\n  const es = new EventSource('/api/notificacoes/stream');\n  es.addEventListener('NOVO_LEAD', e => {\n    const lead = JSON.parse(e.data);\n    console.log(lead);\n  });"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📐 Regras de Análise",
+      "description": "CRUD das regras de classificação de leads — editável pelas funcionárias sem deploy.",
+      "item": [
+        {
+          "name": "Listar todas as regras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras"]
+            }
+          }
+        },
+        {
+          "name": "Listar regras ativas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras/ativas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "ativas"]
+            }
+          }
+        },
+        {
+          "name": "Tipos de regra (enum)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras/tipos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "tipos"]
+            },
+            "description": "KEYWORD_OBJETO | KEYWORD_ITEM | FAIXA_VALOR | PRAZO_MIN_MAX | MODALIDADE_PERMITIDA | DESCARTE"
+          }
+        },
+        {
+          "name": "Categorias disponíveis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras/categorias",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "categorias"]
+            },
+            "description": "VIGILANCIA | MAO_DE_OBRA | LIMPEZA | BRIGADA | COPEIRAGEM"
+          }
+        },
+        {
+          "name": "Buscar regra por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras/{{regra_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "{{regra_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Criar — keyword no objeto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"KEYWORD_OBJETO\",\n  \"nome\": \"Portaria e recepção\",\n  \"descricao\": \"Detecta licitações de portaria e recepção\",\n  \"valorRegra\": \"portaria,recepcao,recepcionista,controle de acesso\",\n  \"peso\": 40,\n  \"categoria\": \"VIGILANCIA\",\n  \"ativa\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/regras",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras"]
+            },
+            "description": "valorRegra: palavras separadas por vírgula (sem acentos, lowercase).\n⚠️ Nome deve ser único — retorna 400 se duplicado."
+          }
+        },
+        {
+          "name": "Criar — faixa de valor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"FAIXA_VALOR\",\n  \"nome\": \"Contratos grandes (acima de R$ 2M)\",\n  \"descricao\": \"Bônus para contratos de alto valor\",\n  \"valorRegra\": \"2000000-\",\n  \"peso\": 15,\n  \"categoria\": \"VIGILANCIA\",\n  \"ativa\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/regras",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras"]
+            },
+            "description": "Formato: \"min-max\" em R$.\n  \"100000-5000000\" → entre 100k e 5M\n  \"2000000-\"       → acima de 2M (sem limite superior)\n  \"-500000\"        → abaixo de 500k"
+          }
+        },
+        {
+          "name": "Criar — prazo de execução",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"PRAZO_MIN_MAX\",\n  \"nome\": \"Prazo ideal (12 a 60 meses)\",\n  \"descricao\": \"Contratos com prazo entre 1 e 5 anos\",\n  \"valorRegra\": \"365-1825\",\n  \"peso\": 10,\n  \"categoria\": \"MAO_DE_OBRA\",\n  \"ativa\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/regras",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras"]
+            },
+            "description": "Formato: \"min-max\" em dias.\n  \"365-1825\" → entre 1 ano e 5 anos"
+          }
+        },
+        {
+          "name": "Criar — modalidade permitida",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"MODALIDADE_PERMITIDA\",\n  \"nome\": \"Modalidades preferidas — pregão e concorrência\",\n  \"descricao\": \"Bônus para modalidades que a empresa opera melhor\",\n  \"valorRegra\": \"PREGAO_ELETRONICO,CONCORRENCIA_ELETRONICA,DISPENSA\",\n  \"peso\": 5,\n  \"categoria\": \"VIGILANCIA\",\n  \"ativa\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/regras",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras"]
+            },
+            "description": "Modalidades disponíveis: PREGAO_ELETRONICO | PREGAO_PRESENCIAL | CONCORRENCIA_ELETRONICA | CONCORRENCIA_PRESENCIAL | DISPENSA | INEXIGIBILIDADE | OUTRO"
+          }
+        },
+        {
+          "name": "Criar — descarte",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"DESCARTE\",\n  \"nome\": \"Descarte — TI e suporte técnico\",\n  \"descricao\": \"Descarta licitações de TI que não são nosso foco\",\n  \"valorRegra\": \"suporte de ti,helpdesk,desenvolvimento de software,sistema de informacao,infraestrutura de rede\",\n  \"peso\": 0,\n  \"categoria\": null,\n  \"ativa\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/regras",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras"]
+            },
+            "description": "Regras DESCARTE têm prioridade total — se a keyword encontrar, score vai a 0 e o edital não aparece como lead."
+          }
+        },
+        {
+          "name": "Atualizar regra",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"KEYWORD_OBJETO\",\n  \"nome\": \"Vigilância — keywords ampliadas\",\n  \"descricao\": \"Inclui CFTV e controle de acesso\",\n  \"valorRegra\": \"vigilancia,vigilância,seguranca,segurança,monitoramento,portaria,ronda,escolta,cftv,controle de acesso\",\n  \"peso\": 55,\n  \"categoria\": \"VIGILANCIA\",\n  \"ativa\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/regras/{{regra_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "{{regra_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Ativar / Desativar (toggle)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras/{{regra_id}}/toggle",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "{{regra_id}}", "toggle"]
+            },
+            "description": "Alterna ativa ↔ inativa sem precisar mandar o objeto completo."
+          }
+        },
+        {
+          "name": "Deletar regra",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras/{{regra_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "{{regra_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🩺 Health & Métricas",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/actuator/health", "host": ["{{base_url}}"], "path": ["actuator", "health"] }
+          }
+        },
+        {
+          "name": "Info da aplicação",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/actuator/info", "host": ["{{base_url}}"], "path": ["actuator", "info"] }
+          }
+        },
+        {
+          "name": "Métricas disponíveis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/actuator/metrics", "host": ["{{base_url}}"], "path": ["actuator", "metrics"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "✅ Testes de Integração",
+      "description": "Sequência com assertions automáticas. Rode em ordem (1→6).",
+      "item": [
+        {
+          "name": "1. Health check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('API respondendo', () => pm.response.to.have.status(200));",
+                  "pm.test('Status UP', () => {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.status).to.eql('UP');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/actuator/health", "host": ["{{base_url}}"], "path": ["actuator", "health"] }
+          }
+        },
+        {
+          "name": "2. Stats iniciais",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Stats retornadas', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Estrutura correta', () => {",
+                  "  pm.expect(json).to.have.property('totalEditais');",
+                  "  pm.expect(json).to.have.property('processados');",
+                  "  pm.expect(json).to.have.property('pendentes');",
+                  "  pm.expect(json).to.have.property('erros');",
+                  "  pm.expect(json).to.have.property('valorTotalEstimado');",
+                  "});",
+                  "pm.collectionVariables.set('total_inicial', json.totalEditais);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/editais/stats", "host": ["{{base_url}}"], "path": ["api", "editais", "stats"] }
+          }
+        },
+        {
+          "name": "3. Regras de análise carregadas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Regras retornadas', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Há regras ativas (inicializador rodou)', () => {",
+                  "  pm.expect(json).to.be.an('array').with.lengthOf.at.least(1);",
+                  "});",
+                  "pm.test('Regras têm estrutura correta', () => {",
+                  "  const r = json[0];",
+                  "  pm.expect(r).to.have.property('id');",
+                  "  pm.expect(r).to.have.property('tipo');",
+                  "  pm.expect(r).to.have.property('nome');",
+                  "  pm.expect(r).to.have.property('valorRegra');",
+                  "  pm.expect(r).to.have.property('peso');",
+                  "  pm.expect(r).to.have.property('ativa');",
+                  "});",
+                  "pm.collectionVariables.set('regra_id', json[0].id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/regras/ativas", "host": ["{{base_url}}"], "path": ["api", "regras", "ativas"] }
+          }
+        },
+        {
+          "name": "4. Criar regra de teste",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Regra criada', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('ID gerado', () => pm.expect(json.id).to.be.a('number'));",
+                  "pm.collectionVariables.set('regra_teste_id', json.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"KEYWORD_OBJETO\",\n  \"nome\": \"TESTE INTEGRAÇÃO — pode deletar\",\n  \"descricao\": \"Regra criada pelo teste automatizado do Postman\",\n  \"valorRegra\": \"teste-postman-xyz\",\n  \"peso\": 1,\n  \"categoria\": \"VIGILANCIA\",\n  \"ativa\": false\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/regras", "host": ["{{base_url}}"], "path": ["api", "regras"] }
+          }
+        },
+        {
+          "name": "5. Toggle regra de teste",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Toggle OK', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Regra foi ativada', () => pm.expect(json.ativa).to.be.true);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras/{{regra_teste_id}}/toggle",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "{{regra_teste_id}}", "toggle"]
+            }
+          }
+        },
+        {
+          "name": "6. Deletar regra de teste",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Deletada com sucesso', () => pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/regras/{{regra_teste_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "regras", "{{regra_teste_id}}"]
+            }
+          }
+        },
+        {
+          "name": "7. Listar leads",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Leads retornados', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('É um array', () => pm.expect(json).to.be.an('array'));",
+                  "if (json.length > 0) {",
+                  "  const lead = json[0];",
+                  "  pm.test('Lead tem score', () => pm.expect(lead.leadScore).to.be.a('number'));",
+                  "  pm.test('Lead tem categoria', () => pm.expect(lead.leadCategoriaPrincipal).to.be.a('string'));",
+                  "  pm.collectionVariables.set('edital_id', lead.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/editais/leads?scoreMinimo=1", "host": ["{{base_url}}"], "path": ["api", "editais", "leads"], "query": [{ "key": "scoreMinimo", "value": "1" }] }
+          }
+        },
+        {
+          "name": "8. Notificações — histórico",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Histórico retornado', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('É um array', () => pm.expect(json).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/notificacoes", "host": ["{{base_url}}"], "path": ["api", "notificacoes"] }
+          }
+        }
+      ]
+    }
+  ]
+}

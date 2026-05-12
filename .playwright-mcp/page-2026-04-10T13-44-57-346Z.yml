@@ -1,0 +1,87 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img [ref=e8]: gavel
+      - generic [ref=e9]: LicitaFlow
+      - button [ref=e10] [cursor=pointer]:
+        - img [ref=e11]: chevron_left
+    - navigation [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: Principal
+        - link "Dashboard" [ref=e15] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e16]: dashboard
+          - generic [ref=e17]: Dashboard
+        - link "Pipeline" [ref=e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=e19]: view_kanban
+          - generic [ref=e20]: Pipeline
+        - link "Editais 3" [ref=e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=e22]: description
+          - generic [ref=e23]: Editais
+          - generic [ref=e24]: "3"
+      - generic [ref=e25]:
+        - generic [ref=e26]: Ferramentas IA
+        - link "Impugnação" [ref=e27] [cursor=pointer]:
+          - /url: /impugnacao
+          - img [ref=e28]: gavel
+          - generic [ref=e29]: Impugnação
+        - link "Assistente IA" [ref=e30] [cursor=pointer]:
+          - /url: /assistente
+          - img [ref=e31]: smart_toy
+          - generic [ref=e32]: Assistente IA
+      - generic [ref=e33]:
+        - generic [ref=e34]: Relatórios
+        - link "Relatórios" [ref=e35] [cursor=pointer]:
+          - /url: /relatorios
+          - img [ref=e36]: bar_chart
+          - generic [ref=e37]: Relatórios
+    - generic [ref=e38]:
+      - link "Configurações" [ref=e40] [cursor=pointer]:
+        - /url: /configuracoes
+        - img [ref=e41]: settings
+        - generic [ref=e42]: Configurações
+      - generic [ref=e43] [cursor=pointer]:
+        - generic [ref=e44]: RR
+        - generic [ref=e45]:
+          - generic [ref=e46]: Rafael Ribeiro
+          - generic [ref=e47]: ADMIN
+        - img [ref=e48]: unfold_more
+  - generic [ref=e49]:
+    - banner [ref=e50]:
+      - generic [ref=e52]:
+        - img [ref=e53]: search
+        - textbox "Buscar editais, órgãos, objetos..." [ref=e54]
+        - generic [ref=e55]: ⌘K
+      - generic [ref=e56]:
+        - button [ref=e57] [cursor=pointer]:
+          - img [ref=e58]: help_outline
+        - button [ref=e59] [cursor=pointer]:
+          - img [ref=e60]: notifications_none
+        - generic [ref=e62] [cursor=pointer]: RR
+    - main [ref=e63]:
+      - generic [ref=e65]:
+        - generic [ref=e67]:
+          - img [ref=e69]: smart_toy
+          - generic [ref=e70]:
+            - heading "Assistente LicitaFlow" [level=1] [ref=e71]
+            - generic [ref=e74]: Alimentado com seus editais via RAG
+        - generic [ref=e76]:
+          - img [ref=e78]: psychology
+          - heading "Olá! Como posso ajudar?" [level=2] [ref=e79]
+          - paragraph [ref=e80]: Tenho acesso completo a todos os editais, leads e histórico da plataforma. Pergunte qualquer coisa.
+          - generic [ref=e81]:
+            - button "Quais são os editais com maior score esta semana?" [ref=e82] [cursor=pointer]
+            - button "Resuma as principais exigências técnicas dos editais pendentes" [ref=e83] [cursor=pointer]
+            - button "Há licitações na área de TI acima de R$ 500k?" [ref=e84] [cursor=pointer]
+            - button "Quais órgãos publicaram mais editais este mês?" [ref=e85] [cursor=pointer]
+            - button "Analise o risco dos editais em aberto" [ref=e86] [cursor=pointer]
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - textbox "Pergunte sobre editais, leads, impugnações..." [ref=e89]
+            - button [disabled] [ref=e91]:
+              - img [ref=e92]: send
+          - paragraph [ref=e93]:
+            - img [ref=e94]: info_outline
+            - text: O assistente acessa apenas dados internos da plataforma — editais, leads e histórico.

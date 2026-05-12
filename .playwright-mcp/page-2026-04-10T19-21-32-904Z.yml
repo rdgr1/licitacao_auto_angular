@@ -1,0 +1,150 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img [ref=e8]: gavel
+      - generic [ref=e9]: LicitaFlow
+      - button [ref=e10] [cursor=pointer]:
+        - img [ref=e11]: chevron_left
+    - navigation [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: Principal
+        - link "Dashboard" [ref=e15] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e16]: dashboard
+          - generic [ref=e17]: Dashboard
+        - link "Pipeline" [ref=e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=e19]: view_kanban
+          - generic [ref=e20]: Pipeline
+        - link "Editais 3" [ref=e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=e22]: description
+          - generic [ref=e23]: Editais
+          - generic [ref=e24]: "3"
+        - link "Notificações" [ref=e25] [cursor=pointer]:
+          - /url: /notificacoes
+          - img [ref=e26]: notifications
+          - generic [ref=e27]: Notificações
+      - generic [ref=e28]:
+        - generic [ref=e29]: Ferramentas IA
+        - link "Impugnação" [ref=e30] [cursor=pointer]:
+          - /url: /impugnacao
+          - img [ref=e31]: gavel
+          - generic [ref=e32]: Impugnação
+        - link "Assistente IA" [ref=e33] [cursor=pointer]:
+          - /url: /assistente
+          - img [ref=e34]: smart_toy
+          - generic [ref=e35]: Assistente IA
+      - generic [ref=e36]:
+        - generic [ref=e37]: Configurações
+        - link "Regras de Análise" [ref=e38] [cursor=pointer]:
+          - /url: /regras
+          - img [ref=e39]: rule
+          - generic [ref=e40]: Regras de Análise
+        - link "Relatórios" [ref=e41] [cursor=pointer]:
+          - /url: /relatorios
+          - img [ref=e42]: bar_chart
+          - generic [ref=e43]: Relatórios
+    - generic [ref=e44]:
+      - link "Configurações" [ref=e46] [cursor=pointer]:
+        - /url: /configuracoes
+        - img [ref=e47]: settings
+        - generic [ref=e48]: Configurações
+      - generic [ref=e49] [cursor=pointer]:
+        - generic [ref=e50]: RR
+        - generic [ref=e51]:
+          - generic [ref=e52]: Rafael Ribeiro
+          - generic [ref=e53]: ADMIN
+        - img [ref=e54]: unfold_more
+  - generic [ref=e55]:
+    - banner [ref=e56]:
+      - generic [ref=e58]:
+        - img [ref=e59]: search
+        - textbox "Buscar editais, órgãos, objetos..." [ref=e60]
+        - generic [ref=e61]: ⌘K
+      - generic [ref=e62]:
+        - button [ref=e63] [cursor=pointer]:
+          - img [ref=e64]: help_outline
+        - button [ref=e65] [cursor=pointer]:
+          - img [ref=e66]: notifications_none
+        - generic [ref=e68] [cursor=pointer]: RR
+    - main [ref=e69]:
+      - generic [ref=e71]:
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - heading "Dashboard" [level=1] [ref=e74]
+            - paragraph [ref=e75]:
+              - text: Bom dia, Rafael! Você tem
+              - strong [ref=e76]: 0 editais
+              - text: abrindo esta semana.
+          - generic [ref=e77]:
+            - button [ref=e78] [cursor=pointer]:
+              - img [ref=e79]: refresh
+            - button "Processar" [ref=e82]:
+              - img [ref=e83]: cloud_download
+              - generic [ref=e84]: Processar
+            - link "Novo Edital" [ref=e87] [cursor=pointer]:
+              - /url: /editais
+              - img [ref=e88]: add
+              - generic [ref=e89]: Novo Edital
+        - generic [ref=e92]:
+          - generic [ref=e95]:
+            - img [ref=e97]: description
+            - generic [ref=e98]:
+              - generic [ref=e99]: Total de Editais
+              - generic [ref=e100]: "0"
+              - generic [ref=e101]:
+                - img [ref=e102]: trending_up
+                - text: Atualizado agora
+          - generic [ref=e105]:
+            - img [ref=e107]: check_circle
+            - generic [ref=e108]:
+              - generic [ref=e109]: Processados
+              - generic [ref=e110]: "0"
+              - generic [ref=e111]:
+                - img [ref=e112]: trending_up
+                - text: Aguardando dados
+          - generic [ref=e115]:
+            - img [ref=e117]: pending_actions
+            - generic [ref=e118]:
+              - generic [ref=e119]: Pendentes
+              - generic [ref=e120]: "0"
+              - generic [ref=e121]:
+                - img [ref=e122]: check
+                - text: Tudo processado
+          - generic [ref=e125]:
+            - img [ref=e127]: monetization_on
+            - generic [ref=e128]:
+              - generic [ref=e129]: Valor em Disputa
+              - generic [ref=e130]: R$ 0
+              - generic [ref=e131]:
+                - img [ref=e132]: trending_up
+                - text: Valor total estimado
+        - generic [ref=e133]:
+          - generic [ref=e136]:
+            - generic [ref=e137]: Volume Mensal
+            - generic [ref=e138]: Editais processados vs. pendentes — últimos 6 meses
+          - generic [ref=e142]:
+            - generic [ref=e144]:
+              - generic [ref=e145]: Distribuição
+              - generic [ref=e146]: Por status atual
+            - generic [ref=e148]:
+              - generic:
+                - generic: 0%
+                - generic: Sucesso
+        - generic [ref=e150]:
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - heading "Próximas Aberturas" [level=3] [ref=e154]
+              - link "Ver todos" [ref=e155] [cursor=pointer]:
+                - /url: /editais
+            - generic [ref=e157]:
+              - img [ref=e158]: event_available
+              - generic [ref=e159]: Nenhum edital com abertura próxima
+          - generic [ref=e161]:
+            - generic [ref=e162]:
+              - heading "Atividade Recente" [level=3] [ref=e163]
+              - button "Limpar" [ref=e164] [cursor=pointer]
+            - generic [ref=e166]:
+              - img [ref=e167]: notifications_none
+              - generic [ref=e168]: Nenhuma atividade recente

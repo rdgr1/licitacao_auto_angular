@@ -1,0 +1,274 @@
+/* ── Shell ────────────────────────────────────────────────────────────────── */
+.details-shell {
+  padding: 28px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @media (max-width: 767px) { padding: 16px; gap: 16px; }
+}
+
+/* ── Page Header ──────────────────────────────────────────────────────────── */
+.details-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.back-btn {
+  flex-shrink: 0;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.header-breadcrumb {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.details-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--mat-sys-on-surface);
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+/* M3 Status Badge inline */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &.processado {
+    background: rgba(16, 185, 129, 0.12);
+    color: #065F46;
+    .status-dot { background: #10B981; }
+  }
+  &.pendente {
+    background: rgba(245, 158, 11, 0.12);
+    color: #92400E;
+    .status-dot { background: #F59E0B; }
+  }
+  &.erro {
+    background: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+    .status-dot { background: var(--mat-sys-error); }
+  }
+}
+
+.spacer { flex: 1 1 auto; }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.btn-danger {
+  color: var(--mat-sys-error) !important;
+  border-color: var(--mat-sys-error) !important;
+}
+
+/* ── Metrics Row ──────────────────────────────────────────────────────────── */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 599px)  { grid-template-columns: 1fr; }
+}
+
+.metric-card {
+  ::ng-deep mat-card-content { padding: 16px 20px !important; }
+}
+
+.metric-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* M3 Tonal Icon Containers */
+.metric-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
+  &.primary-tonal {
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+  }
+  &.secondary-tonal {
+    background: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+  }
+  &.tertiary-tonal {
+    background: var(--mat-sys-tertiary-container);
+    color: var(--mat-sys-on-tertiary-container);
+  }
+  &.warning-tonal {
+    background: rgba(245, 158, 11, 0.12);
+    color: #92400E;
+  }
+}
+
+.metric-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 3px;
+}
+
+.metric-value {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+  line-height: 1.2;
+}
+
+/* ── Tab Content ──────────────────────────────────────────────────────────── */
+.tab-content {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-card {
+  ::ng-deep mat-card-content { padding: 24px !important; }
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mat-sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+}
+
+.objeto-text {
+  font-size: 16px;
+  color: var(--mat-sys-on-surface);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+
+  @media (max-width: 599px) { grid-template-columns: 1fr; }
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.info-value {
+  font-size: 15px;
+  color: var(--mat-sys-on-surface);
+
+  &.highlight {
+    font-weight: 700;
+    color: var(--mat-sys-primary);
+  }
+}
+
+/* Exigencias */
+.exigencias-summary {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 16px;
+}
+
+.exigencia-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  background: var(--mat-sys-surface-container-low, #F8FAFC);
+  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.exigencia-num {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--mat-sys-primary);
+  line-height: 1;
+}
+
+.exigencia-lbl {
+  font-size: 12px;
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 500;
+}
+
+/* Empty tab state */
+.empty-tab {
+  ::ng-deep mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px !important;
+    gap: 12px;
+    color: var(--mat-sys-on-surface-variant);
+    text-align: center;
+
+    mat-icon { font-size: 36px; width: 36px; height: 36px; opacity: 0.5; }
+    p { margin: 0; font-size: 14px; }
+  }
+}
+
+.text-caption { font-size: 13px; color: var(--mat-sys-on-surface-variant); }
+.mt-16 { margin-top: 16px; }

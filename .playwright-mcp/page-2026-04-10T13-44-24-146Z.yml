@@ -1,0 +1,77 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]: gavel
+        - generic [ref=e10]: LicitaFlow
+      - generic [ref=e11]:
+        - heading "Inteligência artificial a serviço das licitações" [level=1] [ref=e12]:
+          - text: Inteligência artificial
+          - text: a serviço das licitações
+        - paragraph [ref=e13]: Automatize a coleta, classifique editais e impugne irregularidades com IA de ponta.
+      - list [ref=e14]:
+        - listitem [ref=e15]:
+          - img [ref=e17]: auto_awesome
+          - generic [ref=e18]:
+            - strong [ref=e19]: Classificação automática
+            - text: IA analisa e pontua cada edital por relevância
+        - listitem [ref=e20]:
+          - img [ref=e22]: view_kanban
+          - generic [ref=e23]:
+            - strong [ref=e24]: Pipeline estilo CRM
+            - text: Gerencie leads de licitação como oportunidades
+        - listitem [ref=e25]:
+          - img [ref=e27]: smart_toy
+          - generic [ref=e28]:
+            - strong [ref=e29]: Assistente RAG
+            - text: Pergunte qualquer coisa sobre os seus editais
+        - listitem [ref=e30]:
+          - img [ref=e32]: gavel
+          - generic [ref=e33]:
+            - strong [ref=e34]: Motor de Impugnação
+            - text: Gere petições fundamentadas em segundos
+      - generic [ref=e36]:
+        - generic [ref=e37]: 🔒 SOC 2
+        - generic [ref=e38]: 🇧🇷 LGPD
+        - generic [ref=e39]: ⚡ 99.9% SLA
+  - main [ref=e40]:
+    - generic [ref=e41]:
+      - generic [ref=e42]:
+        - heading "Bem-vindo de volta" [level=2] [ref=e43]
+        - paragraph [ref=e44]: Entre com suas credenciais para acessar o painel
+      - generic [ref=e45]:
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - text: E-mail corporativo
+            - generic [ref=e50]: "*"
+          - img [ref=e52]: mail_outline
+          - textbox "E-mail corporativo" [ref=e54]:
+            - /placeholder: voce@empresa.com.br
+            - text: admin@licitaflow.com
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - text: Senha
+            - generic [ref=e59]: "*"
+          - img [ref=e61]: lock_outline
+          - textbox "Senha" [ref=e63]:
+            - /placeholder: ••••••••
+            - text: "123456"
+          - button "Mostrar senha" [ref=e65] [cursor=pointer]:
+            - img [ref=e66]: visibility
+        - generic [ref=e69]:
+          - generic [ref=e71]:
+            - generic [ref=e72] [cursor=pointer]:
+              - checkbox "Lembrar por 30 dias" [ref=e74]
+              - generic:
+                - img
+            - generic [ref=e75] [cursor=pointer]: Lembrar por 30 dias
+          - link "Esqueceu a senha?" [ref=e76] [cursor=pointer]:
+            - /url: "#"
+        - button "Entrar na plataforma" [ref=e77]:
+          - generic [ref=e78]:
+            - text: Entrar na plataforma
+            - img [ref=e79]: arrow_forward
+      - paragraph [ref=e82]:
+        - text: Não tem acesso?
+        - link "Solicitar demonstração" [ref=e83] [cursor=pointer]:
+          - /url: "#"

@@ -1,0 +1,208 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img [ref=e8]: gavel
+      - generic [ref=e9]: LicitaFlow
+      - button [ref=e10] [cursor=pointer]:
+        - img [ref=e11]: chevron_left
+    - navigation [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: Principal
+        - link "Dashboard" [ref=e15] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e16]: dashboard
+          - generic [ref=e17]: Dashboard
+        - link "Pipeline" [ref=e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=e19]: view_kanban
+          - generic [ref=e20]: Pipeline
+        - link "Editais 3" [ref=e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=e22]: description
+          - generic [ref=e23]: Editais
+          - generic [ref=e24]: "3"
+        - link "Notificações" [ref=e25] [cursor=pointer]:
+          - /url: /notificacoes
+          - img [ref=e26]: notifications
+          - generic [ref=e27]: Notificações
+      - generic [ref=e28]:
+        - generic [ref=e29]: Ferramentas IA
+        - link "Impugnação" [ref=e30] [cursor=pointer]:
+          - /url: /impugnacao
+          - img [ref=e31]: gavel
+          - generic [ref=e32]: Impugnação
+        - link "Assistente IA" [ref=e33] [cursor=pointer]:
+          - /url: /assistente
+          - img [ref=e34]: smart_toy
+          - generic [ref=e35]: Assistente IA
+      - generic [ref=e36]:
+        - generic [ref=e37]: Configurações
+        - link "Regras de Análise" [ref=e38] [cursor=pointer]:
+          - /url: /regras
+          - img [ref=e39]: rule
+          - generic [ref=e40]: Regras de Análise
+        - link "Relatórios" [ref=e41] [cursor=pointer]:
+          - /url: /relatorios
+          - img [ref=e42]: bar_chart
+          - generic [ref=e43]: Relatórios
+    - generic [ref=e44]:
+      - link "Configurações" [ref=e46] [cursor=pointer]:
+        - /url: /configuracoes
+        - img [ref=e47]: settings
+        - generic [ref=e48]: Configurações
+      - generic [ref=e49] [cursor=pointer]:
+        - generic [ref=e50]: RR
+        - generic [ref=e51]:
+          - generic [ref=e52]: Rafael Ribeiro
+          - generic [ref=e53]: ADMIN
+        - img [ref=e54]: unfold_more
+  - generic [ref=e55]:
+    - banner [ref=e56]:
+      - generic [ref=e58]:
+        - img [ref=e59]: search
+        - textbox "Buscar editais, órgãos, objetos..." [ref=e60]
+        - generic [ref=e61]: ⌘K
+      - generic [ref=e62]:
+        - button [ref=e63] [cursor=pointer]:
+          - img [ref=e64]: help_outline
+        - button [ref=e65] [cursor=pointer]:
+          - img [ref=e66]: notifications_none
+        - generic [ref=e68] [cursor=pointer]: RR
+    - main [ref=e69]:
+      - generic [ref=e71]:
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - heading "Pipeline de Leads" [level=1] [ref=e74]
+            - paragraph [ref=e75]: "8 leads ativos · Total: R$ 8.0M"
+          - generic [ref=e76]:
+            - button [ref=e77] [cursor=pointer]:
+              - img [ref=e78]: refresh
+            - button "Novo Lead" [ref=e81]:
+              - img [ref=e82]: add
+              - generic [ref=e83]: Novo Lead
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - heading "Quente" [level=3] [ref=e91]
+                - generic [ref=e92]: "4"
+              - generic [ref=e93]: R$ 7.1M
+            - generic [ref=e94]:
+              - generic [ref=e96]:
+                - generic [ref=e97]:
+                  - generic [ref=e98]: PE-012/2024
+                  - generic [ref=e99]: "94"
+                - paragraph [ref=e100]: Fornecimento de software de gestão hospitalar integrada
+                - generic [ref=e103]:
+                  - generic [ref=e104]:
+                    - img [ref=e105]: business
+                    - text: Ministério da Saúde
+                  - generic [ref=e106]: Software/TI
+                - generic [ref=e107]:
+                  - generic [ref=e108]: R$ 2.400.000,00
+                  - generic [ref=e109]: 2026-04-11
+              - generic [ref=e111]:
+                - generic [ref=e112]:
+                  - generic [ref=e113]: PE-015/2024
+                  - generic [ref=e114]: "88"
+                - paragraph [ref=e115]: Plataforma de análise de dados e business intelligence
+                - generic [ref=e118]:
+                  - generic [ref=e119]:
+                    - img [ref=e120]: business
+                    - text: SERPRO
+                  - generic [ref=e121]: TI/Analytics
+                - generic [ref=e122]:
+                  - generic [ref=e123]: R$ 3.200.000,00
+                  - generic [ref=e124]: 2026-04-13
+              - generic [ref=e126]:
+                - generic [ref=e127]:
+                  - generic [ref=e128]: CC-004/2024
+                  - generic [ref=e129]: "75"
+                - paragraph [ref=e130]: Infraestrutura de rede e data center
+                - generic [ref=e133]:
+                  - generic [ref=e134]:
+                    - img [ref=e135]: business
+                    - text: ANTT
+                  - generic [ref=e136]: Infraestrutura
+                - generic [ref=e137]:
+                  - generic [ref=e138]: R$ 850.000,00
+                  - generic [ref=e139]: 2026-04-15
+              - generic [ref=e141]:
+                - generic [ref=e142]:
+                  - generic [ref=e143]: PE-018/2024
+                  - generic [ref=e144]: "72"
+                - paragraph [ref=e145]: Consultoria em transformação digital
+                - generic [ref=e148]:
+                  - generic [ref=e149]:
+                    - img [ref=e150]: business
+                    - text: Min. Gestão
+                  - generic [ref=e151]: Consultoria
+                - generic [ref=e152]:
+                  - generic [ref=e153]: R$ 620.000,00
+                  - generic [ref=e154]: 2026-04-18
+          - generic [ref=e155]:
+            - generic [ref=e156]:
+              - generic [ref=e157]:
+                - heading "Morno" [level=3] [ref=e159]
+                - generic [ref=e160]: "2"
+              - generic [ref=e161]: R$ 800K
+            - generic [ref=e162]:
+              - generic [ref=e164]:
+                - generic [ref=e165]:
+                  - generic [ref=e166]: TP-002/2024
+                  - generic [ref=e167]: "60"
+                - paragraph [ref=e168]: Contratação de serviços de segurança da informação
+                - generic [ref=e171]:
+                  - generic [ref=e172]:
+                    - img [ref=e173]: business
+                    - text: Câmara Municipal SP
+                  - generic [ref=e174]: Segurança
+                - generic [ref=e175]:
+                  - generic [ref=e176]: R$ 480.000,00
+                  - generic [ref=e177]: 2026-04-22
+              - generic [ref=e179]:
+                - generic [ref=e180]:
+                  - generic [ref=e181]: CC-007/2024
+                  - generic [ref=e182]: "55"
+                - paragraph [ref=e183]: Aquisição de licenças de software corporativo
+                - generic [ref=e186]:
+                  - generic [ref=e187]:
+                    - img [ref=e188]: business
+                    - text: Tribunal de Contas
+                  - generic [ref=e189]: Licenças
+                - generic [ref=e190]:
+                  - generic [ref=e191]: R$ 320.000,00
+                  - generic [ref=e192]: 2026-04-25
+          - generic [ref=e193]:
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - heading "Frio" [level=3] [ref=e197]
+                - generic [ref=e198]: "2"
+              - generic [ref=e199]: R$ 117K
+            - generic [ref=e200]:
+              - generic [ref=e202]:
+                - generic [ref=e203]:
+                  - generic [ref=e204]: CV-003/2024
+                  - generic [ref=e205]: "38"
+                - paragraph [ref=e206]: Equipamentos de impressão e scanners
+                - generic [ref=e209]:
+                  - generic [ref=e210]:
+                    - img [ref=e211]: business
+                    - text: Prefeitura Municipal
+                  - generic [ref=e212]: Equipamentos
+                - generic [ref=e213]:
+                  - generic [ref=e214]: R$ 75.000,00
+                  - generic [ref=e215]: 2026-04-28
+              - generic [ref=e217]:
+                - generic [ref=e218]:
+                  - generic [ref=e219]: PE-021/2024
+                  - generic [ref=e220]: "22"
+                - paragraph [ref=e221]: Material de escritório e papelaria
+                - generic [ref=e224]:
+                  - generic [ref=e225]:
+                    - img [ref=e226]: business
+                    - text: Min. Educação
+                  - generic [ref=e227]: Material
+                - generic [ref=e228]:
+                  - generic [ref=e229]: R$ 42.000,00
+                  - generic [ref=e230]: 2026-04-30

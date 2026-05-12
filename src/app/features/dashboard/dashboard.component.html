@@ -1,0 +1,268 @@
+<div class="dashboard">
+
+  <!-- ── Header ──────────────────────────────────────────────────────── -->
+  <div class="dash-header animate-fade-up">
+    <div class="dash-header-text">
+      <h1 class="dash-title">Dashboard</h1>
+      <p class="dash-subtitle">
+        Bom dia, Rafael! Você tem
+        <strong>{{ upcoming().length }} editais</strong> abrindo esta semana.
+      </p>
+    </div>
+    <div class="dash-actions">
+      <button mat-icon-button (click)="refresh()" matTooltip="Atualizar dados">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-stroked-button (click)="processar()" [disabled]="processing()"
+              matTooltip="Buscar novos editais no PNCP/DODF/DOU">
+        @if (processing()) {
+          <mat-spinner diameter="16"></mat-spinner>
+        } @else {
+          <mat-icon>cloud_download</mat-icon>
+        }
+        {{ processing() ? 'Processando...' : 'Processar' }}
+      </button>
+      <a mat-flat-button routerLink="/editais">
+        <mat-icon>add</mat-icon>
+        Novo Edital
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Scraper Status Banner ────────────────────────────────────────── -->
+  @if (processing()) {
+    <div class="scraper-banner animate-fade-up">
+      <div class="scraper-banner-top">
+        <div class="scraper-banner-left">
+          <mat-spinner diameter="18"></mat-spinner>
+          <span class="scraper-banner-title">Scraping em andamento</span>
+          @if (scraperStatus()?.scrapersExecutados; as n) {
+            <span class="scraper-badge">{{ n }} scraper{{ n > 1 ? 's' : '' }}</span>
+          }
+        </div>
+        <div class="scraper-banner-counters">
+          @if (scraperStatus()?.total; as total) {
+            <span class="scraper-counter">
+              <span class="scraper-counter-val">{{ scraperStatus()?.processados ?? 0 }}/{{ total }}</span>
+              <span class="scraper-counter-lbl">processados</span>
+            </span>
+          }
+          @if (scraperStatus()?.erros) {
+            <span class="scraper-counter erros">
+              <span class="scraper-counter-val">{{ scraperStatus()?.erros }}</span>
+              <span class="scraper-counter-lbl">erros</span>
+            </span>
+          }
+        </div>
+      </div>
+
+      @if (scraperStatus()?.message; as msg) {
+        <p class="scraper-message">{{ msg }}</p>
+      }
+
+      @if (scraperStatus()?.total) {
+        <mat-progress-bar mode="determinate" [value]="scraperProgress()" class="scraper-progress"></mat-progress-bar>
+        <span class="scraper-pct">{{ scraperProgress() }}%</span>
+      } @else {
+        <mat-progress-bar mode="indeterminate" class="scraper-progress"></mat-progress-bar>
+      }
+    </div>
+  }
+
+  <!-- ── KPI Cards ────────────────────────────────────────────────────── -->
+  @if (loading()) {
+    <div class="stats-row">
+      @for (i of [1,2,3,4]; track i) {
+        <mat-card appearance="outlined" class="stat-card skeleton-card">
+          <mat-card-content>
+            <div class="stat-inner">
+              <div class="skel skel-icon"></div>
+              <div class="stat-body">
+                <div class="skel skel-label"></div>
+                <div class="skel skel-value"></div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  } @else if (stats(); as s) {
+    <div class="stats-row">
+
+      <mat-card appearance="outlined" class="stat-card animate-fade-up-1">
+        <mat-card-content>
+          <div class="stat-inner">
+            <div class="stat-icon-wrap primary-tonal">
+              <mat-icon>description</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Total de Editais</span>
+              <span class="stat-value animate-counter">{{ s.totalEditais }}</span>
+              <span class="stat-trend up">
+                <mat-icon>trending_up</mat-icon>Atualizado agora
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="stat-card animate-fade-up-2">
+        <mat-card-content>
+          <div class="stat-inner">
+            <div class="stat-icon-wrap tertiary-tonal">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Processados</span>
+              <span class="stat-value animate-counter">{{ s.processados }}</span>
+              <span class="stat-trend up">
+                <mat-icon>trending_up</mat-icon>{{ s.ultimaExecucao ? 'Última execução OK' : 'Aguardando dados' }}
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="stat-card animate-fade-up-3">
+        <mat-card-content>
+          <div class="stat-inner">
+            <div class="stat-icon-wrap warning-tonal">
+              <mat-icon>pending_actions</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Pendentes</span>
+              <span class="stat-value animate-counter">{{ s.pendentes }}</span>
+              <span class="stat-trend" [class.down]="s.pendentes > 0" [class.up]="s.pendentes === 0">
+                <mat-icon>{{ s.pendentes > 0 ? 'schedule' : 'check' }}</mat-icon>
+                {{ s.pendentes > 0 ? 'Aguardando processamento' : 'Tudo processado' }}
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="stat-card animate-fade-up-4">
+        <mat-card-content>
+          <div class="stat-inner">
+            <div class="stat-icon-wrap secondary-tonal">
+              <mat-icon>monetization_on</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Valor em Disputa</span>
+              <span class="stat-value">{{ formatCurrency(s.valorTotalEstimado) }}</span>
+              <span class="stat-trend up">
+                <mat-icon>trending_up</mat-icon>Valor total estimado
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  } @else {
+    <div class="stats-row">
+      <div class="empty-stats">
+        <mat-icon>cloud_off</mat-icon>
+        <span>Sem dados disponíveis</span>
+      </div>
+    </div>
+  }
+
+  <!-- ── Charts Row ───────────────────────────────────────────────────── -->
+  <div class="charts-row">
+
+    <mat-card appearance="outlined" class="chart-card wide">
+      <mat-card-header>
+        <mat-card-title>Volume Mensal</mat-card-title>
+        <mat-card-subtitle>Editais processados vs. pendentes — últimos 6 meses</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-canvas">
+          <canvas baseChart [data]="barData()" [type]="'bar'" [options]="barOptions"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Distribuição</mat-card-title>
+        <mat-card-subtitle>Por status atual</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-canvas donut-wrap">
+          <canvas baseChart [data]="donutData()" [type]="'doughnut'" [options]="donutOptions"></canvas>
+          <div class="donut-center-label">
+            <span class="donut-pct">{{ taxaSucesso }}%</span>
+            <span class="donut-lbl">{{ stats() ? 'Sucesso' : '...' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+  <!-- ── Bottom Row ───────────────────────────────────────────────────── -->
+  <div class="bottom-row">
+
+    <!-- Upcoming deadlines -->
+    <mat-card appearance="outlined" class="panel">
+      <mat-card-content>
+        <div class="panel-header">
+          <h3>Próximas Aberturas</h3>
+          <a routerLink="/editais" class="link-action">Ver todos</a>
+        </div>
+        <div class="upcoming-list">
+          @for (item of upcoming(); track item.numero) {
+            <div class="upcoming-item" [class.is-urgent]="item.urgent">
+              <div class="days-badge" [class.urgent]="item.urgent">
+                <span class="days-num">{{ item.daysLeft }}</span>
+                <span class="days-lbl">dias</span>
+              </div>
+              <div class="upcoming-info">
+                <span class="upcoming-numero">{{ item.numero }}</span>
+                <span class="upcoming-objeto">{{ item.objeto }}</span>
+                <span class="upcoming-orgao">{{ item.orgao }}</span>
+              </div>
+              <span class="upcoming-valor">{{ formatCurrency(item.valor) }}</span>
+            </div>
+          }
+          @if (upcoming().length === 0) {
+            <div class="empty-panel">
+              <mat-icon>event_available</mat-icon>
+              <span>Nenhum edital com abertura próxima</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Activity feed -->
+    <mat-card appearance="outlined" class="panel">
+      <mat-card-content>
+        <div class="panel-header">
+          <h3>Atividade Recente</h3>
+          <button class="link-action btn-reset">Limpar</button>
+        </div>
+        <div class="activity-list">
+          @for (notif of notifications(); track notif.editalId) {
+            <div class="activity-item">
+              <span class="activity-dot dot-{{ notif.tipo === 'NOVO_LEAD' ? 'lead' : 'processado' }}"></span>
+              <div class="activity-body">
+                <span class="activity-title">{{ notif.numero }} — {{ notif.objeto }}</span>
+                <span class="activity-meta">Score {{ notif.leadScore }} · {{ notif.categoria }}</span>
+              </div>
+            </div>
+          }
+          @if (notifications().length === 0) {
+            <div class="empty-panel">
+              <mat-icon>notifications_none</mat-icon>
+              <span>Nenhuma atividade recente</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+</div>

@@ -1,0 +1,104 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img [ref=e8]: gavel
+      - generic [ref=e9]: LicitaFlow
+      - button [ref=e10] [cursor=pointer]:
+        - img [ref=e11]: chevron_left
+    - navigation [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: Principal
+        - link "Dashboard" [ref=e15] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e16]: dashboard
+          - generic [ref=e17]: Dashboard
+        - link "Pipeline" [ref=e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=e19]: view_kanban
+          - generic [ref=e20]: Pipeline
+        - link "Editais 3" [ref=e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=e22]: description
+          - generic [ref=e23]: Editais
+          - generic [ref=e24]: "3"
+      - generic [ref=e25]:
+        - generic [ref=e26]: Ferramentas IA
+        - link "Impugnação" [ref=e27] [cursor=pointer]:
+          - /url: /impugnacao
+          - img [ref=e28]: gavel
+          - generic [ref=e29]: Impugnação
+        - link "Assistente IA" [ref=e30] [cursor=pointer]:
+          - /url: /assistente
+          - img [ref=e31]: smart_toy
+          - generic [ref=e32]: Assistente IA
+      - generic [ref=e33]:
+        - generic [ref=e34]: Relatórios
+        - link "Relatórios" [ref=e35] [cursor=pointer]:
+          - /url: /relatorios
+          - img [ref=e36]: bar_chart
+          - generic [ref=e37]: Relatórios
+    - generic [ref=e38]:
+      - link "Configurações" [ref=e40] [cursor=pointer]:
+        - /url: /configuracoes
+        - img [ref=e41]: settings
+        - generic [ref=e42]: Configurações
+      - generic [ref=e43] [cursor=pointer]:
+        - generic [ref=e44]: RR
+        - generic [ref=e45]:
+          - generic [ref=e46]: Rafael Ribeiro
+          - generic [ref=e47]: ADMIN
+        - img [ref=e48]: unfold_more
+  - generic [ref=e49]:
+    - banner [ref=e50]:
+      - generic [ref=e52]:
+        - img [ref=e53]: search
+        - textbox "Buscar editais, órgãos, objetos..." [ref=e54]
+        - generic [ref=e55]: ⌘K
+      - generic [ref=e56]:
+        - button [ref=e57] [cursor=pointer]:
+          - img [ref=e58]: help_outline
+        - button [ref=e59] [cursor=pointer]:
+          - img [ref=e60]: notifications_none
+        - generic [ref=e62] [cursor=pointer]: RR
+    - main [ref=e63]:
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - img [ref=e68]: gavel
+          - generic [ref=e69]:
+            - heading "Motor de Impugnação" [level=1] [ref=e70]
+            - paragraph [ref=e71]: Gere petições de impugnação fundamentadas na Lei 14.133/21 com análise automática de irregularidades
+        - generic [ref=e72]:
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - generic [ref=e76]: "1"
+              - text: Localizar Edital
+            - generic [ref=e77]:
+              - generic [ref=e80]:
+                - generic [ref=e81]:
+                  - text: Número do Edital
+                  - generic [ref=e82]: "*"
+                - img [ref=e84]: search
+                - textbox "Número do Edital" [ref=e86]:
+                  - /placeholder: "Ex: PE-007/2024, CC-001/2024"
+                  - text: PE-007/2024
+              - button "Buscar Edital" [ref=e87]:
+                - generic [ref=e88]:
+                  - img [ref=e89]: search
+                  - text: Buscar Edital
+          - generic [ref=e94]:
+            - img [ref=e96]: gavel
+            - heading "Motor de Impugnação IA" [level=3] [ref=e97]
+            - paragraph [ref=e98]: Busque um edital à esquerda e nossa IA irá analisar automaticamente as irregularidades, identificar os fundamentos legais e redigir a petição formal.
+            - generic [ref=e99]:
+              - generic [ref=e100]:
+                - img [ref=e101]: check_circle
+                - generic [ref=e102]: Análise automática da Lei 14.133/21
+              - generic [ref=e103]:
+                - img [ref=e104]: check_circle
+                - generic [ref=e105]: Verificação de súmulas do TCU
+              - generic [ref=e106]:
+                - img [ref=e107]: check_circle
+                - generic [ref=e108]: Identificação de cláusulas restritivas
+              - generic [ref=e109]:
+                - img [ref=e110]: check_circle
+                - generic [ref=e111]: Petição formal pronta para protocolo
