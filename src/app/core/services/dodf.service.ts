@@ -2,21 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ColetaResultado, DodfKeyword, DodfTipoAbertura, DodfPage } from '../models/dodf.model';
+import { DodfKeyword, DodfTipoAbertura, DodfPage } from '../models/dodf.model';
 
 @Injectable({ providedIn: 'root' })
 export class DodfService {
   private http = inject(HttpClient);
   private base = `${environment.apiUrl}/dodf`;
-
-  // ── Coleta ──────────────────────────────────────────────────────────
-  coletar(data: string): Observable<ColetaResultado> {
-    return this.http.post<ColetaResultado>(
-      `${this.base}/coleta`,
-      null,
-      { params: new HttpParams().set('data', data) }
-    );
-  }
 
   // ── Keywords ────────────────────────────────────────────────────────
   getKeywords(page = 0, size = 10): Observable<DodfPage<DodfKeyword>> {

@@ -11,10 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatChipsModule } from '@angular/material/chips';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { EditaisService } from '../../core/services/editais.service';
-import { DodfService } from '../../core/services/dodf.service';
+import { ColetaService } from '../../core/services/coleta.service';
 import { ToastService } from '../../core/services/toast.service';
 import { LeadResponse } from '../../core/models/edital.model';
 import { ColetaResultado } from '../../core/models/dodf.model';
@@ -37,7 +36,6 @@ import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
     MatInputModule,
     MatNativeDateModule,
     MatExpansionModule,
-    MatChipsModule,
     DragDropModule,
     CurrencyBrPipe,
     TruncatePipe,
@@ -47,7 +45,7 @@ import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 })
 export class PipelineComponent implements OnInit {
   private editaisService = inject(EditaisService);
-  private dodfService = inject(DodfService);
+  private coletaService = inject(ColetaService);
   private toast = inject(ToastService);
 
   // ── Kanban ─────────────────────────────────────────────────────────
@@ -88,18 +86,17 @@ export class PipelineComponent implements OnInit {
     const date = this.coletaDate();
     if (!date) { this.toast.error('Selecione uma data'); return; }
 
-    const dataStr = date.toISOString().split('T')[0];
     this.coletando.set(true);
     this.coletaResultado.set(null);
 
-    this.dodfService.coletar(dataStr).subscribe({
+    this.coletaService.dispararColeta(date).subscribe({
       next: (resultado) => {
         this.coletaResultado.set(resultado);
         this.coletando.set(false);
-        if (resultado.totalRelevantes === 0) {
-          this.toast.info('Nenhuma matéria relevante encontrada para esta data');
+        if (resultado.salvos === 0) {
+          this.toast.info('Nenhum lead novo encontrado para esta data');
         } else {
-          this.toast.success(`${resultado.totalRelevantes} matéria(s) relevante(s) encontrada(s)`);
+          this.toast.success(`${resultado.salvos} lead(s) salvos, ${resultado.duplicados} duplicados`);
         }
       },
       error: () => {

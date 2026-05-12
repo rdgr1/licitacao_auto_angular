@@ -57,28 +57,15 @@
             <span class="summary-lbl">matérias encontradas</span>
           </div>
           <div class="summary-chip relevantes">
-            <span class="summary-val">{{ resultado.totalRelevantes }}</span>
-            <span class="summary-lbl">relevantes</span>
+            <span class="summary-val">{{ resultado.salvos }}</span>
+            <span class="summary-lbl">leads salvos</span>
+          </div>
+          <div class="summary-chip">
+            <span class="summary-val">{{ resultado.duplicados }}</span>
+            <span class="summary-lbl">duplicados</span>
           </div>
           <span class="summary-data">{{ resultado.data }}</span>
         </div>
-
-        @if (resultado.relevantes.length > 0) {
-          <div class="materias-list">
-            @for (m of resultado.relevantes; track m.coMateria) {
-              <div class="materia-card">
-                <div class="materia-top">
-                  <span class="tipo-chip">{{ m.tipo }}</span>
-                  <span class="materia-secao">{{ m.secao }}</span>
-                </div>
-                <p class="materia-titulo">{{ m.titulo }}</p>
-                <p class="materia-orgao">{{ m.coDemandante }}</p>
-              </div>
-            }
-          </div>
-        } @else {
-          <p class="no-results">Nenhuma matéria relevante para esta data.</p>
-        }
       </div>
     }
   </mat-expansion-panel>

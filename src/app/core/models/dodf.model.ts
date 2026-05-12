@@ -10,22 +10,12 @@ export interface DodfTipoAbertura {
   ativo: boolean;
 }
 
-export interface Materia {
-  coDemandante: string;
-  secao: string;
-  poder: string[];
-  tipo: string;
-  coMateria: string;
-  titulo: string;
-  texto: string;
-  slug: string;
-}
-
 export interface ColetaResultado {
   data: string;
   totalMaterias: number;
   totalRelevantes: number;
-  relevantes: Materia[];
+  salvos: number;
+  duplicados: number;
 }
 
 export interface DodfPage<T> {
