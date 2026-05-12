@@ -7,17 +7,83 @@
       <p class="pipeline-sub">{{ hotLeads().length + warmLeads().length + coldLeads().length }} leads ativos · Total: {{ formatVal(hotValue + warmValue + coldValue) }}</p>
     </div>
     <div class="header-actions">
-      <button mat-icon-button matTooltip="Atualizar pipeline">
+      <button mat-icon-button matTooltip="Atualizar pipeline" (click)="loadLeads()">
         <mat-icon>refresh</mat-icon>
-      </button>
-      <button mat-flat-button>
-        <mat-icon>add</mat-icon>
-        Novo Lead
       </button>
     </div>
   </div>
 
-  <!-- ── Loading overlay ─────────────────────────────────────────────── -->
+  <!-- ── Coleta DODF Panel ────────────────────────────────────────────── -->
+  <mat-expansion-panel
+    [expanded]="panelOpen()"
+    (opened)="panelOpen.set(true)"
+    (closed)="panelOpen.set(false)"
+    class="coleta-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon class="panel-icon">article</mat-icon>
+        Coleta DODF
+      </mat-panel-title>
+      <mat-panel-description>
+        Busca matérias relevantes no Diário Oficial do DF
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="coleta-form">
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>Data de Coleta</mat-label>
+        <input matInput [matDatepicker]="picker"
+               [ngModel]="coletaDate()"
+               (ngModelChange)="coletaDate.set($event)" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker" />
+        <mat-datepicker #picker />
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" (click)="coletar()" [disabled]="coletando()">
+        @if (coletando()) {
+          <mat-spinner diameter="16" />
+        } @else {
+          <mat-icon>download</mat-icon>
+        }
+        {{ coletando() ? 'Coletando...' : 'Coletar' }}
+      </button>
+    </div>
+
+    @if (coletaResultado(); as resultado) {
+      <div class="coleta-resultado">
+        <div class="resultado-summary">
+          <div class="summary-chip">
+            <span class="summary-val">{{ resultado.totalMaterias }}</span>
+            <span class="summary-lbl">matérias encontradas</span>
+          </div>
+          <div class="summary-chip relevantes">
+            <span class="summary-val">{{ resultado.totalRelevantes }}</span>
+            <span class="summary-lbl">relevantes</span>
+          </div>
+          <span class="summary-data">{{ resultado.data }}</span>
+        </div>
+
+        @if (resultado.relevantes.length > 0) {
+          <div class="materias-list">
+            @for (m of resultado.relevantes; track m.coMateria) {
+              <div class="materia-card">
+                <div class="materia-top">
+                  <span class="tipo-chip">{{ m.tipo }}</span>
+                  <span class="materia-secao">{{ m.secao }}</span>
+                </div>
+                <p class="materia-titulo">{{ m.titulo }}</p>
+                <p class="materia-orgao">{{ m.coDemandante }}</p>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="no-results">Nenhuma matéria relevante para esta data.</p>
+        }
+      </div>
+    }
+  </mat-expansion-panel>
+
+  <!-- ── Loading ──────────────────────────────────────────────────────── -->
   @if (loading()) {
     <div class="pipeline-loading">
       <mat-spinner diameter="36"></mat-spinner>
@@ -25,11 +91,11 @@
     </div>
   }
 
-  <!-- ── Board ───────────────────────────────────────────────────────── -->
+  <!-- ── Board ────────────────────────────────────────────────────────── -->
   @if (!loading()) {
   <div class="pipeline-board" cdkDropListGroup>
 
-    <!-- HOT COLUMN -->
+    <!-- HOT -->
     <div class="pipeline-column hot">
       <div class="col-header">
         <div class="col-title-row">
@@ -39,14 +105,10 @@
         </div>
         <span class="col-value">{{ formatVal(hotValue) }}</span>
       </div>
-
-      <div class="col-body"
-           cdkDropList
-           id="hot-list"
+      <div class="col-body" cdkDropList id="hot-list"
            [cdkDropListData]="hotLeads()"
            [cdkDropListConnectedTo]="['warm-list','cold-list']"
            (cdkDropListDropped)="drop($event)">
-
         @for (lead of hotLeads(); track lead.id) {
           <mat-card appearance="outlined" class="lead-card card-live animate-war-enter" cdkDrag>
             <mat-card-content>
@@ -54,14 +116,15 @@
                 <span class="lead-numero">{{ lead.numero }}</span>
                 <span class="score-pill hot">{{ lead.leadScore }}</span>
               </div>
+              @if (lead.fonteOrigem) {
+                <span class="fonte-chip fonte-{{ lead.fonteOrigem.toLowerCase() }}">{{ lead.fonteOrigem }}</span>
+              }
               <p class="lead-objeto">{{ lead.objeto | truncate:55 }}</p>
               <div class="score-track">
                 <div class="score-fill hot" [style.width.%]="lead.leadScore"></div>
               </div>
               <div class="card-meta">
-                <span class="meta-item">
-                  <mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}
-                </span>
+                <span class="meta-item"><mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}</span>
                 <span class="meta-chip">{{ lead.leadCategoriaPrincipal }}</span>
               </div>
               <div class="card-footer">
@@ -71,17 +134,13 @@
             </mat-card-content>
           </mat-card>
         }
-
         @if (hotLeads().length === 0) {
-          <div class="empty-col">
-            <mat-icon>local_fire_department</mat-icon>
-            <span>Nenhum lead quente</span>
-          </div>
+          <div class="empty-col"><mat-icon>local_fire_department</mat-icon><span>Nenhum lead quente</span></div>
         }
       </div>
     </div>
 
-    <!-- WARM COLUMN -->
+    <!-- WARM -->
     <div class="pipeline-column warm">
       <div class="col-header">
         <div class="col-title-row">
@@ -91,14 +150,10 @@
         </div>
         <span class="col-value">{{ formatVal(warmValue) }}</span>
       </div>
-
-      <div class="col-body"
-           cdkDropList
-           id="warm-list"
+      <div class="col-body" cdkDropList id="warm-list"
            [cdkDropListData]="warmLeads()"
            [cdkDropListConnectedTo]="['hot-list','cold-list']"
            (cdkDropListDropped)="drop($event)">
-
         @for (lead of warmLeads(); track lead.id) {
           <mat-card appearance="outlined" class="lead-card card-live animate-war-enter" cdkDrag>
             <mat-card-content>
@@ -106,14 +161,15 @@
                 <span class="lead-numero">{{ lead.numero }}</span>
                 <span class="score-pill warm">{{ lead.leadScore }}</span>
               </div>
+              @if (lead.fonteOrigem) {
+                <span class="fonte-chip fonte-{{ lead.fonteOrigem.toLowerCase() }}">{{ lead.fonteOrigem }}</span>
+              }
               <p class="lead-objeto">{{ lead.objeto | truncate:55 }}</p>
               <div class="score-track">
                 <div class="score-fill warm" [style.width.%]="lead.leadScore"></div>
               </div>
               <div class="card-meta">
-                <span class="meta-item">
-                  <mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}
-                </span>
+                <span class="meta-item"><mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}</span>
                 <span class="meta-chip">{{ lead.leadCategoriaPrincipal }}</span>
               </div>
               <div class="card-footer">
@@ -123,17 +179,13 @@
             </mat-card-content>
           </mat-card>
         }
-
         @if (warmLeads().length === 0) {
-          <div class="empty-col">
-            <mat-icon>whatshot</mat-icon>
-            <span>Nenhum lead morno</span>
-          </div>
+          <div class="empty-col"><mat-icon>whatshot</mat-icon><span>Nenhum lead morno</span></div>
         }
       </div>
     </div>
 
-    <!-- COLD COLUMN -->
+    <!-- COLD -->
     <div class="pipeline-column cold">
       <div class="col-header">
         <div class="col-title-row">
@@ -143,14 +195,10 @@
         </div>
         <span class="col-value">{{ formatVal(coldValue) }}</span>
       </div>
-
-      <div class="col-body"
-           cdkDropList
-           id="cold-list"
+      <div class="col-body" cdkDropList id="cold-list"
            [cdkDropListData]="coldLeads()"
            [cdkDropListConnectedTo]="['hot-list','warm-list']"
            (cdkDropListDropped)="drop($event)">
-
         @for (lead of coldLeads(); track lead.id) {
           <mat-card appearance="outlined" class="lead-card card-live animate-war-enter" cdkDrag>
             <mat-card-content>
@@ -158,14 +206,15 @@
                 <span class="lead-numero">{{ lead.numero }}</span>
                 <span class="score-pill cold">{{ lead.leadScore }}</span>
               </div>
+              @if (lead.fonteOrigem) {
+                <span class="fonte-chip fonte-{{ lead.fonteOrigem.toLowerCase() }}">{{ lead.fonteOrigem }}</span>
+              }
               <p class="lead-objeto">{{ lead.objeto | truncate:55 }}</p>
               <div class="score-track">
                 <div class="score-fill cold" [style.width.%]="lead.leadScore"></div>
               </div>
               <div class="card-meta">
-                <span class="meta-item">
-                  <mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}
-                </span>
+                <span class="meta-item"><mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}</span>
                 <span class="meta-chip">{{ lead.leadCategoriaPrincipal }}</span>
               </div>
               <div class="card-footer">
@@ -175,16 +224,12 @@
             </mat-card-content>
           </mat-card>
         }
-
         @if (coldLeads().length === 0) {
-          <div class="empty-col">
-            <mat-icon>ac_unit</mat-icon>
-            <span>Nenhum lead frio</span>
-          </div>
+          <div class="empty-col"><mat-icon>ac_unit</mat-icon><span>Nenhum lead frio</span></div>
         }
       </div>
     </div>
 
   </div>
-  } <!-- end @if (!loading()) -->
+  }
 </div>
