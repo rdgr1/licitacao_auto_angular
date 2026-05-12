@@ -738,6 +738,7 @@ export class MainLayoutComponent implements OnInit {
       label: 'Configurações',
       items: [
         { label: 'Regras de Análise', icon: 'rule', route: '/regras' },
+        { label: 'Config. DODF', icon: 'article', route: '/dodf/configuracao' },
         { label: 'Relatórios', icon: 'bar_chart', route: '/relatorios' },
       ],
     },
