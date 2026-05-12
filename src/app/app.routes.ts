@@ -63,6 +63,11 @@ export const routes: Routes = [
           import('./features/dodf/configuracao/dodf-configuracao.component').then(m => m.DodfConfiguracaoComponent),
       },
       {
+        path: 'leads',
+        loadComponent: () =>
+          import('./features/leads/leads.component').then(m => m.LeadsComponent),
+      },
+      {
         path: 'notificacoes',
         loadComponent: () =>
           import('./features/notificacoes/notificacoes.component').then(m => m.NotificacoesComponent),

@@ -723,6 +723,7 @@ export class MainLayoutComponent implements OnInit {
       items: [
         { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
         { label: 'Pipeline', icon: 'view_kanban', route: '/pipeline' },
+        { label: 'Leads', icon: 'list_alt', route: '/leads' },
         { label: 'Editais', icon: 'description', route: '/editais', badge: 3 },
         { label: 'Notificações', icon: 'notifications', route: '/notificacoes' },
       ],
