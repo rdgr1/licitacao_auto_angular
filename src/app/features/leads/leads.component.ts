@@ -1,14 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCardModule } from '@angular/material/card';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,308 +14,259 @@ import { LeadService } from '../../core/services/lead.service';
 import { ColetaService } from '../../core/services/coleta.service';
 import { ToastService } from '../../core/services/toast.service';
 import { Lead, LeadStatus } from '../../core/models/lead.model';
+import { ColetaResultado } from '../../core/models/dodf.model';
 import { LeadDetalheDialogComponent } from './lead-detalhe-dialog/lead-detalhe-dialog.component';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 
-interface StatusTab {
-  label: string;
-  value: LeadStatus | null;
-}
+interface StatusTab { label: string; value: LeadStatus | null; }
+interface FonteBusca { key: string; label: string; sublabel: string; icon: string; canCollect: boolean; showBadge?: boolean; }
+
+const FONTES: FonteBusca[] = [
+  { key: 'DODF', label: 'DODF', sublabel: 'Diário Oficial do DF',        icon: 'article',       canCollect: true  },
+  { key: 'DOU',  label: 'DOU',  sublabel: 'Diário Oficial da União',      icon: 'library_books', canCollect: true  },
+  { key: 'PNCP', label: 'PNCP', sublabel: 'Portal Nac. de Contratações', icon: 'public',        canCollect: false, showBadge: false },
+];
+
+const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7','#00897B','#43A047','#FB8C00','#E53935'];
 
 @Component({
   selector: 'app-leads',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatCardModule,
-    MatTabsModule,
-    MatChipsModule,
-    MatProgressSpinnerModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatNativeDateModule,
-    TruncatePipe,
+    CommonModule, FormsModule, MatButtonModule, MatIconModule, MatTooltipModule,
+    MatProgressSpinnerModule, MatDatepickerModule, MatFormFieldModule,
+    MatInputModule, MatNativeDateModule, TruncatePipe,
   ],
-  template: `
-    <div class="leads-shell">
-
-      <!-- ── Header ──────────────────────────────────────────────── -->
-      <div class="leads-header">
-        <div>
-          <h1 class="leads-title">Leads</h1>
-          <p class="leads-sub">Matérias coletadas do DODF classificadas para análise</p>
-        </div>
-        <div class="header-actions">
-          <mat-form-field appearance="outline" class="date-field">
-            <mat-label>Data</mat-label>
-            <input matInput [matDatepicker]="picker"
-                   [ngModel]="coletaDate()"
-                   (ngModelChange)="coletaDate.set($event)" />
-            <mat-datepicker-toggle matIconSuffix [for]="picker" />
-            <mat-datepicker #picker />
-          </mat-form-field>
-          <button mat-flat-button color="primary" (click)="coletar()" [disabled]="coletando()">
-            @if (coletando()) {
-              <mat-spinner diameter="16" />
-            } @else {
-              <mat-icon>download</mat-icon>
-            }
-            {{ coletando() ? 'Coletando...' : 'Coletar agora' }}
-          </button>
-        </div>
-      </div>
-
-      <!-- ── Status Tabs ──────────────────────────────────────────── -->
-      <mat-card appearance="outlined" class="leads-card">
-        <mat-tab-group (selectedIndexChange)="onTabChange($event)">
-          @for (tab of statusTabs; track tab.label) {
-            <mat-tab [label]="tab.label" />
-          }
-        </mat-tab-group>
-
-        <!-- ── Table ─────────────────────────────────────────────── -->
-        @if (loading()) {
-          <div class="table-loading">
-            <mat-spinner diameter="32" />
-            <span>Carregando leads...</span>
-          </div>
-        } @else if (leads().length === 0) {
-          <div class="table-empty">
-            <mat-icon>inbox</mat-icon>
-            <span>Nenhum lead encontrado</span>
-          </div>
-        } @else {
-          <table mat-table [dataSource]="leads()" class="leads-table">
-
-            <ng-container matColumnDef="dataPublicacao">
-              <th mat-header-cell *matHeaderCellDef>Data</th>
-              <td mat-cell *matCellDef="let row">{{ row.dataPublicacao }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="orgao">
-              <th mat-header-cell *matHeaderCellDef>Órgão</th>
-              <td mat-cell *matCellDef="let row">{{ row.orgao | truncate:30 }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="tipo">
-              <th mat-header-cell *matHeaderCellDef>Tipo</th>
-              <td mat-cell *matCellDef="let row">{{ row.tipo | truncate:20 }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="titulo">
-              <th mat-header-cell *matHeaderCellDef>Título</th>
-              <td mat-cell *matCellDef="let row">{{ row.titulo | truncate:60 }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>Status</th>
-              <td mat-cell *matCellDef="let row">
-                <span class="status-chip status-{{ row.status.toLowerCase().replace('_', '-') }}">
-                  {{ statusLabel(row.status) }}
-                </span>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="acoes">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <button mat-icon-button matTooltip="Ver detalhes" (click)="verDetalhe(row)">
-                  <mat-icon>open_in_new</mat-icon>
-                </button>
-                @if (row.status !== 'APROVADO') {
-                  <button mat-icon-button matTooltip="Aprovar" color="primary"
-                          (click)="atualizarStatus(row, 'APROVADO', $event)">
-                    <mat-icon>check_circle_outline</mat-icon>
-                  </button>
-                }
-                @if (row.status !== 'REJEITADO') {
-                  <button mat-icon-button matTooltip="Rejeitar" color="warn"
-                          (click)="atualizarStatus(row, 'REJEITADO', $event)">
-                    <mat-icon>cancel</mat-icon>
-                  </button>
-                }
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                class="lead-row"
-                (click)="verDetalhe(row)"></tr>
-          </table>
-
-          <mat-paginator
-            [length]="totalElements()"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="[10, 20, 50]"
-            (page)="onPage($event)"
-            showFirstLastButtons />
-        }
-      </mat-card>
-    </div>
-  `,
-  styles: [`
-    .leads-shell { padding: 24px; }
-    .leads-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .leads-title { font-size: 22px; font-weight: 700; color: #0F172A; margin: 0 0 4px; }
-    .leads-sub { font-size: 13px; color: #64748B; margin: 0; }
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .date-field { width: 160px; }
-    .leads-card { border-radius: 12px; overflow: hidden; }
-    .leads-table { width: 100%; }
-    .lead-row { cursor: pointer; transition: background 150ms; }
-    .lead-row:hover { background: #F8FAFC; }
-    .table-loading, .table-empty {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 48px 24px;
-      color: #64748B;
-      font-size: 14px;
-      mat-icon { font-size: 28px; width: 28px; height: 28px; }
-    }
-    .status-chip {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 6px;
-      padding: 2px 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .status-novo { background: #DBEAFE; color: #1E40AF; }
-    .status-em-analise { background: #FEF3C7; color: #92400E; }
-    .status-aprovado { background: #DCFCE7; color: #166534; }
-    .status-rejeitado { background: #FEE2E2; color: #991B1B; }
-  `]
+  templateUrl: './leads.component.html',
+  styleUrl: './leads.component.scss',
 })
 export class LeadsComponent implements OnInit {
-  private leadService = inject(LeadService);
+  private leadService   = inject(LeadService);
   private coletaService = inject(ColetaService);
-  private toast = inject(ToastService);
-  private dialog = inject(MatDialog);
+  private toast         = inject(ToastService);
+  private dialog        = inject(MatDialog);
+
+  fontes = FONTES;
+  hoje   = new Date();
 
   statusTabs: StatusTab[] = [
-    { label: 'Todos', value: null },
-    { label: 'Novo', value: 'NOVO' },
-    { label: 'Em Análise', value: 'EM_ANALISE' },
-    { label: 'Aprovado', value: 'APROVADO' },
-    { label: 'Rejeitado', value: 'REJEITADO' },
+    { label: 'Todos',            value: null },
+    { label: 'Nova',             value: 'NOVO' },
+    { label: 'Em Triagem',       value: 'EM_TRIAGEM' },
+    { label: 'Verificando Req.', value: 'VERIFICANDO_REQ' },
+    { label: 'Qualificado',      value: 'QUALIFICADO' },
+    { label: 'Descartado',       value: 'DESCARTADO' },
   ];
 
-  selectedStatus = signal<LeadStatus | null>(null);
-  leads = signal<Lead[]>([]);
-  totalElements = signal(0);
-  currentPage = signal(0);
-  pageSize = 20;
-  loading = signal(false);
-  displayedColumns = ['dataPublicacao', 'orgao', 'tipo', 'titulo', 'status', 'acoes'];
+  selectedTabIdx  = signal(0);
+  selectedStatus  = signal<LeadStatus | null>(null);
+  selectedFontes  = signal<string[]>([]);
+  allLeads        = signal<Lead[]>([]);
+  totalElements   = signal(0);
+  currentPage     = signal(0);
+  pageSize        = signal(12);
+  loading         = signal(true);
+  apiError        = signal(false);
+  buscaAtiva      = signal(false);
 
-  coletaDate = signal<Date>(new Date());
-  coletando = signal(false);
+  dateMode   = signal<'single' | 'range'>('single');
+  dateSingle = signal<Date>(new Date());
+  dateFrom   = signal<Date | null>(null);
+  dateTo     = signal<Date | null>(null);
+  coletando       = signal(false);
+  coletaResultado = signal<ColetaResultado | null>(null);
+  private coletaStep  = signal(0);
+  private coletaTotal = signal(0);
 
-  ngOnInit(): void {
-    this.carregarLeads();
+  // ── Computeds ──────────────────────────────────────────────────
+
+  filteredLeads = computed(() => {
+    const fontes = this.selectedFontes();
+    const leads  = this.allLeads();
+    if (!fontes.length) return leads;
+    return leads.filter(l => fontes.includes(l.fonte));
+  });
+
+  countByStatus = (status: LeadStatus | null) =>
+    this.allLeads().filter(l => status === null || l.status === status).length;
+
+  hasCollectableFonte = computed(() =>
+    this.selectedFontes().some(k => FONTES.find(f => f.key === k)?.canCollect)
+  );
+
+  hasNonCollectableFonte = computed(() =>
+    this.selectedFontes().some(k => !FONTES.find(f => f.key === k)?.canCollect)
+  );
+
+  nonCollectableLabel = computed(() =>
+    this.selectedFontes().filter(k => !FONTES.find(f => f.key === k)?.canCollect).join(', ')
+  );
+
+  canSubmit = computed(() => {
+    if (this.dateMode() === 'single') return !!this.dateSingle();
+    const from = this.dateFrom(), to = this.dateTo();
+    return !!from && !!to && to.getTime() >= from.getTime();
+  });
+
+  rangeInfo = computed(() => {
+    const from = this.dateFrom(), to = this.dateTo();
+    if (!from || !to || to < from) return null;
+    const days = Math.round((to.getTime() - from.getTime()) / 86_400_000) + 1;
+    return `${days} dia${days !== 1 ? 's' : ''}`;
+  });
+
+  coletaProgress = computed(() => {
+    const step = this.coletaStep(), total = this.coletaTotal();
+    return total > 1 ? `Coletando ${step}/${total}...` : 'Coletando...';
+  });
+
+  // ── Lifecycle ───────────────────────────────────────────────────
+
+  ngOnInit(): void { this.carregarLeads(); }
+
+  // ── Fontes ──────────────────────────────────────────────────────
+
+  isFonteSelected(key: string): boolean { return this.selectedFontes().includes(key); }
+
+  fecharBusca(): void {
+    this.buscaAtiva.set(false);
+    this.selectedFontes.set([]);
+    this.coletaResultado.set(null);
   }
 
-  carregarLeads(): void {
-    this.loading.set(true);
-    this.leadService.listar({
-      status: this.selectedStatus() ?? undefined,
-      page: this.currentPage(),
-      size: this.pageSize,
-    }).subscribe({
-      next: (page) => {
-        this.leads.set(page.content);
-        this.totalElements.set(page.totalElements);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.toast.error('Erro ao carregar leads');
-        this.loading.set(false);
-      }
-    });
-  }
-
-  onTabChange(index: number): void {
-    this.selectedStatus.set(this.statusTabs[index].value);
+  toggleFonte(key: string): void {
+    this.selectedFontes.update(list =>
+      list.includes(key) ? list.filter(k => k !== key) : [...list, key]
+    );
+    this.coletaResultado.set(null);
     this.currentPage.set(0);
     this.carregarLeads();
   }
 
-  onPage(event: PageEvent): void {
-    this.currentPage.set(event.pageIndex);
-    this.pageSize = event.pageSize;
-    this.carregarLeads();
+  setDateMode(mode: 'single' | 'range'): void {
+    this.dateMode.set(mode);
+    if (mode === 'single') { this.dateFrom.set(null); this.dateTo.set(null); }
   }
 
-  verDetalhe(lead: Lead): void {
-    const ref = this.dialog.open(LeadDetalheDialogComponent, {
-      data: lead,
-      width: '700px',
-      maxWidth: '95vw',
-    });
-    ref.afterClosed().subscribe(updated => {
-      if (updated) this.carregarLeads();
-    });
-  }
+  // ── Leads ───────────────────────────────────────────────────────
 
-  atualizarStatus(lead: Lead, status: LeadStatus, event: Event): void {
-    event.stopPropagation();
-    this.leadService.atualizarStatus(lead.uuid, {
-      status,
-      revisadoPor: 'analista@brasfort.com.br',
+  carregarLeads(): void {
+    this.loading.set(true);
+    this.apiError.set(false);
+    this.leadService.listar({
+      status: this.selectedStatus() ?? undefined,
+      page:   this.currentPage(),
+      size:   this.pageSize(),
     }).subscribe({
-      next: () => {
-        this.toast.success(`Lead ${this.statusLabel(status).toLowerCase()}`);
-        this.carregarLeads();
-      },
-      error: () => this.toast.error('Erro ao atualizar status'),
-    });
-  }
-
-  coletar(): void {
-    if (this.coletando()) return;
-    this.coletando.set(true);
-    this.coletaService.dispararColeta(this.coletaDate()).subscribe({
-      next: (resultado) => {
-        this.coletando.set(false);
-        this.toast.success(`Coleta concluída: ${resultado.salvos} salvos, ${resultado.duplicados} duplicados`);
-        this.carregarLeads();
+      next: (page) => {
+        this.allLeads.set(page.content ?? []);
+        this.totalElements.set(page.totalElements ?? 0);
+        this.loading.set(false);
       },
       error: () => {
-        this.coletando.set(false);
-        this.toast.error('Erro ao disparar coleta');
+        this.apiError.set(true);
+        this.loading.set(false);
+        this.toast.error('Erro ao carregar leads');
       }
     });
   }
 
-  statusLabel(status: LeadStatus): string {
-    const map: Record<LeadStatus, string> = {
-      NOVO: 'Novo',
-      EM_ANALISE: 'Em Análise',
-      APROVADO: 'Aprovado',
-      REJEITADO: 'Rejeitado',
-    };
-    return map[status];
+  onTabChange(idx: number): void {
+    this.selectedTabIdx.set(idx);
+    this.selectedStatus.set(this.statusTabs[idx].value);
+    this.currentPage.set(0);
+    this.carregarLeads();
+  }
+
+  onPrev(): void { if (this.currentPage() > 0) { this.currentPage.update(p => p - 1); this.carregarLeads(); } }
+  onNext(): void {
+    if ((this.currentPage() + 1) * this.pageSize() < this.totalElements()) { this.currentPage.update(p => p + 1); this.carregarLeads(); }
+  }
+
+  totalPages = computed(() => Math.ceil(this.totalElements() / this.pageSize()));
+
+  // ── Coleta ──────────────────────────────────────────────────────
+
+  async coletar(): Promise<void> {
+    if (!this.canSubmit() || this.coletando()) return;
+    const dates = this.buildDateList();
+    if (!dates.length) return;
+
+    this.coletando.set(true);
+    this.coletaResultado.set(null);
+
+    const collectableFontes = this.selectedFontes().filter(k => FONTES.find(f => f.key === k)?.canCollect);
+    // PNCP = 1 chamada (range); DODF/DOU = 1 por dia
+    const totalOps = collectableFontes.reduce((n, f) => n + (f === 'PNCP' ? 1 : dates.length), 0);
+    this.coletaStep.set(0);
+    this.coletaTotal.set(totalOps);
+
+    let totalMaterias = 0, totalSalvos = 0, totalDuplicados = 0, step = 0;
+    for (const fonte of collectableFontes) {
+
+      // DODF e DOU: uma chamada por dia
+      for (let i = 0; i < dates.length; i++) {
+        this.coletaStep.set(++step);
+        try {
+          const r = await this.coletaService.dispararColeta(fonte, dates[i]).toPromise();
+          if (r) { totalMaterias += r.totalMaterias ?? 0; totalSalvos += r.salvos ?? 0; totalDuplicados += r.duplicados ?? 0; }
+        } catch { this.toast.error(`Erro ao coletar ${fonte} ${this.formatDate(dates[i])}`); }
+      }
+    }
+
+    this.coletaResultado.set({ totalMaterias, salvos: totalSalvos, duplicados: totalDuplicados, data: '' } as any);
+    this.coletando.set(false);
+    if (totalSalvos > 0) { this.toast.success(`${totalSalvos} lead(s) coletados`); this.carregarLeads(); }
+    else { this.toast.info('Nenhum lead novo encontrado'); }
+  }
+
+  private buildDateList(): Date[] {
+    if (this.dateMode() === 'single') return this.dateSingle() ? [this.dateSingle()] : [];
+    const from = this.dateFrom(), to = this.dateTo();
+    if (!from || !to) return [];
+    const dates: Date[] = [];
+    const cur = new Date(from);
+    while (cur <= to) { dates.push(new Date(cur)); cur.setDate(cur.getDate() + 1); }
+    return dates;
+  }
+
+  // ── Lead actions ────────────────────────────────────────────────
+
+  verDetalhe(lead: Lead): void {
+    const ref = this.dialog.open(LeadDetalheDialogComponent, { data: lead, width: '700px', maxWidth: '95vw' });
+    ref.afterClosed().subscribe(updated => { if (updated) this.carregarLeads(); });
+  }
+
+  atualizarStatus(lead: Lead, status: LeadStatus, event: Event): void {
+    event.stopPropagation();
+    this.leadService.atualizarStatus(lead.uuid, { status, revisadoPor: 'analista@brasfort.com.br' }).subscribe({
+      next: () => { this.toast.success(this.statusLabel(status)); this.carregarLeads(); },
+      error: () => this.toast.error('Erro ao atualizar status'),
+    });
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────
+
+  orgColor(name: string): string { return ORG_COLORS[(name?.charCodeAt(0) ?? 0) % ORG_COLORS.length]; }
+  orgInitial(name: string): string { return name?.charAt(0).toUpperCase() ?? '?'; }
+
+  normalizeCase(text: string): string {
+    if (!text) return '';
+    const isAllCaps = text === text.toUpperCase() && /[A-ZÁÉÍÓÚÀÂÊÔÃÕÇ]/.test(text);
+    if (!isAllCaps) return text;
+    return text.toLowerCase().replace(/(^\s*\S|[.!?]\s+\S)/g, c => c.toUpperCase());
+  }
+
+  statusLabel(s: LeadStatus): string {
+    const m: Record<LeadStatus, string> = { NOVO: 'Nova', EM_TRIAGEM: 'Em Triagem', VERIFICANDO_REQ: 'Verificando', QUALIFICADO: 'Qualificado', DESCARTADO: 'Descartado' };
+    return m[s] ?? s;
+  }
+
+  formatDate(d: string | Date): string {
+    if (!d) return '';
+    try {
+      const dt = typeof d === 'string' ? (d.includes('T') ? new Date(d) : new Date(d + 'T00:00:00')) : d;
+      return dt.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    } catch { return String(d); }
   }
 }

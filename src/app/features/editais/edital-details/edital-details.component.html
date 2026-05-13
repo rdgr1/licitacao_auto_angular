@@ -4,160 +4,101 @@
 
   @if (!loading() && edital()) {
 
-    <!-- ── Page Header ─────────────────────────────────────────────── -->
-    <div class="details-header">
-      <button mat-icon-button (click)="goBack()" class="back-btn" matTooltip="Voltar para Editais">
+    <!-- ── Header ─────────────────────────────────────────────── -->
+    <div class="detail-header">
+      <button mat-icon-button (click)="goBack()" matTooltip="Voltar">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <div class="header-info">
-        <span class="header-breadcrumb">Editais</span>
-        <h1>{{ edital()!.numero }}</h1>
+
+      <div class="header-crumb">
+        <span class="crumb-parent">Editais</span>
+        <mat-icon class="crumb-sep">chevron_right</mat-icon>
+        <span class="crumb-current">{{ edital()!.numero }}</span>
       </div>
-      <span class="status-badge" [class]="edital()!.status.toLowerCase()">
-        <span class="status-dot"></span>
-        {{ edital()!.status }}
+
+      <span class="status-badge {{ edital()!.status | lowercase }}">
+        <span class="sdot"></span>{{ formatStatus(edital()!.status) }}
       </span>
-      <span class="spacer"></span>
-      <div class="header-actions">
-        <button mat-stroked-button (click)="openPdf()" [disabled]="!edital()?.pdfUrl">
-          <mat-icon>picture_as_pdf</mat-icon>
-          PDF
+
+      <span class="flex-1"></span>
+
+      <div class="header-acts">
+        @if (edital()!.pdfUrl) {
+          <a mat-icon-button [href]="edital()!.pdfUrl" target="_blank" matTooltip="Abrir PDF">
+            <mat-icon>picture_as_pdf</mat-icon>
+          </a>
+        }
+        @if (edital()!.sourceUrl) {
+          <a mat-icon-button [href]="edital()!.sourceUrl" target="_blank" matTooltip="Fonte original">
+            <mat-icon>open_in_new</mat-icon>
+          </a>
+        }
+        <button mat-icon-button matTooltip="Reprocessar" (click)="reprocessar()">
+          <mat-icon>refresh</mat-icon>
         </button>
-        <button mat-stroked-button (click)="openSource()">
-          <mat-icon>open_in_new</mat-icon>
-          Fonte
-        </button>
-        <button mat-stroked-button class="btn-danger" (click)="delete()">
+        <button mat-icon-button matTooltip="Excluir" color="warn" (click)="delete()">
           <mat-icon>delete_outline</mat-icon>
-          Excluir
         </button>
       </div>
     </div>
 
-    <!-- ── Key Metrics Row ────────────────────────────────────────── -->
-    <div class="metrics-row">
-      <mat-card appearance="outlined" class="metric-card">
-        <mat-card-content>
-          <div class="metric-inner">
-            <div class="metric-icon primary-tonal">
-              <mat-icon>monetization_on</mat-icon>
-            </div>
-            <div>
-              <span class="metric-label">Valor Estimado</span>
-              <span class="metric-value">{{ edital()!.valorEstimado | currencyBr }}</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card appearance="outlined" class="metric-card">
-        <mat-card-content>
-          <div class="metric-inner">
-            <div class="metric-icon secondary-tonal">
-              <mat-icon>event</mat-icon>
-            </div>
-            <div>
-              <span class="metric-label">Data de Abertura</span>
-              <span class="metric-value">{{ edital()!.dataAbertura | dateBr }}</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card appearance="outlined" class="metric-card">
-        <mat-card-content>
-          <div class="metric-inner">
-            <div class="metric-icon tertiary-tonal">
-              <mat-icon>business</mat-icon>
-            </div>
-            <div>
-              <span class="metric-label">Órgão</span>
-              <span class="metric-value">{{ edital()!.orgaoOrigem }}</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card appearance="outlined" class="metric-card">
-        <mat-card-content>
-          <div class="metric-inner">
-            <div class="metric-icon warning-tonal">
-              <mat-icon>gavel</mat-icon>
-            </div>
-            <div>
-              <span class="metric-label">Modalidade</span>
-              <span class="metric-value">{{ edital()!.modalidade }}</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+    <!-- ── Info strip ─────────────────────────────────────────── -->
+    <div class="info-strip">
+      <div class="strip-item">
+        <span class="strip-k">Valor estimado</span>
+        <span class="strip-v money">{{ edital()!.valorEstimado | currencyBr }}</span>
+      </div>
+      <div class="strip-div"></div>
+      <div class="strip-item">
+        <span class="strip-k">Abertura</span>
+        <span class="strip-v" [class.urgent]="isUrgent(edital()!.dataAbertura)">
+          {{ edital()!.dataAbertura | dateBr }}
+        </span>
+      </div>
+      <div class="strip-div"></div>
+      <div class="strip-item">
+        <span class="strip-k">Modalidade</span>
+        <span class="strip-v">{{ formatModalidade(edital()!.modalidade) }}</span>
+      </div>
+      <div class="strip-div"></div>
+      <div class="strip-item flex-grow">
+        <span class="strip-k">Órgão</span>
+        <span class="strip-v">{{ edital()!.orgaoOrigem }}</span>
+      </div>
     </div>
 
-    <!-- ── Tabs ───────────────────────────────────────────────────── -->
-    <mat-tab-group animationDuration="200ms">
-      <mat-tab label="Informações Gerais">
-        <div class="tab-content">
-          <mat-card appearance="outlined" class="info-card">
-            <mat-card-content>
-              <div class="section-title">Objeto da Licitação</div>
-              <p class="objeto-text">{{ edital()!.objeto }}</p>
-            </mat-card-content>
-          </mat-card>
+    <!-- ── Objeto ──────────────────────────────────────────────── -->
+    <div class="section-card">
+      <span class="section-label">Objeto da contratação</span>
+      <p class="objeto-text">{{ edital()!.objeto }}</p>
+    </div>
 
-          <mat-card appearance="outlined" class="info-card">
-            <mat-card-content>
-              <div class="section-title">Dados do Processo</div>
-              <div class="info-grid">
-                <div class="info-item">
-                  <span class="info-label">Número</span>
-                  <span class="info-value highlight">{{ edital()!.numero }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Modalidade</span>
-                  <span class="info-value">{{ edital()!.modalidade }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Criado em</span>
-                  <span class="info-value">{{ edital()!.createdAt | dateBr }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Atualizado em</span>
-                  <span class="info-value">{{ edital()!.updatedAt | dateBr }}</span>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
+    <!-- ── Meta grid ──────────────────────────────────────────── -->
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span class="meta-k">Número</span>
+        <span class="meta-v mono">{{ edital()!.numero }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-k">Cadastrado em</span>
+        <span class="meta-v">{{ edital()!.createdAt | dateBr }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-k">Atualizado em</span>
+        <span class="meta-v">{{ edital()!.updatedAt | dateBr }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-k">Exigências</span>
+        <span class="meta-v">{{ edital()!.quantidadeExigencias ?? 0 }}</span>
+      </div>
+      @if (edital()!.errorMessage) {
+        <div class="meta-item full-width">
+          <span class="meta-k">Erro de processamento</span>
+          <span class="meta-v error-text">{{ edital()!.errorMessage }}</span>
         </div>
-      </mat-tab>
-
-      <mat-tab label="Exigências">
-        <div class="tab-content">
-          <mat-card appearance="outlined" class="info-card">
-            <mat-card-content>
-              <div class="section-title">Exigências do Edital</div>
-              <div class="exigencias-summary">
-                <div class="exigencia-stat">
-                  <span class="exigencia-num">{{ edital()!.quantidadeExigencias }}</span>
-                  <span class="exigencia-lbl">Total de Exigências</span>
-                </div>
-              </div>
-              <p class="text-caption mt-16">Detalhamento completo das exigências será disponibilizado em versão futura.</p>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </mat-tab>
-
-      <mat-tab label="Histórico">
-        <div class="tab-content">
-          <mat-card appearance="outlined" class="info-card empty-tab">
-            <mat-card-content>
-              <mat-icon>history</mat-icon>
-              <p>Histórico de processamento será implementado em versão futura.</p>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
+      }
+    </div>
 
   }
+
 </div>

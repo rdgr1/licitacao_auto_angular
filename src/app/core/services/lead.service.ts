@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Lead, LeadStatus, AtualizarStatusRequest } from '../models/lead.model';
-import { Page } from '../models/edital.model';
+import { Page, EditalResponse } from '../models/edital.model';
 
 @Injectable({ providedIn: 'root' })
 export class LeadService {
@@ -25,5 +25,10 @@ export class LeadService {
 
   atualizarStatus(uuid: string, req: AtualizarStatusRequest): Observable<Lead> {
     return this.http.patch<Lead>(`${this.base}/${uuid}/status`, req);
+  }
+
+  // Vincula o lead ao melhor edital encontrado no PNCP (idempotente)
+  buscarEdital(uuid: string): Observable<EditalResponse> {
+    return this.http.post<EditalResponse>(`${this.base}/${uuid}/buscar-edital`, {});
   }
 }

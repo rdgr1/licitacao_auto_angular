@@ -5,35 +5,37 @@ html {
   height: 100%;
   @include mat.theme((
     color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$green-palette,
+      primary: mat.$spring-green-palette,
+      tertiary: mat.$spring-green-palette,
     ),
-    typography: 'Plus Jakarta Sans',
+    typography: 'Inter Tight',
     density: 0,
   ));
 }
 
 // ── Enterprise Design System – LicitaFlow ─────────────────────────────────────
 :root {
-  // Brand
-  --brand-primary:       #2563EB;
-  --brand-primary-hover: #1D4ED8;
-  --brand-primary-light: #EFF6FF;
-  --brand-accent:        #10B981;
-  --brand-accent-hover:  #059669;
-  --brand-accent-light:  #ECFDF5;
+  // Brand — paleta verde #0D1526 · #0C2126 · #107357 · #0DA66E · #11BF7F
+  --brand-primary:       #11BF7F;
+  --brand-primary-hover: #0DA66E;
+  --brand-primary-light: rgba(17,191,127,0.10);
+  --brand-deep:          #107357;
+  --brand-accent:        #11BF7F;
+  --brand-accent-hover:  #0DA66E;
+  --brand-accent-light:  rgba(17,191,127,0.08);
 
   // Sidebar
-  --sidebar-bg:           #0F172A;
+  --sidebar-bg:           #0D1526;
+  --sidebar-bg-hover:     #0C2126;
   --sidebar-border:       rgba(255,255,255,0.06);
   --sidebar-text:         #94A3B8;
   --sidebar-text-hover:   #CBD5E1;
   --sidebar-text-active:  #F8FAFC;
   --sidebar-icon:         #64748B;
-  --sidebar-icon-active:  #10B981;
+  --sidebar-icon-active:  #11BF7F;
   --sidebar-hover-bg:     rgba(255,255,255,0.04);
-  --sidebar-active-bg:    rgba(16,185,129,0.10);
-  --sidebar-active-line:  #10B981;
+  --sidebar-active-bg:    rgba(17,191,127,0.12);
+  --sidebar-active-line:  #11BF7F;
   --sidebar-width:        240px;
   --sidebar-collapsed:    64px;
   --sidebar-section-label:#475569;
@@ -60,7 +62,7 @@ html {
   --border-focus: #2563EB;
 
   // Status
-  --status-processado: #10B981;
+  --status-processado: #11BF7F;
   --status-pendente:   #F59E0B;
   --status-erro:       #EF4444;
 
@@ -76,7 +78,7 @@ html {
   --color-score-hot:         #EF4444;
   --color-score-warm:        #F59E0B;
   --color-score-cold:        #3B82F6;
-  --color-success:           #10B981;
+  --color-success:           #11BF7F;
   --color-warning:           #F59E0B;
   --color-error:             #EF4444;
   --color-info:              #3B82F6;
@@ -102,12 +104,56 @@ html {
   --transition-md: 250ms ease;
 }
 
+// ── Override Material tonal palette ──────────────────────────────────────────
+// mat.$spring-green-palette tone-90 = amarelo-esverdeado → forçamos o verde real
+html {
+  // M3 system tokens
+  --mat-sys-primary:              #11BF7F;
+  --mat-sys-on-primary:           #ffffff;
+  --mat-sys-primary-container:    #D4F5E9;
+  --mat-sys-on-primary-container: #004D30;
+  --mat-sys-tertiary:             #0DA66E;
+  --mat-sys-tertiary-container:   #D4F5E9;
+  --mat-sys-secondary-container:  #E8F5F0;
+
+  // MDC Switch (slide-toggle)
+  --mdc-switch-selected-track-color:           #11BF7F;
+  --mdc-switch-selected-hover-track-color:     #0DA66E;
+  --mdc-switch-selected-focus-track-color:     #0DA66E;
+  --mdc-switch-selected-pressed-track-color:   #107357;
+  --mdc-switch-selected-handle-color:          #ffffff;
+  --mdc-switch-selected-hover-handle-color:    #ffffff;
+  --mdc-switch-selected-focus-handle-color:    #ffffff;
+  --mdc-switch-selected-pressed-handle-color:  #ffffff;
+  --mdc-switch-selected-icon-color:            #107357;
+  --mdc-switch-unselected-track-color:         #CBD5E1;
+  --mdc-switch-unselected-hover-track-color:   #94A3B8;
+  --mdc-switch-unselected-handle-color:        #ffffff;
+  --mdc-switch-unselected-hover-handle-color:  #f8f8f8;
+  --mat-switch-selected-track-color:           #11BF7F;
+  --mat-switch-unselected-track-color:         #CBD5E1;
+
+  // MDC Button
+  --mdc-filled-button-container-color:        #11BF7F;
+  --mdc-filled-button-label-text-color:       #ffffff;
+  --mdc-filled-button-hover-container-color:  #0DA66E;
+
+  // MDC ripple / state overlay
+  --mat-sys-state-layers-primary-opacity: 0.08;
+}
+
+// ── Font variables ────────────────────────────────────────────────────────────
+:root {
+  --font-primary: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 // ── Base ──────────────────────────────────────────────────────────────────────
 body {
   color-scheme: light;
   background: var(--content-bg);
   color: var(--text-primary);
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-primary);
   font-size: 14px;
   line-height: 1.6;
   margin: 0;
@@ -118,11 +164,21 @@ body {
 
 // ── Typography ────────────────────────────────────────────────────────────────
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-primary);
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
   line-height: 1.3;
+}
+
+// Textos pequenos (≤11px) e secundários usam Inter — melhor legibilidade
+// que Inter Tight em tamanhos reduzidos com cor cinza
+.font-secondary,
+.text-caption,
+.text-secondary,
+.mat-mdc-form-field-hint,
+.mat-mdc-form-field-subscript-wrapper {
+  font-family: var(--font-secondary) !important;
 }
 
 // ── Layout Utilities ──────────────────────────────────────────────────────────
@@ -301,6 +357,74 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 767px) {
   .hide-mobile { display: none !important; }
   .show-mobile { display: block !important; }
+}
+
+// ── Elimina qualquer resíduo amarelo do spring-green-palette ─────────────────
+// O M3 usa --mat-sys-primary-container para ripple e alguns chips
+.mat-mdc-button.mat-primary .mat-ripple-element,
+.mat-mdc-raised-button.mat-primary .mat-ripple-element,
+.mat-mdc-flat-button.mat-primary .mat-ripple-element { background-color: rgba(17,191,127,0.12) !important; }
+
+.mat-mdc-chip.mat-primary { background-color: rgba(17,191,127,0.10) !important; }
+
+// Forçar cor verde em todos os estados do slide-toggle
+mat-slide-toggle.mat-primary {
+  --mdc-switch-selected-track-color: #11BF7F !important;
+  --mdc-switch-selected-hover-track-color: #0DA66E !important;
+  --mdc-switch-selected-focus-track-color: #0DA66E !important;
+  --mdc-switch-selected-pressed-track-color: #107357 !important;
+}
+
+// ── Slide toggle — tamanho compacto (tokens no html para vencer especificidade) ─
+html {
+  --mdc-switch-track-height:   20px;
+  --mdc-switch-track-width:    36px;
+  --mdc-switch-handle-height:  14px;
+  --mdc-switch-handle-width:   14px;
+  --mdc-switch-track-shape:    10px;
+}
+.mat-mdc-slide-toggle {
+  font-size: 13px !important;
+  .mdc-form-field { gap: 8px !important; }
+}
+
+// ── Config tables — fonte única de verdade para DODF + DOU ───────────────────
+// Fonte única: mudança aqui reflete em ambos os componentes automaticamente.
+// clamp(min, preferred, max) — ligeiramente maior em telas grandes.
+.cfg-table {
+  --mat-table-background-color:           #ffffff !important;
+  --mat-table-row-item-container-color:   #ffffff !important;
+  --mat-table-row-item-label-text-color:  #334155;
+  --mat-table-header-container-height:    40px;
+  --mat-table-row-item-container-height:  clamp(38px, 3.2vw, 46px);
+
+  .mat-mdc-row,
+  .mat-mdc-header-row { background: #ffffff !important; }
+
+  .mat-mdc-row:hover .mat-mdc-cell { background: #F8FAFC !important; }
+
+  // Toggle compacto — clamp: ligeiramente maior em telas maiores
+  .mdc-switch {
+    --mdc-switch-track-height:   clamp(20px, 1.6vw, 24px);
+    --mdc-switch-track-width:    clamp(36px, 3vw, 44px);
+    --mdc-switch-handle-height:  clamp(14px, 1.1vw, 17px);
+    --mdc-switch-handle-width:   clamp(14px, 1.1vw, 17px);
+    --mdc-switch-track-shape:    12px;
+  }
+
+  // Botões de ação — clamp: não ultrapassam a linha de 46px
+  .mat-mdc-icon-button {
+    width:       clamp(32px, 2.6vw, 38px);
+    height:      clamp(32px, 2.6vw, 38px);
+    padding:     4px;
+    line-height: clamp(32px, 2.6vw, 38px);
+
+    .mat-icon {
+      font-size: clamp(18px, 1.4vw, 21px);
+      width:     clamp(18px, 1.4vw, 21px);
+      height:    clamp(18px, 1.4vw, 21px);
+    }
+  }
 }
 
 // ── Scrollbar ─────────────────────────────────────────────────────────────────

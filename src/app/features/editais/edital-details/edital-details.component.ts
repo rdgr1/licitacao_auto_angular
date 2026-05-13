@@ -1,10 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { EditaisService } from '../../../core/services/editais.service';
@@ -18,14 +16,12 @@ import { DateBrPipe } from '../../../shared/pipes/date-br.pipe';
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatTabsModule,
     MatTooltipModule,
     LoadingSpinnerComponent,
     CurrencyBrPipe,
-    DateBrPipe
+    DateBrPipe,
   ],
   templateUrl: './edital-details.component.html',
   styleUrl: './edital-details.component.scss'
@@ -73,11 +69,32 @@ export class EditalDetailsComponent implements OnInit {
     }
   }
 
+  reprocessar() {
+    this.editaisService.reprocessar(this.edital()!.id).subscribe({
+      next: () => this.loadEdital(this.edital()!.id),
+    });
+  }
+
   delete() {
     if (confirm('Deseja realmente excluir este edital?')) {
       this.editaisService.delete(this.edital()!.id).subscribe(() => {
         this.router.navigate(['/editais']);
       });
     }
+  }
+
+  formatStatus(s: string): string {
+    const m: Record<string, string> = { PROCESSADO:'Processado', PENDENTE:'Pendente', PROCESSANDO:'Processando', ERRO:'Erro', ANTECIPADO:'Antecipado', ARQUIVADO:'Arquivado' };
+    return m[s] ?? s;
+  }
+
+  formatModalidade(m: string): string {
+    return m?.replace(/_/g,' ').replace('ELETRONICO','ELETRÔNICO').replace('CONCORRENCIA','CONCORRÊNCIA') ?? m;
+  }
+
+  isUrgent(data: string): boolean {
+    if (!data) return false;
+    const diff = new Date(data).getTime() - Date.now();
+    return diff > 0 && diff < 3 * 86_400_000;
   }
 }

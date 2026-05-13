@@ -1,42 +1,44 @@
 <div class="editais-shell">
 
-  <!-- ── Page Header ──────────────────────────────────────────────────── -->
+  <!-- ── Header ─────────────────────────────────────────────────── -->
   <div class="page-header">
-    <div class="page-header-left">
-      <div class="page-icon-wrap">
-        <mat-icon>description</mat-icon>
-      </div>
-      <div>
-        <h1>Editais</h1>
-        <p>Gerencie e acompanhe todos os editais de licitação</p>
-      </div>
+    <div>
+      <h1 class="page-title">Editais</h1>
+      <p class="page-sub">
+        {{ dataSource.filteredData.length }}
+        edital{{ dataSource.filteredData.length !== 1 ? 'is' : '' }} encontrado{{ dataSource.filteredData.length !== 1 ? 's' : '' }}
+      </p>
     </div>
-    <button mat-flat-button (click)="loadEditais()">
-      <mat-icon>refresh</mat-icon>
-      Atualizar
-    </button>
+    <div class="header-right">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input placeholder="Número, objeto, órgão..." (input)="applyFilter($event)" />
+      </div>
+      <button mat-icon-button matTooltip="Recarregar" (click)="loadEditais()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
   </div>
 
+  <!-- ── Status Chips ────────────────────────────────────────────── -->
+  <div class="status-bar">
+    @for (s of statusOptions; track s.value) {
+      <button class="status-pill"
+              [class.active]="selectedStatus() === s.value"
+              (click)="onStatusFilter(s.value)">
+        @if (s.cls) { <span class="s-dot {{ s.cls }}"></span> }
+        {{ s.label }}
+      </button>
+    }
+  </div>
+
+  <!-- ── Table ───────────────────────────────────────────────────── -->
   <app-loading-spinner [isLoading]="loading" />
 
   @if (!loading()) {
-    <!-- ── Table Card ────────────────────────────────────────────────── -->
-    <mat-card appearance="outlined" class="table-card">
-
-      <!-- Card toolbar -->
-      <div class="table-toolbar">
-        <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput placeholder="Buscar por número, objeto, órgão..." (input)="applyFilter($event)">
-        </mat-form-field>
-        <span class="result-count" *ngIf="dataSource.filteredData.length > 0">
-          {{ dataSource.filteredData.length }} resultado{{ dataSource.filteredData.length !== 1 ? 's' : '' }}
-        </span>
-      </div>
-
+    <div class="table-wrap">
       <table mat-table [dataSource]="dataSource" matSort class="editais-table">
 
-        <!-- Número Column -->
         <ng-container matColumnDef="numero">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Número</th>
           <td mat-cell *matCellDef="let row">
@@ -44,23 +46,20 @@
           </td>
         </ng-container>
 
-        <!-- Objeto Column -->
         <ng-container matColumnDef="objeto">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Objeto</th>
           <td mat-cell *matCellDef="let row" class="objeto-cell">
-            {{ row.objeto | truncate:70 }}
+            {{ row.objeto | truncate:72 }}
           </td>
         </ng-container>
 
-        <!-- Modalidade Column -->
         <ng-container matColumnDef="modalidade">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Modalidade</th>
           <td mat-cell *matCellDef="let row">
-            <span class="modalidade-chip">{{ row.modalidade }}</span>
+            <span class="mod-tag">{{ formatModalidade(row.modalidade) }}</span>
           </td>
         </ng-container>
 
-        <!-- Valor Column -->
         <ng-container matColumnDef="valorEstimado">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
           <td mat-cell *matCellDef="let row" class="valor-cell">
@@ -68,24 +67,24 @@
           </td>
         </ng-container>
 
-        <!-- Data Column -->
         <ng-container matColumnDef="dataAbertura">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Abertura</th>
-          <td mat-cell *matCellDef="let row">{{ row.dataAbertura | dateBr }}</td>
-        </ng-container>
-
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
           <td mat-cell *matCellDef="let row">
-            <span class="status-badge" [class]="getStatusClass(row.status)">
-              <span class="status-dot"></span>
-              {{ row.status }}
+            <span class="date-cell" [class.urgent]="isUrgent(row.dataAbertura)">
+              {{ row.dataAbertura | dateBr }}
             </span>
           </td>
         </ng-container>
 
-        <!-- Actions Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="status-badge {{ getStatusClass(row.status) }}">
+              <span class="status-dot"></span>{{ formatStatus(row.status) }}
+            </span>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
@@ -94,51 +93,38 @@
             </button>
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="viewDetails(row)">
-                <mat-icon>visibility</mat-icon>
-                <span>Ver detalhes</span>
+                <mat-icon>visibility</mat-icon><span>Ver detalhes</span>
               </button>
               <button mat-menu-item (click)="verItens(row)">
-                <mat-icon>list_alt</mat-icon>
-                <span>Ver Itens</span>
+                <mat-icon>list_alt</mat-icon><span>Ver itens</span>
               </button>
               <button mat-menu-item (click)="reprocessar(row)">
-                <mat-icon>refresh</mat-icon>
-                <span>Reprocessar</span>
+                <mat-icon>refresh</mat-icon><span>Reprocessar</span>
               </button>
-              <mat-divider></mat-divider>
-              <button mat-menu-item (click)="delete(row)" class="menu-item-danger">
-                <mat-icon>delete_outline</mat-icon>
-                <span>Excluir</span>
+              <mat-divider />
+              <button mat-menu-item (click)="delete(row)" class="menu-danger">
+                <mat-icon>delete_outline</mat-icon><span>Excluir</span>
               </button>
             </mat-menu>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row
-            *matRowDef="let row; columns: displayedColumns;"
-            (click)="viewDetails(row)"
-            class="table-row">
-        </tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            (click)="viewDetails(row)" class="table-row"></tr>
 
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-            <app-empty-state
-              icon="description"
-              title="Nenhum edital encontrado"
-              message="Não há editais cadastrados ou nenhum corresponde aos filtros aplicados">
-            </app-empty-state>
+          <td [attr.colspan]="displayedColumns.length">
+            <div class="empty-table">
+              <mat-icon>description</mat-icon>
+              <span>Nenhum edital encontrado</span>
+            </div>
           </td>
         </tr>
       </table>
 
-      <mat-paginator
-        [pageSizeOptions]="[10, 25, 50, 100]"
-        [pageSize]="25"
-        showFirstLastButtons>
-      </mat-paginator>
-
-    </mat-card>
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" [pageSize]="25" showFirstLastButtons />
+    </div>
   }
 
 </div>

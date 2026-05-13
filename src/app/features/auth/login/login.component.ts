@@ -183,7 +183,7 @@ import { AuthService } from '../../../core/services/auth.service';
       display: flex;
       min-height: 100vh;
       background: #F1F5F9;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Inter Tight', sans-serif;
     }
 
     /* ── Left panel ─────────────────────────────────────────────────── */
@@ -194,7 +194,7 @@ import { AuthService } from '../../../core/services/auth.service';
       justify-content: center;
       width: 45%;
       flex-shrink: 0;
-      background: linear-gradient(155deg, #0F172A 0%, #1E293B 60%, #0F2A1A 100%);
+      background: linear-gradient(155deg, #0D1526 0%, #1E293B 60%, #0F2A1A 100%);
       overflow: hidden;
 
       @media (max-width: 900px) { display: none; }
@@ -218,7 +218,7 @@ import { AuthService } from '../../../core/services/auth.service';
     .logo-icon {
       width: 44px;
       height: 44px;
-      background: linear-gradient(135deg, #10B981, #059669);
+      background: linear-gradient(135deg, #11BF7F, #0DA66E);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -293,7 +293,7 @@ import { AuthService } from '../../../core/services/auth.service';
           font-size: 18px;
           width: 18px;
           height: 18px;
-          color: #10B981;
+          color: #11BF7F;
         }
       }
 
@@ -373,7 +373,7 @@ import { AuthService } from '../../../core/services/auth.service';
       margin-bottom: 32px;
       font-size: 18px;
       font-weight: 700;
-      color: #0F172A;
+      color: #0D1526;
 
       @media (max-width: 900px) { display: flex; }
     }
@@ -384,7 +384,7 @@ import { AuthService } from '../../../core/services/auth.service';
       h2 {
         font-size: 26px;
         font-weight: 800;
-        color: #0F172A;
+        color: #0D1526;
         letter-spacing: -0.4px;
         margin-bottom: 6px;
       }
@@ -440,7 +440,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
     .forgot-link {
       font-size: 13px;
-      color: #2563EB;
+      color: #0DA66E;
       text-decoration: none;
       font-weight: 500;
       &:hover { text-decoration: underline; }
@@ -452,7 +452,7 @@ import { AuthService } from '../../../core/services/auth.service';
       border-radius: 8px !important;
       font-size: 15px;
       font-weight: 600;
-      background: linear-gradient(135deg, #2563EB, #1D4ED8) !important;
+      background: linear-gradient(135deg, #0DA66E, #107357) !important;
       color: white !important;
       display: flex;
       align-items: center;
@@ -462,7 +462,7 @@ import { AuthService } from '../../../core/services/auth.service';
       letter-spacing: 0.01em;
 
       &:hover:not(:disabled) {
-        background: linear-gradient(135deg, #1D4ED8, #1E40AF) !important;
+        background: linear-gradient(135deg, #107357, #1E40AF) !important;
         box-shadow: 0 4px 14px rgba(37,99,235,0.35);
         transform: translateY(-1px);
       }
@@ -483,7 +483,7 @@ import { AuthService } from '../../../core/services/auth.service';
       color: #64748B;
 
       a {
-        color: #2563EB;
+        color: #0DA66E;
         text-decoration: none;
         font-weight: 600;
         &:hover { text-decoration: underline; }

@@ -10,6 +10,28 @@ export interface DodfTipoAbertura {
   ativo: boolean;
 }
 
+// ── DOU entities ──────────────────────────────────────────────────────────────
+
+export interface DouKeyword {
+  uuid: string;
+  termo: string;
+  ativo: boolean;
+}
+
+export interface DouTipoArtigo {
+  uuid: string;
+  valor: string;
+  ativo: boolean;
+}
+
+export interface DouRegiao {
+  uuid: string;
+  termo: string;
+  ativo: boolean;
+}
+
+// ── Coleta ────────────────────────────────────────────────────────────────────
+
 export interface ColetaResultado {
   data: string;
   totalMaterias: number;

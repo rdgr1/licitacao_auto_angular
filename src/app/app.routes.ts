@@ -53,14 +53,15 @@ export const routes: Routes = [
           import('./features/chat/chat.component').then(m => m.ChatComponent),
       },
       {
-        path: 'regras',
+        path: 'configuracoes',
         loadComponent: () =>
-          import('./features/regras/regras.component').then(m => m.RegrasComponent),
+          import('./features/configuracoes/configuracoes.component').then(m => m.ConfiguracoesComponent),
       },
+      // compatibilidade com rota antiga
       {
         path: 'dodf/configuracao',
-        loadComponent: () =>
-          import('./features/dodf/configuracao/dodf-configuracao.component').then(m => m.DodfConfiguracaoComponent),
+        redirectTo: 'configuracoes',
+        pathMatch: 'full',
       },
       {
         path: 'leads',
@@ -72,9 +73,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/notificacoes/notificacoes.component').then(m => m.NotificacoesComponent),
       },
+      // Cotação domain
+      {
+        path: 'cotacao/fornecedores',
+        loadComponent: () =>
+          import('./features/cotacao/fornecedores/fornecedores.component').then(m => m.FornecedoresComponent),
+      },
+      {
+        path: 'cotacao/itens',
+        loadComponent: () =>
+          import('./features/cotacao/itens/itens.component').then(m => m.ItensComponent),
+      },
       // Placeholder routes
       {
-        path: 'relatorios',
+        path: 'perfil',
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
       },

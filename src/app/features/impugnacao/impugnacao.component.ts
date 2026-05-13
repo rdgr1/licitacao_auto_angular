@@ -273,7 +273,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
     .page-wrapper {
       padding: 28px 32px;
       max-width: 1400px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Inter Tight', sans-serif;
 
       @media (max-width: 768px) { padding: 16px; }
     }
@@ -285,7 +285,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       gap: 16px;
       margin-bottom: 28px;
 
-      h1 { font-size: 22px; font-weight: 800; color: #0F172A; margin: 0 0 4px; }
+      h1 { font-size: 22px; font-weight: 800; color: #0D1526; margin: 0 0 4px; }
       p  { color: #64748B; font-size: 13.5px; line-height: 1.5; margin: 0; }
     }
 
@@ -293,13 +293,13 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       width: 48px;
       height: 48px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #0F172A, #1E293B);
+      background: linear-gradient(135deg, #0D1526, #1E293B);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
 
-      mat-icon { font-size: 24px; width: 24px; height: 24px; color: #10B981; }
+      mat-icon { font-size: 24px; width: 24px; height: 24px; color: #11BF7F; }
     }
 
     /* ── Layout ──────────────────────────────────────────────────────── */
@@ -330,7 +330,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       gap: 10px;
       font-size: 14px;
       font-weight: 700;
-      color: #0F172A;
+      color: #0D1526;
       margin-bottom: 16px;
     }
 
@@ -340,7 +340,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: #0F172A;
+      background: #0D1526;
       color: white;
       font-size: 11px;
       font-weight: 700;
@@ -363,8 +363,8 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       margin-left: auto;
       font-size: 12px;
       font-weight: 600;
-      color: #059669;
-      background: #ECFDF5;
+      color: #0DA66E;
+      background: rgba(17,191,127,0.08);
       border: 1px solid #A7F3D0;
       border-radius: 20px;
       padding: 3px 10px;
@@ -379,7 +379,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
     .search-btn {
       height: 56px;
       border-radius: 8px !important;
-      background: #0F172A !important;
+      background: #0D1526 !important;
       color: white !important;
       white-space: nowrap;
       display: flex;
@@ -409,13 +409,13 @@ type Step = 'search' | 'found' | 'generating' | 'done';
 
     /* ── Edital card ─────────────────────────────────────────────────── */
     .edital-card {
-      border-left: 3px solid #10B981;
+      border-left: 3px solid #11BF7F;
     }
 
     .edital-number {
       font-size: 20px;
       font-weight: 800;
-      color: #0F172A;
+      color: #0D1526;
       letter-spacing: -0.3px;
       margin-bottom: 8px;
     }
@@ -468,7 +468,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       width: 100%;
       height: 48px;
       border-radius: 8px !important;
-      background: linear-gradient(135deg, #2563EB, #1D4ED8) !important;
+      background: linear-gradient(135deg, #0DA66E, #107357) !important;
       color: white !important;
       font-size: 14px;
       font-weight: 600;
@@ -510,9 +510,9 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       gap: 8px;
       font-size: 15px;
       font-weight: 700;
-      color: #0F172A;
+      color: #0D1526;
 
-      mat-icon { font-size: 20px; width: 20px; height: 20px; color: #2563EB; }
+      mat-icon { font-size: 20px; width: 20px; height: 20px; color: #0DA66E; }
     }
 
     .result-actions {
@@ -535,7 +535,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
 
     .print-btn {
       border-radius: 8px !important;
-      background: #0F172A !important;
+      background: #0D1526 !important;
       color: white !important;
       font-size: 13px !important;
       gap: 5px;
@@ -555,8 +555,8 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      background: #EFF6FF;
-      color: #1D4ED8;
+      background: rgba(17,191,127,0.06);
+      color: #107357;
       border: 1px solid #BFDBFE;
       border-radius: 6px;
       padding: 4px 10px;
@@ -656,7 +656,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
 
       mat-icon { font-size: 18px; width: 18px; height: 18px; color: #F59E0B; }
 
-      strong { color: #0F172A; }
+      strong { color: #0D1526; }
     }
 
     /* ── Generating card ─────────────────────────────────────────────── */
@@ -669,7 +669,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       align-items: center;
       gap: 16px;
 
-      h3 { font-size: 18px; font-weight: 700; color: #0F172A; margin: 0; }
+      h3 { font-size: 18px; font-weight: 700; color: #0D1526; margin: 0; }
       p  { font-size: 13.5px; color: #64748B; max-width: 320px; line-height: 1.6; margin: 0; }
     }
 
@@ -689,7 +689,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       font-size: 13px;
       color: #94A3B8;
 
-      mat-icon { font-size: 16px; width: 16px; height: 16px; color: #10B981; }
+      mat-icon { font-size: 16px; width: 16px; height: 16px; color: #11BF7F; }
 
       .step-dot {
         width: 16px;
@@ -699,8 +699,8 @@ type Step = 'search' | 'found' | 'generating' | 'done';
         flex-shrink: 0;
       }
 
-      &.done { color: #10B981; }
-      &.active { color: #2563EB; animation: blink 1s infinite; }
+      &.done { color: #11BF7F; }
+      &.active { color: #0DA66E; animation: blink 1s infinite; }
       &.pending { color: #CBD5E1; }
     }
 
@@ -716,7 +716,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       padding: 32px;
       text-align: center;
 
-      h3 { font-size: 18px; font-weight: 700; color: #0F172A; margin: 16px 0 8px; }
+      h3 { font-size: 18px; font-weight: 700; color: #0D1526; margin: 16px 0 8px; }
       p  { font-size: 13.5px; color: #64748B; max-width: 340px; margin: 0 auto 24px; line-height: 1.6; }
     }
 
@@ -749,7 +749,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       font-size: 13px;
       color: #475569;
 
-      mat-icon { font-size: 16px; width: 16px; height: 16px; color: #10B981; flex-shrink: 0; }
+      mat-icon { font-size: 16px; width: 16px; height: 16px; color: #11BF7F; flex-shrink: 0; }
     }
   `],
 })

@@ -7,12 +7,23 @@ import { ColetaResultado } from '../models/dodf.model';
 @Injectable({ providedIn: 'root' })
 export class ColetaService {
   private http = inject(HttpClient);
-  private base = `${environment.apiUrl}/dodf`;
+  private apiUrl = environment.apiUrl;
 
-  dispararColeta(data: Date): Observable<ColetaResultado> {
+  dispararColeta(fonte: string, data: Date): Observable<ColetaResultado> {
     const dataStr = data.toISOString().split('T')[0];
+
+    // PNCP usa dataInicial + dataFinal (range); para coleta dia a dia passamos mesmo valor nos dois
+    if (fonte === 'PNCP') {
+      return this.http.post<ColetaResultado>(
+        `${this.apiUrl}/pncp/coleta`,
+        null,
+        { params: new HttpParams().set('dataInicial', dataStr).set('dataFinal', dataStr) }
+      );
+    }
+
+    const path = fonte === 'DOU' ? 'dou/coleta' : 'dodf/coleta';
     return this.http.post<ColetaResultado>(
-      `${this.base}/coleta`,
+      `${this.apiUrl}/${path}`,
       null,
       { params: new HttpParams().set('data', dataStr) }
     );

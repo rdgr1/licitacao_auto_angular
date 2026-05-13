@@ -1,13 +1,10 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { interval, Subscription, switchMap, takeWhile } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BaseChartDirective } from 'ng2-charts';
 import {
   Chart as ChartJS, ChartData, ChartOptions,
@@ -21,7 +18,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, DoughnutController, BarController,
 import { EditaisService } from '../../core/services/editais.service';
 import { NotificacoesService } from '../../core/services/notificacoes.service';
 import { ToastService } from '../../core/services/toast.service';
-import { EstatisticasDTO, LeadResponse, NotificacaoEvent, ProcessarResult } from '../../core/models/edital.model';
+import { EstatisticasDTO, LeadResponse, NotificacaoEvent } from '../../core/models/edital.model';
 
 interface UpcomingEdital {
   numero: string;
@@ -35,34 +32,25 @@ interface UpcomingEdital {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatCardModule, MatIconModule, MatTooltipModule, MatProgressSpinnerModule, MatProgressBarModule, BaseChartDirective],
+  imports: [CommonModule, RouterLink, MatButtonModule, MatCardModule, MatIconModule, MatTooltipModule, BaseChartDirective],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   private editaisService = inject(EditaisService);
   private notificacoesService = inject(NotificacoesService);
   private toast = inject(ToastService);
 
   loading = signal(true);
-  processing = signal(false);
-  scraperStatus = signal<ProcessarResult | null>(null);
-  private pollSub?: Subscription;
   stats = signal<EstatisticasDTO | null>(null);
   notifications = signal<NotificacaoEvent[]>([]);
   upcoming = signal<UpcomingEdital[]>([]);
-
-  scraperProgress = computed(() => {
-    const s = this.scraperStatus();
-    if (!s?.total) return 0;
-    return Math.round(((s.processados ?? 0) / s.total) * 100);
-  });
 
   donutData = signal<ChartData<'doughnut'>>({
     labels: ['Processados', 'Pendentes', 'Erros'],
     datasets: [{
       data: [89, 24, 14],
-      backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+      backgroundColor: ['#11BF7F', '#F59E0B', '#EF4444'],
       borderWidth: 0,
       hoverOffset: 8,
     }],
@@ -79,7 +67,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           padding: 16,
           usePointStyle: true,
           pointStyleWidth: 8,
-          font: { size: 12, family: "'Plus Jakarta Sans', sans-serif" },
+          font: { size: 12, family: "'Inter Tight', sans-serif" },
         },
       },
       tooltip: {
@@ -94,7 +82,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       {
         label: 'Processados',
         data: [42, 58, 71, 65, 80, 89],
-        backgroundColor: '#10B981',
+        backgroundColor: '#11BF7F',
         borderRadius: 6,
         borderSkipped: false,
       },
@@ -115,12 +103,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       x: {
         grid: { display: false },
         border: { display: false },
-        ticks: { font: { size: 12, family: "'Plus Jakarta Sans', sans-serif" } },
+        ticks: { font: { size: 12, family: "'Inter Tight', sans-serif" } },
       },
       y: {
         grid: { color: '#F1F5F9' },
         border: { display: false },
-        ticks: { font: { size: 12, family: "'Plus Jakarta Sans', sans-serif" } },
+        ticks: { font: { size: 12, family: "'Inter Tight', sans-serif" } },
       },
     },
     plugins: {
@@ -130,7 +118,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         labels: {
           usePointStyle: true,
           pointStyleWidth: 8,
-          font: { size: 12, family: "'Plus Jakarta Sans', sans-serif" },
+          font: { size: 12, family: "'Inter Tight', sans-serif" },
         },
       },
     },
@@ -138,17 +126,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading.set(true);
-
-    // Detecta se scraping já está rodando ao abrir o dashboard
-    this.editaisService.processarStatus().subscribe({
-      next: (status) => {
-        if (status?.running) {
-          this.processing.set(true);
-          this.scraperStatus.set(status);
-          this.iniciarPolling();
-        }
-      },
-    });
 
     this.editaisService.getStats().subscribe({
       next: (s) => {
@@ -158,7 +135,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           labels: ['Processados', 'Pendentes', 'Erros'],
           datasets: [{
             data: [s.processados, s.pendentes, s.erros],
-            backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+            backgroundColor: ['#11BF7F', '#F59E0B', '#EF4444'],
             borderWidth: 0,
             hoverOffset: 8,
           }],
@@ -188,60 +165,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.notificacoesService.getHistorico().subscribe({
       next: (notifs) => this.notifications.set((notifs ?? []).slice(0, 6)),
     });
-  }
-
-  refresh() {
-    this.ngOnInit();
-  }
-
-  processar() {
-    if (this.processing()) return;
-    this.processing.set(true);
-
-    this.editaisService.processar().subscribe({
-      next: () => this.iniciarPolling(),
-      error: (err) => {
-        // 409 = já está rodando, só iniciar o polling
-        if (err.status === 409) {
-          this.iniciarPolling();
-        } else {
-          this.processing.set(false);
-          this.toast.error('Erro ao acionar processamento');
-        }
-      },
-    });
-  }
-
-  private iniciarPolling() {
-    this.pollSub?.unsubscribe();
-    this.pollSub = interval(3000).pipe(
-      switchMap(() => this.editaisService.processarStatus()),
-      takeWhile((res) => res.running, true),
-    ).subscribe({
-      next: (res) => {
-        this.scraperStatus.set(res);
-        if (!res.running) {
-          this.processing.set(false);
-          if (!res.success) {
-            this.toast.error(res.message ?? 'Falha no processamento');
-          } else if (!res.processados) {
-            this.toast.info(res.message ?? 'Nenhum edital novo encontrado no período');
-          } else {
-            this.toast.success(`${res.processados} edital(is) processado(s)!`);
-            this.refresh();
-          }
-        }
-      },
-      error: () => {
-        this.processing.set(false);
-        this.scraperStatus.set(null);
-        this.toast.error('Erro ao verificar status do processamento');
-      },
-    });
-  }
-
-  ngOnDestroy() {
-    this.pollSub?.unsubscribe();
   }
 
   formatCurrency(value: number): string {

@@ -25,15 +25,19 @@ export class NotificacoesService {
     if (this.eventSource) return;
     const url = `${this.apiUrl.replace('/api', '')}/api/notificacoes/stream`;
     this.eventSource = new EventSource(url);
+
     this.eventSource.addEventListener('NOVO_LEAD', (e: MessageEvent) => {
       try {
         const event: NotificacaoEvent = JSON.parse(e.data);
         this._stream$.next(event);
         this._novas.update(n => n + 1);
-      } catch {
-        // ignore parse errors
-      }
+      } catch { /* ignore parse errors */ }
     });
+
+    // Silencia erros de conexão (backend offline / reconexão automática do SSE)
+    this.eventSource.onerror = () => {
+      // EventSource reconecta automaticamente — não precisa de ação
+    };
   }
 
   stopSSE(): void {

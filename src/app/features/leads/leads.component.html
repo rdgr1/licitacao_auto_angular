@@ -1,0 +1,234 @@
+<div class="leads-shell">
+
+  <!-- ── Header ──────────────────────────────────────────────────── -->
+  <div class="leads-header">
+    <div>
+      <h1 class="leads-title">Leads</h1>
+      <p class="leads-sub">Matérias coletadas das fontes oficiais classificadas para análise</p>
+    </div>
+  </div>
+
+  <!-- ── Painel de Coleta ─────────────────────────────────────────── -->
+  <div class="coleta-panel">
+
+    <!-- Estado colapsado: botão de entrada -->
+    @if (!buscaAtiva()) {
+      <div class="busca-trigger">
+        <div class="busca-trigger-info">
+          <mat-icon>manage_search</mat-icon>
+          <div>
+            <span class="trigger-title">Buscar leads</span>
+            <span class="trigger-sub">Colete matérias do DODF, DOU ou filtre por PNCP</span>
+          </div>
+        </div>
+        <button class="btn-buscar-leads" (click)="buscaAtiva.set(true)">
+          <mat-icon>search</mat-icon>
+          Buscar leads
+        </button>
+      </div>
+    }
+
+    <!-- Estado expandido: fontes + data -->
+    @if (buscaAtiva()) {
+      <!-- Passo 1: Fontes -->
+      <div class="step-row">
+        <span class="step-label"><span class="step-num">1</span>Fonte de busca</span>
+        <div class="fonte-chips">
+          @for (f of fontes; track f.key; let i = $index) {
+            <button class="fonte-chip pop-in" [style.animation-delay]="(i * 80) + 'ms'"
+                    [class.active]="isFonteSelected(f.key)" (click)="toggleFonte(f.key)">
+              <div class="fonte-check">
+                <mat-icon>{{ isFonteSelected(f.key) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              </div>
+              <mat-icon class="fonte-icon">{{ f.icon }}</mat-icon>
+              <div class="fonte-info">
+                <span class="fonte-key">{{ f.label }}</span>
+                <span class="fonte-sub">{{ f.sublabel }}</span>
+              </div>
+              @if (!f.canCollect && f.showBadge !== false) {
+                <span class="fonte-soon">em breve</span>
+              }
+            </button>
+          }
+        </div>
+        <button class="btn-fechar-busca" (click)="fecharBusca()" matTooltip="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+    <!-- Passo 2: Data (após selecionar fonte) -->
+    @if (selectedFontes().length > 0) {
+      <div class="step-row step-date animate-in">
+        <span class="step-label"><span class="step-num">2</span>Data</span>
+        <div class="date-config">
+
+          <div class="date-mode-toggle">
+            <button class="mode-btn" [class.active]="dateMode() === 'single'" (click)="setDateMode('single')">
+              <mat-icon>event</mat-icon>Dia específico
+            </button>
+            <button class="mode-btn" [class.active]="dateMode() === 'range'" (click)="setDateMode('range')">
+              <mat-icon>date_range</mat-icon>Período
+            </button>
+          </div>
+
+          <div class="date-inputs">
+            @if (dateMode() === 'single') {
+              <mat-form-field appearance="outline" class="date-field">
+                <mat-label>Data</mat-label>
+                <input matInput [matDatepicker]="pSingle" [ngModel]="dateSingle()" (ngModelChange)="dateSingle.set($event)" [max]="hoje" />
+                <mat-datepicker-toggle matIconSuffix [for]="pSingle" />
+                <mat-datepicker #pSingle />
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline" class="date-field">
+                <mat-label>De</mat-label>
+                <input matInput [matDatepicker]="pFrom" [ngModel]="dateFrom()" (ngModelChange)="dateFrom.set($event)" [max]="dateTo() ?? hoje" />
+                <mat-datepicker-toggle matIconSuffix [for]="pFrom" />
+                <mat-datepicker #pFrom />
+              </mat-form-field>
+              <mat-icon class="range-arrow">arrow_forward</mat-icon>
+              <mat-form-field appearance="outline" class="date-field">
+                <mat-label>Até</mat-label>
+                <input matInput [matDatepicker]="pTo" [ngModel]="dateTo()" (ngModelChange)="dateTo.set($event)" [min]="dateFrom() ?? undefined" [max]="hoje" />
+                <mat-datepicker-toggle matIconSuffix [for]="pTo" />
+                <mat-datepicker #pTo />
+              </mat-form-field>
+              @if (rangeInfo()) { <span class="range-info">{{ rangeInfo() }}</span> }
+            }
+          </div>
+
+          <div class="coleta-actions">
+            @if (hasCollectableFonte()) {
+              <button mat-flat-button color="primary" (click)="coletar()" [disabled]="coletando() || !canSubmit()">
+                @if (coletando()) { <mat-spinner diameter="16" /> } @else { <mat-icon>download</mat-icon> }
+                {{ coletando() ? coletaProgress() : 'Coletar agora' }}
+              </button>
+            }
+          </div>
+        </div>
+
+        @if (coletaResultado(); as r) {
+          <div class="coleta-resultado">
+            <span class="res-chip"><span class="res-val">{{ r.totalMaterias }}</span> matérias</span>
+            <span class="res-chip relevantes"><span class="res-val">{{ r.salvos }}</span> salvos</span>
+            <span class="res-chip"><span class="res-val">{{ r.duplicados }}</span> duplicados</span>
+          </div>
+        }
+      </div>
+    } <!-- fim @if selectedFontes -->
+  } <!-- fim @if buscaAtiva -->
+  </div>
+
+  <!-- ── Status Tabs ───────────────────────────────────────────────── -->
+  <div class="status-bar">
+    @for (tab of statusTabs; track tab.label; let i = $index) {
+      <button class="status-pill" [class.active]="selectedTabIdx() === i" (click)="onTabChange(i)">
+        {{ tab.label }}
+        <span class="pill-count">{{ countByStatus(tab.value) }}</span>
+      </button>
+    }
+  </div>
+
+  <!-- ── Card Grid ─────────────────────────────────────────────────── -->
+  @if (loading()) {
+    <div class="leads-grid">
+      @for (n of [1,2,3,4,5,6]; track n) {
+        <div class="lead-card skeleton">
+          <div class="sk sk-meta"></div>
+          <div class="sk sk-title"></div>
+          <div class="sk sk-title short"></div>
+          <div class="sk sk-org"></div>
+          <div class="sk sk-footer"></div>
+        </div>
+      }
+    </div>
+  } @else if (apiError()) {
+    <div class="empty-state error">
+      <mat-icon>cloud_off</mat-icon>
+      <strong>Não foi possível carregar os leads</strong>
+      <span>Verifique se o backend está rodando e tente novamente.</span>
+      <button mat-stroked-button (click)="carregarLeads()">
+        <mat-icon>refresh</mat-icon> Tentar novamente
+      </button>
+    </div>
+  } @else if (filteredLeads().length === 0) {
+    <div class="empty-state">
+      <mat-icon>inbox</mat-icon>
+      <strong>Nenhum lead encontrado</strong>
+      <span>{{ selectedStatus() || selectedFontes().length ? 'Nenhum lead com esses filtros.' : 'Selecione uma fonte e colete matérias do diário oficial para começar.' }}</span>
+    </div>
+  } @else {
+    <div class="leads-grid">
+      @for (lead of filteredLeads(); track lead.uuid) {
+        <div class="lead-card status-border-{{ lead.status }}" (click)="verDetalhe(lead)">
+
+          <!-- Meta row -->
+          <div class="lc-meta">
+            <span class="lc-fonte fonte-{{ lead.fonte?.toLowerCase() }}">{{ lead.fonte }}</span>
+            <span class="lc-tipo">{{ lead.tipo }}</span>
+            <span class="lc-status status-{{ lead.status }}">
+              <span class="status-dot"></span>{{ statusLabel(lead.status) }}
+            </span>
+          </div>
+
+          <!-- Title -->
+          <p class="lc-title">{{ normalizeCase(lead.titulo) }}</p>
+
+          <!-- Org -->
+          <div class="lc-org">
+            <span class="org-avatar" [style.background]="orgColor(lead.orgao)">{{ orgInitial(lead.orgao) }}</span>
+            <span class="org-name">{{ lead.orgao }}</span>
+          </div>
+
+          <!-- Date + observacao -->
+          <div class="lc-bottom">
+            <span class="lc-date">
+              <mat-icon>calendar_today</mat-icon>
+              {{ formatDate(lead.dataPublicacao) }}
+            </span>
+            @if (lead.observacao) {
+              <span class="lc-obs">{{ lead.observacao }}</span>
+            }
+          </div>
+
+          <!-- Actions -->
+          <div class="lc-actions" (click)="$event.stopPropagation()">
+            <button class="act-btn" matTooltip="Ver detalhes" (click)="verDetalhe(lead)">
+              <mat-icon>open_in_new</mat-icon>
+              Detalhes
+            </button>
+            @if (lead.status !== 'QUALIFICADO') {
+              <button class="act-btn act-qualify" matTooltip="Qualificar lead"
+                      (click)="atualizarStatus(lead, 'QUALIFICADO', $event)">
+                <mat-icon>verified</mat-icon>
+                Qualificar
+              </button>
+            } @else {
+              <span class="act-done"><mat-icon>check_circle</mat-icon> Qualificado</span>
+            }
+            @if (lead.status !== 'DESCARTADO' && lead.status !== 'QUALIFICADO') {
+              <button class="act-btn act-discard" matTooltip="Descartar"
+                      (click)="atualizarStatus(lead, 'DESCARTADO', $event)">
+                <mat-icon>block</mat-icon>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Paginação simples -->
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <button class="page-btn" (click)="onPrev()" [disabled]="currentPage() === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <span class="page-info">{{ currentPage() + 1 }} / {{ totalPages() }}</span>
+        <button class="page-btn" (click)="onNext()" [disabled]="currentPage() + 1 >= totalPages()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    }
+  }
+
+</div>

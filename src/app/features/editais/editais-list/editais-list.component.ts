@@ -23,7 +23,7 @@ import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { DateBrPipe } from '../../../shared/pipes/date-br.pipe';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { ItensDialogComponent } from '../../regras/itens-dialog/itens-dialog.component';
+import { ItensDialogComponent } from '../itens-dialog/itens-dialog.component';
 
 @Component({
   selector: 'app-editais-list',
@@ -62,8 +62,29 @@ export class EditaisListComponent implements OnInit {
   loading = signal(false);
   dataSource = new MatTableDataSource<EditalResponse>([]);
   displayedColumns = ['numero', 'objeto', 'modalidade', 'valorEstimado', 'dataAbertura', 'status', 'actions'];
+  selectedStatus = signal('');
+  private searchText = '';
+
+  statusOptions = [
+    { label: 'Todos',       value: '',           cls: '' },
+    { label: 'Processado',  value: 'PROCESSADO', cls: 'processado' },
+    { label: 'Pendente',    value: 'PENDENTE',   cls: 'pendente' },
+    { label: 'Processando', value: 'PROCESSANDO',cls: 'processando' },
+    { label: 'Erro',        value: 'ERRO',       cls: 'erro' },
+    { label: 'Antecipado',  value: 'ANTECIPADO', cls: 'antecipado' },
+    { label: 'Arquivado',   value: 'ARQUIVADO',  cls: 'arquivado' },
+  ];
 
   ngOnInit() {
+    this.dataSource.filterPredicate = (row: EditalResponse, f: string) => {
+      const [text, status] = f.split('§');
+      const matchText = !text ||
+        row.numero?.toLowerCase().includes(text) ||
+        row.objeto?.toLowerCase().includes(text) ||
+        row.orgaoOrigem?.toLowerCase().includes(text);
+      const matchStatus = !status || row.status === status;
+      return matchText && matchStatus;
+    };
     this.loadEditais();
   }
 
@@ -77,6 +98,7 @@ export class EditaisListComponent implements OnInit {
     this.editaisService.getAll().subscribe({
       next: (editais) => {
         this.dataSource.data = editais;
+        this.applyFilters();
         this.loading.set(false);
       },
       error: () => {
@@ -87,8 +109,35 @@ export class EditaisListComponent implements OnInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.searchText = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.applyFilters();
+  }
+
+  onStatusFilter(status: string) {
+    this.selectedStatus.set(status);
+    this.applyFilters();
+  }
+
+  private applyFilters() {
+    this.dataSource.filter = `${this.searchText}§${this.selectedStatus()}`;
+  }
+
+  formatModalidade(m: string): string {
+    return m?.replace(/_/g, ' ').replace('ELETRONICO', 'ELETRÔNICO').replace('CONCORRENCIA', 'CONCORRÊNCIA') ?? m;
+  }
+
+  formatStatus(s: string): string {
+    const map: Record<string, string> = {
+      PROCESSADO: 'Processado', PENDENTE: 'Pendente', PROCESSANDO: 'Processando',
+      ERRO: 'Erro', ANTECIPADO: 'Antecipado', ARQUIVADO: 'Arquivado',
+    };
+    return map[s] ?? s;
+  }
+
+  isUrgent(data: string): boolean {
+    if (!data) return false;
+    const diff = new Date(data).getTime() - Date.now();
+    return diff > 0 && diff < 3 * 86_400_000;
   }
 
   viewDetails(edital: EditalResponse) {
@@ -132,11 +181,8 @@ export class EditaisListComponent implements OnInit {
 
   reprocessar(edital: EditalResponse) {
     this.editaisService.reprocessar(edital.id).subscribe({
-      next: () => {
-        this.toast.success(`Edital ${edital.numero} enviado para reprocessamento`);
-        this.loadEditais();
-      },
-      error: () => this.toast.error('Erro ao reprocessar edital'),
+      next: () => { this.toast.success(`Edital ${edital.numero} reprocessado`); this.loadEditais(); },
+      error: () => this.toast.error('Erro ao reprocessar'),
     });
   }
 

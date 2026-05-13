@@ -1,14 +1,11 @@
-// src/app/features/dodf/configuracao/dodf-configuracao.component.ts
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { DodfService } from '../../../core/services/dodf.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -17,295 +14,259 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 import { KeywordDialogComponent } from './keyword-dialog/keyword-dialog.component';
 import { TipoAberturaDialogComponent } from './tipo-abertura-dialog/tipo-abertura-dialog.component';
 
+type Tab = 'keywords' | 'tipos';
+
 @Component({
   selector: 'app-dodf-configuracao',
   standalone: true,
   imports: [
-    CommonModule,
-    MatTabsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSlideToggleModule,
-    MatTooltipModule,
-    MatCardModule,
+    CommonModule, MatTableModule, MatPaginatorModule,
+    MatButtonModule, MatIconModule, MatSlideToggleModule, MatTooltipModule,
   ],
   template: `
-    <div class="dodf-config-shell">
-      <div class="config-header">
-        <h1 class="config-title">Configuração DODF</h1>
-        <p class="config-subtitle">Gerencie as palavras-chave e tipos de abertura usados na filtragem do Diário Oficial do DF.</p>
+    <div class="cfg-shell">
+
+      <!-- ── Tab bar ─────────────────────────────────────────────── -->
+      <div class="tab-bar">
+        <button class="tab-pill" [class.active]="tab() === 'keywords'" (click)="tab.set('keywords')">
+          Keywords <span class="pill-count">{{ keywordTotal() }}</span>
+        </button>
+        <button class="tab-pill" [class.active]="tab() === 'tipos'" (click)="tab.set('tipos')">
+          Tipos de Abertura <span class="pill-count">{{ tipoTotal() }}</span>
+        </button>
+        <span class="tab-spacer"></span>
+        @if (tab() === 'keywords') {
+          <button mat-flat-button color="primary" (click)="openCreateKeyword()">
+            <mat-icon>add</mat-icon>Nova Keyword
+          </button>
+        } @else {
+          <button mat-flat-button color="primary" (click)="openCreateTipo()">
+            <mat-icon>add</mat-icon>Novo Tipo
+          </button>
+        }
       </div>
 
-      <mat-card appearance="outlined" class="config-card">
-        <mat-tab-group>
-
-          <!-- ── Keywords Tab ──────────────────────────────────────── -->
-          <mat-tab label="Keywords">
-            <div class="tab-toolbar">
-              <button mat-flat-button color="primary" (click)="openCreateKeyword()">
-                <mat-icon>add</mat-icon>Nova Keyword
-              </button>
+      <!-- ── Keywords ─────────────────────────────────────────────── -->
+      @if (tab() === 'keywords') {
+        <div class="table-wrap">
+          @if (loadingKeywords()) {
+            <div class="table-state"><span>Carregando...</span></div>
+          } @else if (keywords().length === 0) {
+            <div class="table-state">
+              <mat-icon>search_off</mat-icon><span>Nenhuma keyword cadastrada</span>
             </div>
+          } @else {
+            <table mat-table [dataSource]="keywords()" class="cfg-table">
+              <ng-container matColumnDef="termo">
+                <th mat-header-cell *matHeaderCellDef>Termo</th>
+                <td mat-cell *matCellDef="let row"><code class="termo">{{ row.termo }}</code></td>
+              </ng-container>
+              <ng-container matColumnDef="ativo">
+                <th mat-header-cell *matHeaderCellDef>Ativo</th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-slide-toggle [checked]="row.ativo" (change)="toggleKeyword(row)" color="primary" />
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let row" class="actions-cell">
+                  <button mat-icon-button matTooltip="Editar" (click)="openEditKeyword(row)"><mat-icon>edit</mat-icon></button>
+                  <button mat-icon-button matTooltip="Excluir" color="warn" (click)="deleteKeyword(row)"><mat-icon>delete_outline</mat-icon></button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="kwCols"></tr>
+              <tr mat-row *matRowDef="let row; columns: kwCols;" class="cfg-row"></tr>
+            </table>
+          }
+          <!-- Fora do @else: nunca é destruído, mantém estado de página -->
+          <mat-paginator
+            [length]="keywordTotal()"
+            [pageSize]="keywordPageSize"
+            [pageIndex]="keywordPage"
+            [pageSizeOptions]="[5, 10, 20]"
+            [style.display]="keywordTotal() > keywordPageSize ? '' : 'none'"
+            (page)="onKeywordPage($event)"
+            showFirstLastButtons />
+        </div>
+      }
 
-            @if (loadingKeywords()) {
-              <div class="tab-loading">Carregando...</div>
-            } @else {
-              <table mat-table [dataSource]="keywords()" class="config-table">
-                <ng-container matColumnDef="termo">
-                  <th mat-header-cell *matHeaderCellDef>Termo</th>
-                  <td mat-cell *matCellDef="let row">{{ row.termo }}</td>
-                </ng-container>
-                <ng-container matColumnDef="ativo">
-                  <th mat-header-cell *matHeaderCellDef>Ativo</th>
-                  <td mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.ativo" (change)="toggleKeyword(row)" />
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="acoes">
-                  <th mat-header-cell *matHeaderCellDef></th>
-                  <td mat-cell *matCellDef="let row">
-                    <button mat-icon-button matTooltip="Editar" (click)="openEditKeyword(row)">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button matTooltip="Excluir" color="warn" (click)="deleteKeyword(row)">
-                      <mat-icon>delete_outline</mat-icon>
-                    </button>
-                  </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="keywordCols"></tr>
-                <tr mat-row *matRowDef="let row; columns: keywordCols;"></tr>
-              </table>
-              <mat-paginator
-                [length]="keywordTotal()"
-                [pageSize]="keywordPageSize"
-                [pageSizeOptions]="[5, 10, 20]"
-                (page)="onKeywordPage($event)"
-                showFirstLastButtons />
-            }
-          </mat-tab>
-
-          <!-- ── Tipos de Abertura Tab ─────────────────────────────── -->
-          <mat-tab label="Tipos de Abertura">
-            <div class="tab-toolbar">
-              <button mat-flat-button color="primary" (click)="openCreateTipo()">
-                <mat-icon>add</mat-icon>Novo Tipo
-              </button>
+      <!-- ── Tipos de Abertura ─────────────────────────────────────── -->
+      @if (tab() === 'tipos') {
+        <div class="table-wrap">
+          @if (loadingTipos()) {
+            <div class="table-state"><span>Carregando...</span></div>
+          } @else if (tipos().length === 0) {
+            <div class="table-state">
+              <mat-icon>search_off</mat-icon><span>Nenhum tipo cadastrado</span>
             </div>
+          } @else {
+            <table mat-table [dataSource]="tipos()" class="cfg-table">
+              <ng-container matColumnDef="valor">
+                <th mat-header-cell *matHeaderCellDef>Valor</th>
+                <td mat-cell *matCellDef="let row"><code class="termo">{{ row.valor }}</code></td>
+              </ng-container>
+              <ng-container matColumnDef="ativo">
+                <th mat-header-cell *matHeaderCellDef>Ativo</th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-slide-toggle [checked]="row.ativo" (change)="toggleTipo(row)" color="primary" />
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let row" class="actions-cell">
+                  <button mat-icon-button matTooltip="Editar" (click)="openEditTipo(row)"><mat-icon>edit</mat-icon></button>
+                  <button mat-icon-button matTooltip="Excluir" color="warn" (click)="deleteTipo(row)"><mat-icon>delete_outline</mat-icon></button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="tpCols"></tr>
+              <tr mat-row *matRowDef="let row; columns: tpCols;" class="cfg-row"></tr>
+            </table>
+          }
+          <mat-paginator
+            [length]="tipoTotal()"
+            [pageSize]="tipoPageSize"
+            [pageIndex]="tipoPage"
+            [pageSizeOptions]="[5, 10, 20]"
+            [style.display]="tipoTotal() > tipoPageSize ? '' : 'none'"
+            (page)="onTipoPage($event)"
+            showFirstLastButtons />
+        </div>
+      }
 
-            @if (loadingTipos()) {
-              <div class="tab-loading">Carregando...</div>
-            } @else {
-              <table mat-table [dataSource]="tipos()" class="config-table">
-                <ng-container matColumnDef="valor">
-                  <th mat-header-cell *matHeaderCellDef>Valor</th>
-                  <td mat-cell *matCellDef="let row">{{ row.valor }}</td>
-                </ng-container>
-                <ng-container matColumnDef="ativo">
-                  <th mat-header-cell *matHeaderCellDef>Ativo</th>
-                  <td mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.ativo" (change)="toggleTipo(row)" />
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="acoes">
-                  <th mat-header-cell *matHeaderCellDef></th>
-                  <td mat-cell *matCellDef="let row">
-                    <button mat-icon-button matTooltip="Editar" (click)="openEditTipo(row)">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button matTooltip="Excluir" color="warn" (click)="deleteTipo(row)">
-                      <mat-icon>delete_outline</mat-icon>
-                    </button>
-                  </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="tipoCols"></tr>
-                <tr mat-row *matRowDef="let row; columns: tipoCols;"></tr>
-              </table>
-              <mat-paginator
-                [length]="tipoTotal()"
-                [pageSize]="tipoPageSize"
-                [pageSizeOptions]="[5, 10, 20]"
-                (page)="onTipoPage($event)"
-                showFirstLastButtons />
-            }
-          </mat-tab>
-
-        </mat-tab-group>
-      </mat-card>
     </div>
   `,
   styles: [`
-    .dodf-config-shell { padding: 24px; max-width: 900px; }
-    .config-header { margin-bottom: 24px; }
-    .config-title { font-size: 22px; font-weight: 700; color: #0F172A; margin: 0 0 4px; }
-    .config-subtitle { font-size: 13px; color: #64748B; margin: 0; }
-    .config-card { border-radius: 12px; overflow: hidden; }
-    .tab-toolbar { padding: 16px 16px 8px; display: flex; justify-content: flex-end; }
-    .tab-loading { padding: 32px; text-align: center; color: #64748B; }
-    .config-table { width: 100%; }
+    .cfg-shell { display: flex; flex-direction: column; gap: 14px; }
+
+    /* Tab bar */
+    .tab-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .tab-pill {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px;
+      border: 1.5px solid #E8EDF5; background: #fff; color: #64748B;
+      font-size: 12.5px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 150ms;
+      &:hover { border-color: #CBD5E1; color: #1E293B; }
+      &.active { border-color: #1E293B; background: #1E293B; color: #fff; font-weight: 600;
+        .pill-count { background: rgba(255,255,255,0.2); color: #fff; } }
+    }
+    .pill-count {
+      background: #F1F5F9; color: #475569; border-radius: 10px;
+      font-size: 10px; font-weight: 700; padding: 0 6px; min-width: 18px; text-align: center;
+    }
+    .tab-spacer { flex: 1; }
+
+    /* Table container */
+    .table-wrap { background: #fff; border-radius: 12px; border: 1px solid #E2E8F0; overflow: hidden; }
+    .cfg-table { width: 100%; }
+
+    ::ng-deep .cfg-table { --mat-table-background-color: #fff; --mat-table-row-item-container-color: #fff;
+      th.mat-mdc-header-cell {
+        font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase;
+        letter-spacing: 0.06em; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; padding: 10px 14px;
+      }
+      td.mat-mdc-cell { padding: 11px 14px; font-size: 13px; color: #334155; border-bottom: 1px solid #F1F5F9; }
+    }
+
+    .cfg-row:last-child ::ng-deep td.mat-mdc-cell { border-bottom: none; }
+
+    code.termo {
+      font-family: 'JetBrains Mono','Courier New',monospace; font-size: 12px;
+      background: #EEF2F7; border: 1px solid #CBD5E1; border-radius: 4px; padding: 2px 8px; color: #0F172A; font-weight: 500;
+    }
+    .actions-cell { text-align: right; white-space: nowrap; }
+
+
+    .table-state {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 40px 24px; color: #94A3B8; font-size: 13.5px;
+      mat-icon { font-size: 22px; width: 22px; height: 22px; }
+    }
   `]
 })
 export class DodfConfiguracaoComponent implements OnInit {
+  @Input() embedded = false;
+
   private dodfService = inject(DodfService);
-  private toast = inject(ToastService);
-  private dialog = inject(MatDialog);
+  private toast       = inject(ToastService);
+  private dialog      = inject(MatDialog);
 
-  keywords = signal<DodfKeyword[]>([]);
+  tab = signal<Tab>('keywords');
+
+  keywords     = signal<DodfKeyword[]>([]);
   keywordTotal = signal(0);
-  keywordPage = 0;
+  keywordPage  = 0;
   keywordPageSize = 10;
-  loadingKeywords = signal(false);
+  loadingKeywords = signal(true);
 
-  tipos = signal<DodfTipoAbertura[]>([]);
+  tipos     = signal<DodfTipoAbertura[]>([]);
   tipoTotal = signal(0);
-  tipoPage = 0;
+  tipoPage  = 0;
   tipoPageSize = 10;
-  loadingTipos = signal(false);
+  loadingTipos = signal(true);
 
-  keywordCols = ['termo', 'ativo', 'acoes'];
-  tipoCols = ['valor', 'ativo', 'acoes'];
+  kwCols = ['termo', 'ativo', 'acoes'];
+  tpCols = ['valor', 'ativo', 'acoes'];
 
-  ngOnInit(): void {
-    this.loadKeywords();
-    this.loadTipos();
-  }
+  ngOnInit(): void { this.loadKeywords(); this.loadTipos(); }
+
+  // ── Keywords ──────────────────────────────────────────────────────
 
   loadKeywords(): void {
     this.loadingKeywords.set(true);
     this.dodfService.getKeywords(this.keywordPage, this.keywordPageSize).subscribe({
-      next: (page) => {
-        this.keywords.set(page.content);
-        this.keywordTotal.set(page.totalElements);
-        this.loadingKeywords.set(false);
-      },
-      error: () => {
-        this.toast.error('Erro ao carregar keywords');
-        this.loadingKeywords.set(false);
-      }
+      next: (p) => { this.keywords.set(p.content); this.keywordTotal.set(p.totalElements); this.loadingKeywords.set(false); },
+      error: () => { this.toast.error('Erro ao carregar keywords'); this.loadingKeywords.set(false); }
     });
   }
 
-  onKeywordPage(event: PageEvent): void {
-    this.keywordPage = event.pageIndex;
-    this.keywordPageSize = event.pageSize;
-    this.loadKeywords();
-  }
+  onKeywordPage(e: PageEvent): void { this.keywordPage = e.pageIndex; this.keywordPageSize = e.pageSize; this.loadKeywords(); }
 
   openCreateKeyword(): void {
-    const ref = this.dialog.open(KeywordDialogComponent, { data: {}, width: '400px' });
-    ref.afterClosed().subscribe(result => {
-      if (result) {
-        this.dodfService.createKeyword(result).subscribe({
-          next: () => { this.toast.success('Keyword criada!'); this.loadKeywords(); },
-          error: () => this.toast.error('Erro ao criar keyword'),
-        });
-      }
-    });
+    this.dialog.open(KeywordDialogComponent, { data: {}, width: '400px' })
+      .afterClosed().subscribe(r => { if (r) this.dodfService.createKeyword(r).subscribe({ next: () => { this.toast.success('Keyword criada!'); this.loadKeywords(); }, error: () => this.toast.error('Erro ao criar') }); });
   }
 
-  openEditKeyword(keyword: DodfKeyword): void {
-    const ref = this.dialog.open(KeywordDialogComponent, { data: { keyword }, width: '400px' });
-    ref.afterClosed().subscribe(result => {
-      if (result) {
-        this.dodfService.updateKeyword(keyword.uuid, result).subscribe({
-          next: () => { this.toast.success('Keyword atualizada!'); this.loadKeywords(); },
-          error: () => this.toast.error('Erro ao atualizar keyword'),
-        });
-      }
-    });
+  openEditKeyword(kw: DodfKeyword): void {
+    this.dialog.open(KeywordDialogComponent, { data: { keyword: kw }, width: '400px' })
+      .afterClosed().subscribe(r => { if (r) this.dodfService.updateKeyword(kw.uuid, r).subscribe({ next: () => { this.toast.success('Atualizada!'); this.loadKeywords(); }, error: () => this.toast.error('Erro') }); });
   }
 
-  toggleKeyword(keyword: DodfKeyword): void {
-    this.dodfService.updateKeyword(keyword.uuid, { termo: keyword.termo, ativo: !keyword.ativo }).subscribe({
-      next: () => {
-        this.toast.success(keyword.ativo ? 'Keyword desativada' : 'Keyword ativada');
-        this.loadKeywords();
-      },
-      error: () => { this.toast.error('Erro ao alterar keyword'); this.loadKeywords(); },
-    });
+  toggleKeyword(kw: DodfKeyword): void {
+    this.dodfService.updateKeyword(kw.uuid, { termo: kw.termo, ativo: !kw.ativo }).subscribe({ next: () => this.loadKeywords(), error: () => this.loadKeywords() });
   }
 
-  deleteKeyword(keyword: DodfKeyword): void {
-    const ref = this.dialog.open(ConfirmDialogComponent, {
-      data: { title: 'Excluir Keyword', message: `Deseja excluir a keyword "${keyword.termo}"?`, confirmLabel: 'Excluir', danger: true }
-    });
-    ref.afterClosed().subscribe(confirmed => {
-      if (confirmed) {
-        this.dodfService.deleteKeyword(keyword.uuid).subscribe({
-          next: () => { this.toast.success('Keyword excluída'); this.loadKeywords(); },
-          error: () => this.toast.error('Erro ao excluir keyword'),
-        });
-      }
-    });
+  deleteKeyword(kw: DodfKeyword): void {
+    this.dialog.open(ConfirmDialogComponent, { data: { title: 'Excluir Keyword', message: `Excluir "${kw.termo}"?`, confirmLabel: 'Excluir', danger: true } })
+      .afterClosed().subscribe(ok => { if (ok) this.dodfService.deleteKeyword(kw.uuid).subscribe({ next: () => { this.toast.success('Excluída'); this.loadKeywords(); }, error: () => this.toast.error('Erro') }); });
   }
+
+  // ── Tipos ─────────────────────────────────────────────────────────
 
   loadTipos(): void {
     this.loadingTipos.set(true);
     this.dodfService.getTipos(this.tipoPage, this.tipoPageSize).subscribe({
-      next: (page) => {
-        this.tipos.set(page.content);
-        this.tipoTotal.set(page.totalElements);
-        this.loadingTipos.set(false);
-      },
-      error: () => {
-        this.toast.error('Erro ao carregar tipos de abertura');
-        this.loadingTipos.set(false);
-      }
+      next: (p) => { this.tipos.set(p.content); this.tipoTotal.set(p.totalElements); this.loadingTipos.set(false); },
+      error: () => { this.toast.error('Erro ao carregar tipos'); this.loadingTipos.set(false); }
     });
   }
 
-  onTipoPage(event: PageEvent): void {
-    this.tipoPage = event.pageIndex;
-    this.tipoPageSize = event.pageSize;
-    this.loadTipos();
-  }
+  onTipoPage(e: PageEvent): void { this.tipoPage = e.pageIndex; this.tipoPageSize = e.pageSize; this.loadTipos(); }
 
   openCreateTipo(): void {
-    const ref = this.dialog.open(TipoAberturaDialogComponent, { data: {}, width: '400px' });
-    ref.afterClosed().subscribe(result => {
-      if (result) {
-        this.dodfService.createTipo(result).subscribe({
-          next: () => { this.toast.success('Tipo criado!'); this.loadTipos(); },
-          error: () => this.toast.error('Erro ao criar tipo'),
-        });
-      }
-    });
+    this.dialog.open(TipoAberturaDialogComponent, { data: {}, width: '400px' })
+      .afterClosed().subscribe(r => { if (r) this.dodfService.createTipo(r).subscribe({ next: () => { this.toast.success('Tipo criado!'); this.loadTipos(); }, error: () => this.toast.error('Erro') }); });
   }
 
-  openEditTipo(tipo: DodfTipoAbertura): void {
-    const ref = this.dialog.open(TipoAberturaDialogComponent, { data: { tipo }, width: '400px' });
-    ref.afterClosed().subscribe(result => {
-      if (result) {
-        this.dodfService.updateTipo(tipo.uuid, result).subscribe({
-          next: () => { this.toast.success('Tipo atualizado!'); this.loadTipos(); },
-          error: () => this.toast.error('Erro ao atualizar tipo'),
-        });
-      }
-    });
+  openEditTipo(tp: DodfTipoAbertura): void {
+    this.dialog.open(TipoAberturaDialogComponent, { data: { tipo: tp }, width: '400px' })
+      .afterClosed().subscribe(r => { if (r) this.dodfService.updateTipo(tp.uuid, r).subscribe({ next: () => { this.toast.success('Atualizado!'); this.loadTipos(); }, error: () => this.toast.error('Erro') }); });
   }
 
-  toggleTipo(tipo: DodfTipoAbertura): void {
-    this.dodfService.updateTipo(tipo.uuid, { valor: tipo.valor, ativo: !tipo.ativo }).subscribe({
-      next: () => {
-        this.toast.success(tipo.ativo ? 'Tipo desativado' : 'Tipo ativado');
-        this.loadTipos();
-      },
-      error: () => { this.toast.error('Erro ao alterar tipo'); this.loadTipos(); },
-    });
+  toggleTipo(tp: DodfTipoAbertura): void {
+    this.dodfService.updateTipo(tp.uuid, { valor: tp.valor, ativo: !tp.ativo }).subscribe({ next: () => this.loadTipos(), error: () => this.loadTipos() });
   }
 
-  deleteTipo(tipo: DodfTipoAbertura): void {
-    const ref = this.dialog.open(ConfirmDialogComponent, {
-      data: { title: 'Excluir Tipo de Abertura', message: `Deseja excluir o tipo "${tipo.valor}"?`, confirmLabel: 'Excluir', danger: true }
-    });
-    ref.afterClosed().subscribe(confirmed => {
-      if (confirmed) {
-        this.dodfService.deleteTipo(tipo.uuid).subscribe({
-          next: () => { this.toast.success('Tipo excluído'); this.loadTipos(); },
-          error: () => this.toast.error('Erro ao excluir tipo'),
-        });
-      }
-    });
+  deleteTipo(tp: DodfTipoAbertura): void {
+    this.dialog.open(ConfirmDialogComponent, { data: { title: 'Excluir Tipo', message: `Excluir "${tp.valor}"?`, confirmLabel: 'Excluir', danger: true } })
+      .afterClosed().subscribe(ok => { if (ok) this.dodfService.deleteTipo(tp.uuid).subscribe({ next: () => { this.toast.success('Excluído'); this.loadTipos(); }, error: () => this.toast.error('Erro') }); });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, HostListener } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificacoesService } from '../../../core/services/notificacoes.service';
+import { NotificacaoEvent } from '../../../core/models/edital.model';
 
 interface NavItem {
   label: string;
@@ -89,17 +90,6 @@ interface NavSection {
         <!-- Footer -->
         <div class="sidebar-footer">
           <div class="sidebar-divider"></div>
-          <a class="nav-item"
-             routerLink="/configuracoes"
-             routerLinkActive="active"
-             (click)="mobileOpen.set(false)"
-             [matTooltip]="collapsed() ? 'Configurações' : ''"
-             matTooltipPosition="right">
-            <mat-icon class="nav-icon">settings</mat-icon>
-            @if (!collapsed()) {
-              <span class="nav-label">Configurações</span>
-            }
-          </a>
 
           <div class="user-card" [matMenuTriggerFor]="userMenu"
                [matTooltip]="collapsed() ? (auth.currentUser()?.name ?? '') : ''"
@@ -132,14 +122,6 @@ interface NavSection {
               <mat-icon>menu</mat-icon>
             </button>
 
-            <!-- Search -->
-            <div class="search-bar hide-mobile">
-              <mat-icon class="search-icon">search</mat-icon>
-              <input type="text"
-                     placeholder="Buscar editais, órgãos, objetos..."
-                     class="search-input" />
-              <kbd class="search-kbd">⌘K</kbd>
-            </div>
           </div>
 
           <div class="topbar-right">
@@ -148,7 +130,8 @@ interface NavSection {
               <mat-icon>help_outline</mat-icon>
             </button>
 
-            <button class="icon-btn notif-btn" matTooltip="Notificações" routerLink="/notificacoes">
+            <button class="icon-btn notif-btn" matTooltip="Notificações"
+                    [matMenuTriggerFor]="notifMenu" (click)="openNotifMenu()">
               @if (notifSvc.novas() > 0) {
                 <span class="radar-ring" style="width:24px;height:24px;top:6px;left:6px;"></span>
                 <span class="radar-ring" style="width:24px;height:24px;top:6px;left:6px;"></span>
@@ -175,6 +158,41 @@ interface NavSection {
         </main>
       </div>
     </div>
+
+    <!-- Notification popup -->
+    <mat-menu #notifMenu="matMenu" class="notif-popup" xPosition="before">
+      <div class="notif-popup-header" (click)="$event.stopPropagation()">
+        <span class="notif-popup-title">Notificações</span>
+        @if (notifSvc.novas() > 0) {
+          <button mat-icon-button class="notif-clear-btn"
+                  (click)="notifSvc.clearNovas(); $event.stopPropagation()">
+            <mat-icon>done_all</mat-icon>
+          </button>
+        }
+      </div>
+      <div class="notif-popup-list" (click)="$event.stopPropagation()">
+        @if (notifHistorico().length === 0) {
+          <div class="notif-popup-empty">
+            <mat-icon>notifications_none</mat-icon>
+            <span>Sem notificações recentes</span>
+          </div>
+        }
+        @for (n of notifHistorico(); track n.editalId) {
+          <div class="notif-popup-item">
+            <div class="notif-score-chip" [class.hot]="(n.leadScore ?? 0) >= 70" [class.warm]="(n.leadScore ?? 0) >= 40 && (n.leadScore ?? 0) < 70">
+              {{ n.leadScore ?? '–' }}
+            </div>
+            <div class="notif-popup-info">
+              <span class="notif-popup-numero">{{ n.numero }}</span>
+              <span class="notif-popup-objeto">{{ n.objeto }}</span>
+              @if (n.categoria) {
+                <span class="notif-popup-cat">{{ n.categoria }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </mat-menu>
 
     <!-- User dropdown menu -->
     <mat-menu #userMenu="matMenu" class="user-dropdown">
@@ -221,7 +239,7 @@ interface NavSection {
       display: flex;
       flex-direction: column;
       height: 100%;
-      background: var(--sidebar-bg, #0F172A);
+      background: var(--sidebar-bg, #0D1526);
       border-right: 1px solid var(--sidebar-border, rgba(255,255,255,0.06));
       overflow: hidden;
       transition: width 200ms ease;
@@ -272,7 +290,7 @@ interface NavSection {
     .logo-mark {
       width: 36px;
       height: 36px;
-      background: linear-gradient(135deg, #10B981, #059669);
+      background: linear-gradient(135deg, #11BF7F, #0DA66E);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -387,7 +405,7 @@ interface NavSection {
         background: var(--sidebar-active-bg, rgba(16,185,129,0.10));
         color: var(--sidebar-text-active, #F8FAFC);
 
-        .nav-icon { color: var(--sidebar-icon-active, #10B981); }
+        .nav-icon { color: var(--sidebar-icon-active, #11BF7F); }
 
         &::before {
           content: '';
@@ -396,7 +414,7 @@ interface NavSection {
           top: 6px;
           bottom: 6px;
           width: 3px;
-          background: var(--sidebar-active-line, #10B981);
+          background: var(--sidebar-active-line, #11BF7F);
           border-radius: 0 2px 2px 0;
         }
       }
@@ -468,7 +486,7 @@ interface NavSection {
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+      background: linear-gradient(135deg, #0DA66E, #107357);
       color: white;
       font-size: 12px;
       font-weight: 700;
@@ -551,55 +569,6 @@ interface NavSection {
       flex-shrink: 0;
     }
 
-    .search-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 8px;
-      padding: 6px 12px;
-      max-width: 400px;
-      width: 100%;
-      transition: border-color 150ms;
-
-      &:focus-within {
-        border-color: #2563EB;
-        background: white;
-        box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
-      }
-    }
-
-    .search-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-      color: #94A3B8;
-      flex-shrink: 0;
-    }
-
-    .search-input {
-      border: none;
-      background: transparent;
-      outline: none;
-      font-size: 13.5px;
-      color: #0F172A;
-      font-family: inherit;
-      flex: 1;
-      min-width: 0;
-
-      &::placeholder { color: #94A3B8; }
-    }
-
-    .search-kbd {
-      font-size: 11px;
-      color: #94A3B8;
-      background: #E2E8F0;
-      border-radius: 4px;
-      padding: 1px 5px;
-      flex-shrink: 0;
-      font-family: monospace;
-    }
 
     .icon-btn {
       background: none;
@@ -617,7 +586,7 @@ interface NavSection {
 
       &:hover {
         background: #F1F5F9;
-        color: #0F172A;
+        color: #0D1526;
       }
 
       mat-icon { font-size: 20px; width: 20px; height: 20px; }
@@ -640,7 +609,7 @@ interface NavSection {
       width: 34px;
       height: 34px;
       border-radius: 8px;
-      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+      background: linear-gradient(135deg, #0DA66E, #107357);
       color: white;
       font-size: 12px;
       font-weight: 700;
@@ -683,7 +652,7 @@ interface NavSection {
       width: 38px;
       height: 38px;
       border-radius: 8px;
-      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+      background: linear-gradient(135deg, #0DA66E, #107357);
       color: white;
       font-size: 14px;
       font-weight: 700;
@@ -696,7 +665,7 @@ interface NavSection {
     .user-menu-name {
       font-size: 14px;
       font-weight: 600;
-      color: #0F172A;
+      color: #0D1526;
     }
 
     .user-menu-email {
@@ -708,6 +677,119 @@ interface NavSection {
       color: #EF4444 !important;
       mat-icon { color: #EF4444 !important; }
     }
+
+    /* ── Notification popup ──────────────────────────────────────────── */
+    ::ng-deep .notif-popup {
+      .mat-mdc-menu-content { padding: 0; }
+      min-width: 340px !important;
+      max-width: 360px !important;
+    }
+
+    .notif-popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px 8px;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .notif-popup-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0D1526;
+    }
+
+    .notif-clear-btn {
+      width: 28px;
+      height: 28px;
+      mat-icon { font-size: 18px; color: #64748B; }
+    }
+
+    .notif-popup-list {
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 4px 0;
+
+      &::-webkit-scrollbar { width: 4px; }
+      &::-webkit-scrollbar-track { background: transparent; }
+      &::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 4px; }
+    }
+
+    .notif-popup-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 24px 16px;
+      color: #94A3B8;
+      font-size: 13px;
+
+      mat-icon { font-size: 28px; width: 28px; height: 28px; opacity: 0.5; }
+    }
+
+    .notif-popup-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid #F1F5F9;
+      cursor: default;
+
+      &:last-child { border-bottom: none; }
+      &:hover { background: #F8FAFC; }
+    }
+
+    .notif-score-chip {
+      min-width: 34px;
+      height: 22px;
+      border-radius: 6px;
+      background: #E2E8F0;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+
+      &.hot { background: rgba(16,185,129,0.15); color: #0DA66E; }
+      &.warm { background: rgba(245,158,11,0.15); color: #D97706; }
+    }
+
+    .notif-popup-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .notif-popup-numero {
+      font-size: 12px;
+      font-weight: 600;
+      color: #0D1526;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .notif-popup-objeto {
+      font-size: 12px;
+      color: #475569;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4;
+    }
+
+    .notif-popup-cat {
+      font-size: 10px;
+      font-weight: 600;
+      color: #11BF7F;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
   `],
 })
 export class MainLayoutComponent implements OnInit {
@@ -716,31 +798,36 @@ export class MainLayoutComponent implements OnInit {
 
   collapsed = signal(false);
   mobileOpen = signal(false);
+  notifHistorico = signal<NotificacaoEvent[]>([]);
 
   navSections: NavSection[] = [
     {
-      label: 'Principal',
+      label: 'Licitações',
       items: [
-        { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-        { label: 'Pipeline', icon: 'view_kanban', route: '/pipeline' },
         { label: 'Leads', icon: 'list_alt', route: '/leads' },
-        { label: 'Editais', icon: 'description', route: '/editais', badge: 3 },
-        { label: 'Notificações', icon: 'notifications', route: '/notificacoes' },
+        { label: 'Pipeline', icon: 'view_kanban', route: '/pipeline' },
+        { label: 'Editais', icon: 'description', route: '/editais' },
       ],
     },
     {
-      label: 'Ferramentas IA',
+      label: 'Inteligência',
       items: [
+        { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
         { label: 'Impugnação', icon: 'gavel', route: '/impugnacao' },
         { label: 'Assistente IA', icon: 'smart_toy', route: '/assistente' },
       ],
     },
     {
+      label: 'Cotação',
+      items: [
+        { label: 'Fornecedores', icon: 'storefront', route: '/cotacao/fornecedores' },
+        { label: 'Itens', icon: 'inventory_2', route: '/cotacao/itens' },
+      ],
+    },
+    {
       label: 'Configurações',
       items: [
-        { label: 'Regras de Análise', icon: 'rule', route: '/regras' },
-        { label: 'Config. DODF', icon: 'article', route: '/dodf/configuracao' },
-        { label: 'Relatórios', icon: 'bar_chart', route: '/relatorios' },
+        { label: 'Configurações', icon: 'settings', route: '/configuracoes' },
       ],
     },
   ];
@@ -749,13 +836,12 @@ export class MainLayoutComponent implements OnInit {
     this.notifSvc.startSSE();
   }
 
-  @HostListener('document:keydown', ['$event'])
-  onKeydown(event: KeyboardEvent): void {
-    // ⌘K or Ctrl+K to focus search
-    if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
-      event.preventDefault();
-      const input = document.querySelector<HTMLInputElement>('.search-input');
-      input?.focus();
-    }
+  openNotifMenu(): void {
+    this.notifSvc.clearNovas();
+    this.notifSvc.getHistorico().subscribe({
+      next: (n) => this.notifHistorico.set((n ?? []).slice(0, 10)),
+      error: () => {}
+    });
   }
+
 }

@@ -1,222 +1,166 @@
 <div class="pipeline-shell">
 
-  <!-- ── Header ──────────────────────────────────────────────────────── -->
+  <!-- ── Header ─────────────────────────────────────────────────── -->
   <div class="pipeline-header">
-    <div>
-      <h1 class="pipeline-title">Pipeline de Leads</h1>
-      <p class="pipeline-sub">{{ hotLeads().length + warmLeads().length + coldLeads().length }} leads ativos · Total: {{ formatVal(hotValue + warmValue + coldValue) }}</p>
+    <div class="header-left">
+      <h1 class="pipeline-title">Pipeline</h1>
+      <p class="pipeline-sub">
+        @if (active() === 'qual') {
+          @if (loadingQual()) { Carregando... }
+          @else { {{ qualTotal() }} oportunidade{{ qualTotal() !== 1 ? 's' : '' }} em qualificação }
+        } @else {
+          @if (loadingProc()) { Carregando... }
+          @else { {{ procTotal() }} processo{{ procTotal() !== 1 ? 's' : '' }} em andamento }
+        }
+      </p>
     </div>
-    <div class="header-actions">
-      <button mat-icon-button matTooltip="Atualizar pipeline" (click)="loadLeads()">
+
+    <div class="header-right">
+      <div class="pipeline-toggle">
+        <button class="toggle-btn" [class.active]="active() === 'qual'" (click)="active.set('qual')">
+          <mat-icon>filter_alt</mat-icon>
+          Qualificação
+          <span class="toggle-count" [class.green]="active() === 'qual'">{{ qualTotal() }}</span>
+        </button>
+        <button class="toggle-btn" [class.active]="active() === 'proc'" (click)="active.set('proc')">
+          <mat-icon>account_tree</mat-icon>
+          Processo Licitatório
+          <span class="toggle-count" [class.green]="active() === 'proc'">{{ procTotal() }}</span>
+        </button>
+      </div>
+      <button mat-icon-button matTooltip="Recarregar"
+              (click)="active() === 'qual' ? loadLeads() : loadProcessos()">
         <mat-icon>refresh</mat-icon>
       </button>
     </div>
   </div>
 
-  <!-- ── Coleta DODF Panel ────────────────────────────────────────────── -->
-  <mat-expansion-panel
-    [expanded]="panelOpen()"
-    (opened)="panelOpen.set(true)"
-    (closed)="panelOpen.set(false)"
-    class="coleta-panel">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <mat-icon class="panel-icon">article</mat-icon>
-        Coleta DODF
-      </mat-panel-title>
-      <mat-panel-description>
-        Busca matérias relevantes no Diário Oficial do DF
-      </mat-panel-description>
-    </mat-expansion-panel-header>
+  <!-- ── QUALIFICAÇÃO ─────────────────────────────────────────────── -->
+  @if (active() === 'qual') {
+    @if (loadingQual()) {
+      <div class="loading-state"><mat-spinner diameter="32" /><span>Carregando leads...</span></div>
+    } @else {
+      <div class="board cols-5" cdkDropListGroup>
+        @for (col of qualColumns; track col.id) {
+          <div class="col" [style.--cc]="col.color" [style.--ca]="col.accent">
 
-    <div class="coleta-form">
-      <mat-form-field appearance="outline" class="date-field">
-        <mat-label>Data de Coleta</mat-label>
-        <input matInput [matDatepicker]="picker"
-               [ngModel]="coletaDate()"
-               (ngModelChange)="coletaDate.set($event)" />
-        <mat-datepicker-toggle matIconSuffix [for]="picker" />
-        <mat-datepicker #picker />
-      </mat-form-field>
+            <!-- Column header -->
+            <div class="col-header">
+              <mat-icon class="col-icon">{{ col.icon }}</mat-icon>
+              <span class="col-label">{{ col.label }}</span>
+              <span class="col-count">{{ col.leads.length }}</span>
+            </div>
 
-      <button mat-flat-button color="primary" (click)="coletar()" [disabled]="coletando()">
-        @if (coletando()) {
-          <mat-spinner diameter="16" />
-        } @else {
-          <mat-icon>download</mat-icon>
+            <!-- Drop zone -->
+            <div class="col-body" cdkDropList [id]="col.id"
+                 [cdkDropListData]="col.leads"
+                 [cdkDropListConnectedTo]="qualConnected"
+                 (cdkDropListDropped)="dropQual($event)">
+
+              @for (lead of col.leads; track lead.uuid) {
+                <div class="kcard" cdkDrag [cdkDragData]="lead">
+                  <div class="kcard-placeholder" *cdkDragPlaceholder></div>
+
+                  <!-- Source + date + drag -->
+                  <div class="kcard-meta">
+                    <span class="src src-{{ lead.fonte?.toLowerCase() }}">{{ lead.fonte }}</span>
+                    <span class="kcard-date">{{ formatDate(lead.dataPublicacao) }}</span>
+                    <mat-icon class="kcard-drag">drag_indicator</mat-icon>
+                  </div>
+
+                  <!-- Title -->
+                  <p class="kcard-title">{{ lead.titulo }}</p>
+
+                  <!-- Footer: org + tipo -->
+                  <div class="kcard-footer">
+                    <div class="kcard-org">
+                      <span class="org-dot" [style.background]="orgColor(lead.orgao)">{{ orgInitial(lead.orgao) }}</span>
+                      <span class="org-name">{{ lead.orgao | truncate:26 }}</span>
+                    </div>
+                    @if (lead.tipo) {
+                      <span class="tipo-tag">{{ tipoShort(lead.tipo) | truncate:20 }}</span>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (col.leads.length === 0) {
+                <div class="col-empty">
+                  <mat-icon>{{ col.icon }}</mat-icon>
+                  <span>Vazio</span>
+                </div>
+              }
+            </div>
+          </div>
         }
-        {{ coletando() ? 'Coletando...' : 'Coletar' }}
-      </button>
-    </div>
-
-    @if (coletaResultado(); as resultado) {
-      <div class="coleta-resultado">
-        <div class="resultado-summary">
-          <div class="summary-chip">
-            <span class="summary-val">{{ resultado.totalMaterias }}</span>
-            <span class="summary-lbl">matérias encontradas</span>
-          </div>
-          <div class="summary-chip relevantes">
-            <span class="summary-val">{{ resultado.salvos }}</span>
-            <span class="summary-lbl">leads salvos</span>
-          </div>
-          <div class="summary-chip">
-            <span class="summary-val">{{ resultado.duplicados }}</span>
-            <span class="summary-lbl">duplicados</span>
-          </div>
-          <span class="summary-data">{{ resultado.data }}</span>
-        </div>
       </div>
     }
-  </mat-expansion-panel>
-
-  <!-- ── Loading ──────────────────────────────────────────────────────── -->
-  @if (loading()) {
-    <div class="pipeline-loading">
-      <mat-spinner diameter="36"></mat-spinner>
-      <span>Carregando leads...</span>
-    </div>
   }
 
-  <!-- ── Board ────────────────────────────────────────────────────────── -->
-  @if (!loading()) {
-  <div class="pipeline-board" cdkDropListGroup>
+  <!-- ── PROCESSO LICITATÓRIO ─────────────────────────────────────── -->
+  @if (active() === 'proc') {
+    @if (loadingProc()) {
+      <div class="loading-state"><mat-spinner diameter="32" /><span>Carregando processos...</span></div>
+    } @else {
+      <div class="board cols-7" cdkDropListGroup>
+        @for (col of procColumns; track col.id) {
+          <div class="col" [style.--cc]="col.color" [style.--ca]="col.accent"
+               [class.col-final]="col.key === 'GANHO' || col.key === 'PERDIDO'">
 
-    <!-- HOT -->
-    <div class="pipeline-column hot">
-      <div class="col-header">
-        <div class="col-title-row">
-          <div class="col-indicator hot"></div>
-          <h3>Quente</h3>
-          <span class="col-badge hot">{{ hotLeads().length }}</span>
-        </div>
-        <span class="col-value">{{ formatVal(hotValue) }}</span>
-      </div>
-      <div class="col-body" cdkDropList id="hot-list"
-           [cdkDropListData]="hotLeads()"
-           [cdkDropListConnectedTo]="['warm-list','cold-list']"
-           (cdkDropListDropped)="drop($event)">
-        @for (lead of hotLeads(); track lead.id) {
-          <mat-card appearance="outlined" class="lead-card card-live animate-war-enter" cdkDrag>
-            <mat-card-content>
-              <div class="card-top">
-                <span class="lead-numero">{{ lead.numero }}</span>
-                <span class="score-pill hot">{{ lead.leadScore }}</span>
-              </div>
-              @if (lead.fonteOrigem) {
-                <span class="fonte-chip fonte-{{ lead.fonteOrigem.toLowerCase() }}">{{ lead.fonteOrigem }}</span>
+            <div class="col-header">
+              <mat-icon class="col-icon">{{ col.icon }}</mat-icon>
+              <span class="col-label">{{ col.label }}</span>
+              <span class="col-count">{{ col.processos.length }}</span>
+            </div>
+
+            <div class="col-body" cdkDropList [id]="col.id"
+                 [cdkDropListData]="col.processos"
+                 [cdkDropListConnectedTo]="procConnected"
+                 (cdkDropListDropped)="dropProc($event)">
+
+              @for (proc of col.processos; track proc.uuid) {
+                <div class="kcard kcard-proc"
+                     [class.kcard-ganho]="col.key === 'GANHO'"
+                     [class.kcard-perdido]="col.key === 'PERDIDO'"
+                     cdkDrag [cdkDragData]="proc"
+                     (click)="openDetalhe(proc)">
+                  <div class="kcard-placeholder" *cdkDragPlaceholder></div>
+
+                  <div class="kcard-meta">
+                    <span class="src src-{{ proc.fonte?.toLowerCase() }}">{{ proc.fonte }}</span>
+                    <span class="kcard-date">{{ formatDate(proc.criadoEm) }}</span>
+                    <mat-icon class="kcard-drag">drag_indicator</mat-icon>
+                  </div>
+
+                  <p class="kcard-title">{{ proc.titulo }}</p>
+
+                  <div class="kcard-footer">
+                    <div class="kcard-org">
+                      <span class="org-dot" [style.background]="orgColor(proc.orgao)">{{ orgInitial(proc.orgao) }}</span>
+                      <span class="org-name">{{ proc.orgao | truncate:24 }}</span>
+                    </div>
+                    @if (proc.responsavel) {
+                      <span class="resp-chip" [matTooltip]="proc.responsavel">
+                        {{ proc.responsavel.split(' ')[0] }}
+                      </span>
+                    }
+                  </div>
+
+                  <div class="kcard-click-hint">Clique para detalhes</div>
+                </div>
               }
-              <p class="lead-objeto">{{ lead.objeto | truncate:55 }}</p>
-              <div class="score-track">
-                <div class="score-fill hot" [style.width.%]="lead.leadScore"></div>
-              </div>
-              <div class="card-meta">
-                <span class="meta-item"><mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}</span>
-                <span class="meta-chip">{{ lead.leadCategoriaPrincipal }}</span>
-              </div>
-              <div class="card-footer">
-                <span class="lead-valor">{{ lead.valorEstimado | currencyBr }}</span>
-                <span class="lead-data">{{ lead.dataAbertura }}</span>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        }
-        @if (hotLeads().length === 0) {
-          <div class="empty-col"><mat-icon>local_fire_department</mat-icon><span>Nenhum lead quente</span></div>
-        }
-      </div>
-    </div>
 
-    <!-- WARM -->
-    <div class="pipeline-column warm">
-      <div class="col-header">
-        <div class="col-title-row">
-          <div class="col-indicator warm"></div>
-          <h3>Morno</h3>
-          <span class="col-badge warm">{{ warmLeads().length }}</span>
-        </div>
-        <span class="col-value">{{ formatVal(warmValue) }}</span>
-      </div>
-      <div class="col-body" cdkDropList id="warm-list"
-           [cdkDropListData]="warmLeads()"
-           [cdkDropListConnectedTo]="['hot-list','cold-list']"
-           (cdkDropListDropped)="drop($event)">
-        @for (lead of warmLeads(); track lead.id) {
-          <mat-card appearance="outlined" class="lead-card card-live animate-war-enter" cdkDrag>
-            <mat-card-content>
-              <div class="card-top">
-                <span class="lead-numero">{{ lead.numero }}</span>
-                <span class="score-pill warm">{{ lead.leadScore }}</span>
-              </div>
-              @if (lead.fonteOrigem) {
-                <span class="fonte-chip fonte-{{ lead.fonteOrigem.toLowerCase() }}">{{ lead.fonteOrigem }}</span>
+              @if (col.processos.length === 0) {
+                <div class="col-empty">
+                  <mat-icon>{{ col.icon }}</mat-icon>
+                  <span>Vazio</span>
+                </div>
               }
-              <p class="lead-objeto">{{ lead.objeto | truncate:55 }}</p>
-              <div class="score-track">
-                <div class="score-fill warm" [style.width.%]="lead.leadScore"></div>
-              </div>
-              <div class="card-meta">
-                <span class="meta-item"><mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}</span>
-                <span class="meta-chip">{{ lead.leadCategoriaPrincipal }}</span>
-              </div>
-              <div class="card-footer">
-                <span class="lead-valor">{{ lead.valorEstimado | currencyBr }}</span>
-                <span class="lead-data">{{ lead.dataAbertura }}</span>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        }
-        @if (warmLeads().length === 0) {
-          <div class="empty-col"><mat-icon>whatshot</mat-icon><span>Nenhum lead morno</span></div>
+            </div>
+          </div>
         }
       </div>
-    </div>
-
-    <!-- COLD -->
-    <div class="pipeline-column cold">
-      <div class="col-header">
-        <div class="col-title-row">
-          <div class="col-indicator cold"></div>
-          <h3>Frio</h3>
-          <span class="col-badge cold">{{ coldLeads().length }}</span>
-        </div>
-        <span class="col-value">{{ formatVal(coldValue) }}</span>
-      </div>
-      <div class="col-body" cdkDropList id="cold-list"
-           [cdkDropListData]="coldLeads()"
-           [cdkDropListConnectedTo]="['hot-list','warm-list']"
-           (cdkDropListDropped)="drop($event)">
-        @for (lead of coldLeads(); track lead.id) {
-          <mat-card appearance="outlined" class="lead-card card-live animate-war-enter" cdkDrag>
-            <mat-card-content>
-              <div class="card-top">
-                <span class="lead-numero">{{ lead.numero }}</span>
-                <span class="score-pill cold">{{ lead.leadScore }}</span>
-              </div>
-              @if (lead.fonteOrigem) {
-                <span class="fonte-chip fonte-{{ lead.fonteOrigem.toLowerCase() }}">{{ lead.fonteOrigem }}</span>
-              }
-              <p class="lead-objeto">{{ lead.objeto | truncate:55 }}</p>
-              <div class="score-track">
-                <div class="score-fill cold" [style.width.%]="lead.leadScore"></div>
-              </div>
-              <div class="card-meta">
-                <span class="meta-item"><mat-icon>business</mat-icon>{{ lead.orgaoOrigem | truncate:20 }}</span>
-                <span class="meta-chip">{{ lead.leadCategoriaPrincipal }}</span>
-              </div>
-              <div class="card-footer">
-                <span class="lead-valor">{{ lead.valorEstimado | currencyBr }}</span>
-                <span class="lead-data">{{ lead.dataAbertura }}</span>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        }
-        @if (coldLeads().length === 0) {
-          <div class="empty-col"><mat-icon>ac_unit</mat-icon><span>Nenhum lead frio</span></div>
-        }
-      </div>
-    </div>
-
-  </div>
+    }
   }
+
 </div>
