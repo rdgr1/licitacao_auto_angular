@@ -29,7 +29,7 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
 @Component({
   selector: 'app-lead-detalhe-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatProgressSpinnerModule, CurrencyBrPipe],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatProgressSpinnerModule, CurrencyBrPipe, JustificativaDialogComponent],
   template: `
     <div class="ld-shell">
 
