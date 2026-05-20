@@ -1,4 +1,10 @@
-export type LeadStatus = 'NOVO' | 'EM_TRIAGEM' | 'VERIFICANDO_REQ' | 'QUALIFICADO' | 'DESCARTADO';
+export type LeadStatus =
+  | 'DESCARTADO'
+  | 'NOVO'
+  | 'APROVACAO_PRESIDENCIA'
+  | 'ESTUDO_VIABILIDADE'
+  | 'SEGUNDA_APROVACAO_PRESIDENCIA'
+  | 'QUALIFICADO';
 
 export interface Lead {
   uuid: string;
@@ -21,5 +27,5 @@ export interface Lead {
 export interface AtualizarStatusRequest {
   status: LeadStatus;
   revisadoPor: string;
-  observacao?: string;
+  observacao: string;
 }
