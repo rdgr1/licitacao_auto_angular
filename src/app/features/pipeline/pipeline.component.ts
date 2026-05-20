@@ -12,19 +12,19 @@ import { ToastService } from '../../core/services/toast.service';
 import { Lead, LeadStatus } from '../../core/models/lead.model';
 import { ProcessoLicitatorio, StatusProcesso } from '../../core/models/processo.model';
 import { ProcessoDetalheDialogComponent } from '../processos/processo-detalhe-dialog/processo-detalhe-dialog.component';
+import { LeadDetalheDialogComponent } from '../leads/lead-detalhe-dialog/lead-detalhe-dialog.component';
+import { JustificativaDialogComponent } from '../../shared/components/justificativa-dialog/justificativa-dialog.component';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 
 interface LeadCol  { id: string; key: LeadStatus;    label: string; icon: string; color: string; accent: string; leads: Lead[]; }
 interface ProcCol  { id: string; key: StatusProcesso; label: string; icon: string; color: string; accent: string; processos: ProcessoLicitatorio[]; }
-
-// ── Colors ───────────────────────────────────────────────────────────────────
 
 const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7','#00897B','#43A047','#FB8C00','#E53935'];
 
 @Component({
   selector: 'app-pipeline',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule, MatProgressSpinnerModule, DragDropModule, TruncatePipe],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule, MatProgressSpinnerModule, DragDropModule, TruncatePipe, LeadDetalheDialogComponent],
   templateUrl: './pipeline.component.html',
   styleUrl: './pipeline.component.scss',
 })
@@ -39,21 +39,21 @@ export class PipelineComponent implements OnInit {
   loadingProc = signal(true);
 
   qualColumns: LeadCol[] = [
-    { id: 'q-nova',        key: 'NOVO',           label: 'Nova',             icon: 'inbox',         color: '#3B82F6', accent: 'rgba(17,191,127,0.06)', leads: [] },
-    { id: 'q-triagem',     key: 'EM_TRIAGEM',      label: 'Em Triagem',       icon: 'manage_search', color: '#8B5CF6', accent: '#F5F3FF', leads: [] },
-    { id: 'q-verificando', key: 'VERIFICANDO_REQ', label: 'Verificando Req.', icon: 'checklist',     color: '#F59E0B', accent: '#FFFBEB', leads: [] },
-    { id: 'q-qualificado', key: 'QUALIFICADO',     label: 'Qualificado',      icon: 'verified',      color: '#11BF7F', accent: '#F0FDF4', leads: [] },
-    { id: 'q-descartado',  key: 'DESCARTADO',      label: 'Descartado',       icon: 'block',         color: '#94A3B8', accent: '#F8FAFC', leads: [] },
+    { id: 'q-descartado', key: 'DESCARTADO',                    label: 'Descarte',              icon: 'block',         color: '#94A3B8', accent: '#F8FAFC',                    leads: [] },
+    { id: 'q-novo',       key: 'NOVO',                          label: 'Novos Leads',            icon: 'inbox',         color: '#3B82F6', accent: 'rgba(17,191,127,0.06)',       leads: [] },
+    { id: 'q-aprovacao',  key: 'APROVACAO_PRESIDENCIA',         label: 'Aprov. Presidência',     icon: 'how_to_reg',    color: '#8B5CF6', accent: '#F5F3FF',                    leads: [] },
+    { id: 'q-viab',       key: 'ESTUDO_VIABILIDADE',            label: 'Estudo e Viabilidade',   icon: 'science',       color: '#F59E0B', accent: '#FFFBEB',                    leads: [] },
+    { id: 'q-2aprov',     key: 'SEGUNDA_APROVACAO_PRESIDENCIA', label: '2ª Aprov. Presidência',  icon: 'verified_user', color: '#11BF7F', accent: '#F0FDF4',                    leads: [] },
   ];
 
   procColumns: ProcCol[] = [
-    { id: 'p-proposta',  key: 'ELABORANDO_PROPOSTA', label: 'Elaborando Proposta', icon: 'edit_document',          color: '#3B82F6', accent: 'rgba(17,191,127,0.06)', processos: [] },
-    { id: 'p-docs',      key: 'DOCUMENTACAO',        label: 'Documentação',        icon: 'folder_open',            color: '#8B5CF6', accent: '#F5F3FF', processos: [] },
-    { id: 'p-abertura',  key: 'AGUARDANDO_ABERTURA', label: 'Aguard. Abertura',    icon: 'schedule',               color: '#F59E0B', accent: '#FFFBEB', processos: [] },
-    { id: 'p-disputa',   key: 'EM_DISPUTA',          label: 'Em Disputa',          icon: 'gavel',                  color: '#EF4444', accent: '#FFF1F2', processos: [] },
-    { id: 'p-negociacao',key: 'NEGOCIACAO',          label: 'Negociação',          icon: 'handshake',              color: '#F97316', accent: '#FFF7ED', processos: [] },
-    { id: 'p-ganho',     key: 'GANHO',               label: 'Ganho',               icon: 'emoji_events',           color: '#11BF7F', accent: '#F0FDF4', processos: [] },
-    { id: 'p-perdido',   key: 'PERDIDO',             label: 'Perdido',             icon: 'sentiment_dissatisfied', color: '#94A3B8', accent: '#F8FAFC', processos: [] },
+    { id: 'p-proposta',   key: 'ELABORANDO_PROPOSTA', label: 'Elaborando Proposta', icon: 'edit_document',          color: '#3B82F6', accent: 'rgba(17,191,127,0.06)', processos: [] },
+    { id: 'p-docs',       key: 'DOCUMENTACAO',        label: 'Documentação',        icon: 'folder_open',            color: '#8B5CF6', accent: '#F5F3FF', processos: [] },
+    { id: 'p-abertura',   key: 'AGUARDANDO_ABERTURA', label: 'Aguard. Abertura',    icon: 'schedule',               color: '#F59E0B', accent: '#FFFBEB', processos: [] },
+    { id: 'p-disputa',    key: 'EM_DISPUTA',          label: 'Em Disputa',          icon: 'gavel',                  color: '#EF4444', accent: '#FFF1F2', processos: [] },
+    { id: 'p-negociacao', key: 'NEGOCIACAO',          label: 'Negociação',          icon: 'handshake',              color: '#F97316', accent: '#FFF7ED', processos: [] },
+    { id: 'p-ganho',      key: 'GANHO',               label: 'Ganho',               icon: 'emoji_events',           color: '#11BF7F', accent: '#F0FDF4', processos: [] },
+    { id: 'p-perdido',    key: 'PERDIDO',             label: 'Perdido',             icon: 'sentiment_dissatisfied', color: '#94A3B8', accent: '#F8FAFC', processos: [] },
   ];
 
   get qualConnected(): string[] { return this.qualColumns.map(c => c.id); }
@@ -76,7 +76,8 @@ export class PipelineComponent implements OnInit {
     this.leadService.listar({ page: 0, size: 500 }).subscribe({
       next: (page) => {
         for (const lead of page.content ?? []) {
-          (this.qualColumns.find(c => c.key === lead.status) ?? this.qualColumns[0]).leads.push(lead);
+          const col = this.qualColumns.find(c => c.key === lead.status);
+          if (col) col.leads.push(lead);
         }
         this.refreshQualTotal();
         this.loadingQual.set(false);
@@ -102,26 +103,38 @@ export class PipelineComponent implements OnInit {
 
   dropQual(event: CdkDragDrop<Lead[]>): void {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex); return;
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      return;
     }
-    const lead = event.previousContainer.data[event.previousIndex];
-    const targetCol = this.qualColumns.find(c => c.id === event.container.id)!;
-    transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
-    this.refreshQualTotal();
 
-    this.leadService.atualizarStatus(lead.uuid, { status: targetCol.key, revisadoPor: 'pipeline' }).subscribe({
-      next: () => {
-        if (targetCol.key === 'QUALIFICADO') {
-          this.toast.success('Lead qualificado — criando processo...');
-          setTimeout(() => this.loadProcessos(), 2000);
+    const lead      = event.previousContainer.data[event.previousIndex];
+    const targetCol = this.qualColumns.find(c => c.id === event.container.id)!;
+    const prevCol   = this.qualColumns.find(c => c.id === event.previousContainer.id)!;
+
+    const ref = this.dialog.open(JustificativaDialogComponent, {
+      data: { titulo: `Mover para ${targetCol.label}` },
+      width: '460px',
+      disableClose: true,
+    });
+
+    ref.afterClosed().subscribe((justificativa: string | undefined) => {
+      if (!justificativa) return;
+
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      this.refreshQualTotal();
+
+      this.leadService.atualizarStatus(lead.uuid, {
+        status: targetCol.key,
+        revisadoPor: 'pipeline',
+        observacao: justificativa,
+      }).subscribe({
+        error: () => {
+          const fromIdx = event.container.data.findIndex(l => l.uuid === lead.uuid);
+          if (fromIdx >= 0) transferArrayItem(event.container.data, prevCol.leads, fromIdx, event.previousIndex);
+          this.refreshQualTotal();
+          this.toast.error('Erro ao atualizar lead');
         }
-      },
-      error: () => {
-        const fromIdx = event.container.data.findIndex(l => l.uuid === lead.uuid);
-        const prevCol = this.qualColumns.find(c => c.id === event.previousContainer.id)!;
-        if (fromIdx >= 0) transferArrayItem(event.container.data, prevCol.leads, fromIdx, event.previousIndex);
-        this.toast.error('Erro ao atualizar lead');
-      }
+      });
     });
   }
 
@@ -144,13 +157,20 @@ export class PipelineComponent implements OnInit {
     });
   }
 
-  openDetalhe(proc: ProcessoLicitatorio): void {
-    this.dialog.open(ProcessoDetalheDialogComponent, { data: proc, width: '680px', maxWidth: '95vw' });
+  openLeadDetalhe(lead: Lead): void {
+    const ref = this.dialog.open(LeadDetalheDialogComponent, { data: lead, width: '680px', maxWidth: '95vw' });
+    ref.afterClosed().subscribe(result => {
+      if (result) this.loadLeads();
+      if (result === 'aprovado') setTimeout(() => this.loadProcessos(), 2000);
+    });
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────────
+  openDetalhe(proc: ProcessoLicitatorio): void {
+    const ref = this.dialog.open(ProcessoDetalheDialogComponent, { data: proc, width: '680px', maxWidth: '95vw' });
+    ref.afterClosed().subscribe(changed => { if (changed) this.loadProcessos(); });
+  }
 
-  orgColor(name: string): string { return ORG_COLORS[(name?.charCodeAt(0) ?? 0) % ORG_COLORS.length]; }
+  orgColor(name: string):   string { return ORG_COLORS[(name?.charCodeAt(0) ?? 0) % ORG_COLORS.length]; }
   orgInitial(name: string): string { return name?.charAt(0).toUpperCase() ?? '?'; }
 
   tipoShort(tipo: string): string {
