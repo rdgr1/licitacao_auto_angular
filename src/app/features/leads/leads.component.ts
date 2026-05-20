@@ -50,12 +50,12 @@ export class LeadsComponent implements OnInit {
   hoje   = new Date();
 
   statusTabs: StatusTab[] = [
-    { label: 'Todos',            value: null },
-    { label: 'Nova',             value: 'NOVO' },
-    { label: 'Em Triagem',       value: 'EM_TRIAGEM' },
-    { label: 'Verificando Req.', value: 'VERIFICANDO_REQ' },
-    { label: 'Qualificado',      value: 'QUALIFICADO' },
-    { label: 'Descartado',       value: 'DESCARTADO' },
+    { label: 'Todos',              value: null },
+    { label: 'Novos Leads',        value: 'NOVO' },
+    { label: 'Aprov. Presidência', value: 'APROVACAO_PRESIDENCIA' },
+    { label: 'Estudo e Viab.',     value: 'ESTUDO_VIABILIDADE' },
+    { label: '2ª Aprovação',       value: 'SEGUNDA_APROVACAO_PRESIDENCIA' },
+    { label: 'Descartado',         value: 'DESCARTADO' },
   ];
 
   selectedTabIdx  = signal(0);
@@ -239,7 +239,7 @@ export class LeadsComponent implements OnInit {
 
   atualizarStatus(lead: Lead, status: LeadStatus, event: Event): void {
     event.stopPropagation();
-    this.leadService.atualizarStatus(lead.uuid, { status, revisadoPor: 'analista@brasfort.com.br' }).subscribe({
+    this.leadService.atualizarStatus(lead.uuid, { status, revisadoPor: 'analista@brasfort.com.br', observacao: 'Atualizado via lista de leads' }).subscribe({
       next: () => { this.toast.success(this.statusLabel(status)); this.carregarLeads(); },
       error: () => this.toast.error('Erro ao atualizar status'),
     });
@@ -258,7 +258,7 @@ export class LeadsComponent implements OnInit {
   }
 
   statusLabel(s: LeadStatus): string {
-    const m: Record<LeadStatus, string> = { NOVO: 'Nova', EM_TRIAGEM: 'Em Triagem', VERIFICANDO_REQ: 'Verificando', QUALIFICADO: 'Qualificado', DESCARTADO: 'Descartado' };
+    const m: Record<LeadStatus, string> = { NOVO: 'Novo Lead', APROVACAO_PRESIDENCIA: 'Aprov. Presidência', ESTUDO_VIABILIDADE: 'Estudo e Viabilidade', SEGUNDA_APROVACAO_PRESIDENCIA: '2ª Aprovação', QUALIFICADO: 'Qualificado', DESCARTADO: 'Descartado' };
     return m[s] ?? s;
   }
 
