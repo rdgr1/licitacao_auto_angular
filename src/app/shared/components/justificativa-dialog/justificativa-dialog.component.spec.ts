@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { JustificativaDialogComponent } from './justificativa-dialog.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { vi } from 'vitest';
 
 const dialogRefStub = { close: vi.fn() };
 
