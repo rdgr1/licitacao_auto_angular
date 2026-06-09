@@ -1,24 +1,19 @@
-import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { EditaisService } from '../../../core/services/editais.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { EditalResponse } from '../../../core/models/edital.model';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
-import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { EditalResponse, EditalStatus, EstatisticasDTO } from '../../../core/models/edital.model';
 import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { DateBrPipe } from '../../../shared/pipes/date-br.pipe';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
@@ -34,92 +29,151 @@ import { ItensDialogComponent } from '../itens-dialog/itens-dialog.component';
     MatPaginatorModule,
     MatSortModule,
     MatButtonModule,
-    MatCardModule,
     MatIconModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatChipsModule,
     MatDividerModule,
     MatMenuModule,
-    LoadingSpinnerComponent,
-    EmptyStateComponent,
+    MatProgressSpinnerModule,
     CurrencyBrPipe,
     DateBrPipe,
     TruncatePipe,
   ],
   templateUrl: './editais-list.component.html',
-  styleUrl: './editais-list.component.scss'
+  styleUrl:    './editais-list.component.scss',
 })
 export class EditaisListComponent implements OnInit {
   private editaisService = inject(EditaisService);
-  private toast = inject(ToastService);
-  private dialog = inject(MatDialog);
-  private router = inject(Router);
+  private toast          = inject(ToastService);
+  private dialog         = inject(MatDialog);
+  private router         = inject(Router);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) set matSort(s: MatSort) {
+    if (s) this.dataSource.sort = s;
+  }
 
-  loading = signal(false);
+  loading    = signal(false);
   dataSource = new MatTableDataSource<EditalResponse>([]);
   displayedColumns = ['numero', 'objeto', 'modalidade', 'valorEstimado', 'dataAbertura', 'status', 'actions'];
-  selectedStatus = signal('');
-  private searchText = '';
+
+  selectedStatus = signal<EditalStatus | ''>('');
+  searchText     = signal('');
+
+  currentPage    = signal(0);
+  pageSize       = signal(25);
+  totalElements  = signal(0);
+
+  statsData = signal<EstatisticasDTO | null>(null);
+
+  totalEditais     = computed(() => this.statsData()?.totalEditais ?? 0);
+  totalProcessados = computed(() => this.statsData()?.processados ?? 0);
+  totalPendentes   = computed(() => this.statsData()?.pendentes ?? 0);
+  totalErros       = computed(() => this.statsData()?.erros ?? 0);
+  totalValor       = computed(() => this.statsData()?.valorTotalEstimado ?? 0);
+  totalPages       = computed(() => Math.ceil(this.totalElements() / this.pageSize()) || 1);
 
   statusOptions = [
-    { label: 'Todos',       value: '',           cls: '' },
-    { label: 'Processado',  value: 'PROCESSADO', cls: 'processado' },
-    { label: 'Pendente',    value: 'PENDENTE',   cls: 'pendente' },
-    { label: 'Processando', value: 'PROCESSANDO',cls: 'processando' },
-    { label: 'Erro',        value: 'ERRO',       cls: 'erro' },
-    { label: 'Antecipado',  value: 'ANTECIPADO', cls: 'antecipado' },
-    { label: 'Arquivado',   value: 'ARQUIVADO',  cls: 'arquivado' },
+    { label: 'Todos',       value: '' as const,            cls: '' },
+    { label: 'Processado',  value: 'PROCESSADO' as const,  cls: 'processado' },
+    { label: 'Pendente',    value: 'PENDENTE' as const,    cls: 'pendente' },
+    { label: 'Processando', value: 'PROCESSANDO' as const, cls: 'processando' },
+    { label: 'Erro',        value: 'ERRO' as const,        cls: 'erro' },
+    { label: 'Antecipado',  value: 'ANTECIPADO' as const,  cls: 'antecipado' },
+    { label: 'Arquivado',   value: 'ARQUIVADO' as const,   cls: 'arquivado' },
   ];
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.dataSource.filterPredicate = (row: EditalResponse, f: string) => {
-      const [text, status] = f.split('§');
-      const matchText = !text ||
-        row.numero?.toLowerCase().includes(text) ||
-        row.objeto?.toLowerCase().includes(text) ||
-        row.orgaoOrigem?.toLowerCase().includes(text);
-      const matchStatus = !status || row.status === status;
-      return matchText && matchStatus;
+      if (!f) return true;
+      const q = f.toLowerCase();
+      return (row.numero?.toLowerCase().includes(q) ||
+              row.objeto?.toLowerCase().includes(q) ||
+              row.orgaoOrigem?.toLowerCase().includes(q)) ?? false;
     };
+    this.loadStats();
     this.loadEditais();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  private loadStats(): void {
+    this.editaisService.getStats().subscribe({
+      next: (s) => this.statsData.set(s),
+    });
   }
 
-  loadEditais() {
+  loadEditais(): void {
     this.loading.set(true);
-    this.editaisService.getAll().subscribe({
-      next: (editais) => {
-        this.dataSource.data = editais;
-        this.applyFilters();
+    const rawStatus = this.selectedStatus();
+    const status = rawStatus ? rawStatus as EditalStatus : undefined;
+    this.editaisService.getAll({ page: this.currentPage(), size: this.pageSize(), status }).subscribe({
+      next: (page) => {
+        this.dataSource.data = page.content ?? [];
+        this.totalElements.set(page.totalElements ?? 0);
         this.loading.set(false);
       },
       error: () => {
         this.toast.error('Erro ao carregar editais');
         this.loading.set(false);
-      }
+      },
     });
   }
 
-  applyFilter(event: Event) {
-    this.searchText = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.applyFilters();
+  applyFilter(event: Event): void {
+    this.searchText.set((event.target as HTMLInputElement).value.trim().toLowerCase());
+    this.dataSource.filter = this.searchText();
   }
 
-  onStatusFilter(status: string) {
-    this.selectedStatus.set(status);
-    this.applyFilters();
+  onStatusFilter(status: string): void {
+    this.selectedStatus.set(status as EditalStatus | '');
+    this.currentPage.set(0);
+    this.loadEditais();
   }
 
-  private applyFilters() {
-    this.dataSource.filter = `${this.searchText}§${this.selectedStatus()}`;
+  onPageChange(event: PageEvent): void {
+    this.currentPage.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
+    this.loadEditais();
+  }
+
+  statusCount(value: string): number {
+    const s = this.statsData();
+    if (!s) return 0;
+    if (!value) return s.totalEditais;
+    const m: Record<string, number> = {
+      PROCESSADO: s.processados,
+      PENDENTE:   s.pendentes,
+      ERRO:       s.erros,
+    };
+    return m[value] ?? 0;
+  }
+
+  viewDetails(edital: EditalResponse): void { this.router.navigate(['/editais', edital.id]); }
+
+  verItens(edital: EditalResponse): void {
+    this.editaisService.getItens(edital.id).subscribe({
+      next: (itens) => this.dialog.open(ItensDialogComponent, {
+        data: { editalId: edital.id, numero: edital.numero, itens },
+        width: '720px', maxWidth: '95vw',
+      }),
+      error: () => this.toast.error('Erro ao carregar itens do edital'),
+    });
+  }
+
+  reprocessar(edital: EditalResponse): void {
+    this.editaisService.reprocessar(edital.id).subscribe({
+      next: () => { this.toast.success(`Edital ${edital.numero} reprocessado`); this.loadEditais(); },
+      error: () => this.toast.error('Erro ao reprocessar'),
+    });
+  }
+
+  delete(edital: EditalResponse): void {
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: 'Excluir Edital', message: `Deseja excluir o edital ${edital.numero}?`, confirmLabel: 'Excluir', danger: true },
+    });
+    ref.afterClosed().subscribe(confirmed => {
+      if (!confirmed) return;
+      this.editaisService.delete(edital.id).subscribe({
+        next: () => { this.toast.success(`Edital ${edital.numero} excluído`); this.loadEditais(); },
+        error: () => this.toast.error('Erro ao excluir edital'),
+      });
+    });
   }
 
   formatModalidade(m: string): string {
@@ -134,59 +188,11 @@ export class EditaisListComponent implements OnInit {
     return map[s] ?? s;
   }
 
+  getStatusClass(status: string): string { return status.toLowerCase().replace(/_/g, '-'); }
+
   isUrgent(data: string): boolean {
     if (!data) return false;
     const diff = new Date(data).getTime() - Date.now();
     return diff > 0 && diff < 3 * 86_400_000;
-  }
-
-  viewDetails(edital: EditalResponse) {
-    this.router.navigate(['/editais', edital.id]);
-  }
-
-  verItens(edital: EditalResponse): void {
-    this.editaisService.getItens(edital.id).subscribe({
-      next: (itens) => {
-        this.dialog.open(ItensDialogComponent, {
-          data: { editalId: edital.id, numero: edital.numero, itens },
-          width: '720px',
-          maxWidth: '95vw',
-        });
-      },
-      error: () => this.toast.error('Erro ao carregar itens do edital'),
-    });
-  }
-
-  delete(edital: EditalResponse) {
-    const ref = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Excluir Edital',
-        message: `Deseja realmente excluir o edital ${edital.numero}?`,
-        confirmLabel: 'Excluir',
-        danger: true,
-      }
-    });
-    ref.afterClosed().subscribe(confirmed => {
-      if (confirmed) {
-        this.editaisService.delete(edital.id).subscribe({
-          next: () => {
-            this.toast.success(`Edital ${edital.numero} excluído`);
-            this.loadEditais();
-          },
-          error: () => this.toast.error('Erro ao excluir edital'),
-        });
-      }
-    });
-  }
-
-  reprocessar(edital: EditalResponse) {
-    this.editaisService.reprocessar(edital.id).subscribe({
-      next: () => { this.toast.success(`Edital ${edital.numero} reprocessado`); this.loadEditais(); },
-      error: () => this.toast.error('Erro ao reprocessar'),
-    });
-  }
-
-  getStatusClass(status: string): string {
-    return status.toLowerCase().replace(/_/g, '-');
   }
 }

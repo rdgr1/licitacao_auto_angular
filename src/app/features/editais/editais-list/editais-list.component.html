@@ -1,95 +1,178 @@
 <div class="editais-shell">
 
-  <!-- ── Header ─────────────────────────────────────────────────── -->
-  <div class="page-header">
-    <div>
+  <!-- ── Header ───────────────────────────────────────────────────── -->
+  <header class="page-header">
+    <div class="header-left">
       <h1 class="page-title">Editais</h1>
-      <p class="page-sub">
-        {{ dataSource.filteredData.length }}
-        edital{{ dataSource.filteredData.length !== 1 ? 'is' : '' }} encontrado{{ dataSource.filteredData.length !== 1 ? 's' : '' }}
+      <p class="page-sub" aria-live="polite">
+        @if (searchText()) {
+          {{ dataSource.filteredData.length }} resultado(s) nesta página
+        } @else {
+          {{ totalElements() | number:'1.0-0' }} registro(s)
+        }
       </p>
     </div>
-    <div class="header-right">
-      <div class="search-box">
-        <mat-icon>search</mat-icon>
-        <input placeholder="Número, objeto, órgão..." (input)="applyFilter($event)" />
+    <div class="header-actions">
+      <div class="search-box" role="search">
+        <mat-icon aria-hidden="true">search</mat-icon>
+        <input placeholder="Número, objeto, órgão..."
+               aria-label="Pesquisar editais"
+               (input)="applyFilter($event)" />
       </div>
-      <button mat-icon-button matTooltip="Recarregar" (click)="loadEditais()">
-        <mat-icon>refresh</mat-icon>
+      <button class="reload-btn"
+              (click)="loadEditais()"
+              aria-label="Recarregar editais"
+              [class.spinning]="loading()">
+        <mat-icon aria-hidden="true">refresh</mat-icon>
       </button>
     </div>
-  </div>
+  </header>
 
-  <!-- ── Status Chips ────────────────────────────────────────────── -->
-  <div class="status-bar">
+  <!-- ── Stats ─────────────────────────────────────────────────────── -->
+  @if (!loading() && totalEditais() > 0) {
+    <div class="stats-row" role="list" aria-label="Resumo dos editais">
+      <div class="stat-card" role="listitem">
+        <mat-icon class="stat-icon" aria-hidden="true">inventory_2</mat-icon>
+        <span class="stat-val">{{ totalEditais() }}</span>
+        <span class="stat-lbl">Total</span>
+      </div>
+      <div class="stat-card stat-green" role="listitem"
+           [attr.aria-label]="totalProcessados() + ' processados'">
+        <mat-icon class="stat-icon" aria-hidden="true">task_alt</mat-icon>
+        <span class="stat-val">{{ totalProcessados() }}</span>
+        <span class="stat-lbl">Processados</span>
+      </div>
+      <div class="stat-card stat-slate" role="listitem"
+           [attr.aria-label]="totalPendentes() + ' pendentes'">
+        <mat-icon class="stat-icon" aria-hidden="true">pending</mat-icon>
+        <span class="stat-val">{{ totalPendentes() }}</span>
+        <span class="stat-lbl">Pendentes</span>
+      </div>
+      <div class="stat-card" role="listitem"
+           [class.stat-red]="totalErros() > 0"
+           [attr.aria-label]="totalErros() + ' erros'">
+        <mat-icon class="stat-icon" aria-hidden="true">error_outline</mat-icon>
+        <span class="stat-val">{{ totalErros() }}</span>
+        <span class="stat-lbl">Erros</span>
+      </div>
+      <div class="stat-card stat-blue" role="listitem" aria-label="Valor estimado total">
+        <mat-icon class="stat-icon" aria-hidden="true">payments</mat-icon>
+        <span class="stat-val stat-val-sm">{{ totalValor() | currencyBr }}</span>
+        <span class="stat-lbl">Valor estimado</span>
+      </div>
+    </div>
+  }
+
+  <!-- ── Filtros de status ──────────────────────────────────────────── -->
+  <nav class="filter-bar" aria-label="Filtros por status">
     @for (s of statusOptions; track s.value) {
-      <button class="status-pill"
+      <button class="filter-pill"
               [class.active]="selectedStatus() === s.value"
+              [attr.aria-pressed]="selectedStatus() === s.value"
+              [attr.aria-label]="s.label + ', ' + statusCount(s.value) + ' editais'"
               (click)="onStatusFilter(s.value)">
-        @if (s.cls) { <span class="s-dot {{ s.cls }}"></span> }
+        @if (s.cls) {
+          <span class="pill-dot {{ s.cls }}" aria-hidden="true"></span>
+        }
         {{ s.label }}
+        <span class="pill-count" aria-hidden="true">{{ statusCount(s.value) }}</span>
       </button>
     }
-  </div>
+  </nav>
 
-  <!-- ── Table ───────────────────────────────────────────────────── -->
-  <app-loading-spinner [isLoading]="loading" />
+  <!-- ── Loading ───────────────────────────────────────────────────── -->
+  @if (loading()) {
+    <div class="loading-state" role="status" aria-live="polite" aria-busy="true">
+      <mat-spinner diameter="26" />
+      <span>Carregando editais...</span>
+    </div>
+  }
 
+  <!-- ── Tabela + Paginação ─────────────────────────────────────────── -->
   @if (!loading()) {
     <div class="table-wrap">
-      <table mat-table [dataSource]="dataSource" matSort class="editais-table">
+      <table mat-table [dataSource]="dataSource" matSort
+             class="editais-table"
+             aria-label="Lista de editais">
 
+        <!-- Número + Órgão -->
         <ng-container matColumnDef="numero">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Número</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Número / Órgão</th>
           <td mat-cell *matCellDef="let row">
-            <span class="numero-text">{{ row.numero }}</span>
+            <div class="cell-id">
+              <span class="numero-text" [title]="row.numero">{{ row.numero }}</span>
+              <span class="orgao-sub" [title]="row.orgaoOrigem">{{ row.orgaoOrigem }}</span>
+            </div>
           </td>
         </ng-container>
 
+        <!-- Objeto -->
         <ng-container matColumnDef="objeto">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Objeto</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Objeto</th>
           <td mat-cell *matCellDef="let row" class="objeto-cell">
-            {{ row.objeto | truncate:72 }}
+            <p class="objeto-line1">{{ row.objeto | truncate:90 }}</p>
           </td>
         </ng-container>
 
+        <!-- Modalidade -->
         <ng-container matColumnDef="modalidade">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Modalidade</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Modalidade</th>
           <td mat-cell *matCellDef="let row">
             <span class="mod-tag">{{ formatModalidade(row.modalidade) }}</span>
           </td>
         </ng-container>
 
+        <!-- Valor -->
         <ng-container matColumnDef="valorEstimado">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
-          <td mat-cell *matCellDef="let row" class="valor-cell">
-            {{ row.valorEstimado | currencyBr }}
+          <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Valor est.</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="cell-valor">
+              <span class="valor-num"
+                    [class.valor-zero]="!row.valorEstimado">
+                {{ row.valorEstimado ? (row.valorEstimado | currencyBr) : '—' }}
+              </span>
+            </div>
           </td>
         </ng-container>
 
+        <!-- Abertura -->
         <ng-container matColumnDef="dataAbertura">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Abertura</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Abertura</th>
           <td mat-cell *matCellDef="let row">
-            <span class="date-cell" [class.urgent]="isUrgent(row.dataAbertura)">
-              {{ row.dataAbertura | dateBr }}
-            </span>
+            <div class="cell-data" [class.urgent]="isUrgent(row.dataAbertura)">
+              @if (isUrgent(row.dataAbertura)) {
+                <mat-icon class="date-warn" aria-label="Urgente">warning_amber</mat-icon>
+              }
+              <div>
+                <span class="data-val">{{ row.dataAbertura | dateBr }}</span>
+                @if (isUrgent(row.dataAbertura)) {
+                  <span class="data-urg">Em breve</span>
+                }
+              </div>
+            </div>
           </td>
         </ng-container>
 
+        <!-- Status -->
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Status</th>
           <td mat-cell *matCellDef="let row">
-            <span class="status-badge {{ getStatusClass(row.status) }}">
-              <span class="status-dot"></span>{{ formatStatus(row.status) }}
+            <span class="status-badge {{ getStatusClass(row.status) }}"
+                  [attr.aria-label]="'Status: ' + formatStatus(row.status)">
+              <span class="status-dot" aria-hidden="true"></span>
+              {{ formatStatus(row.status) }}
             </span>
           </td>
         </ng-container>
 
+        <!-- Ações -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef></th>
+          <th mat-header-cell *matHeaderCellDef aria-label="Ações"></th>
           <td mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
-            <button mat-icon-button [matMenuTriggerFor]="menu" class="action-btn">
-              <mat-icon>more_vert</mat-icon>
+            <button class="action-menu-btn"
+                    [matMenuTriggerFor]="menu"
+                    [attr.aria-label]="'Ações do edital ' + row.numero">
+              <mat-icon aria-hidden="true">more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="viewDetails(row)">
@@ -99,7 +182,7 @@
                 <mat-icon>list_alt</mat-icon><span>Ver itens</span>
               </button>
               <button mat-menu-item (click)="reprocessar(row)">
-                <mat-icon>refresh</mat-icon><span>Reprocessar</span>
+                <mat-icon>sync</mat-icon><span>Reprocessar</span>
               </button>
               <mat-divider />
               <button mat-menu-item (click)="delete(row)" class="menu-danger">
@@ -109,21 +192,32 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-            (click)="viewDetails(row)" class="table-row"></tr>
+            class="table-row"
+            tabindex="0"
+            (click)="viewDetails(row)"
+            (keydown.enter)="viewDetails(row)"
+            [attr.aria-label]="'Ver detalhes: ' + row.numero"></tr>
 
         <tr class="mat-row" *matNoDataRow>
           <td [attr.colspan]="displayedColumns.length">
-            <div class="empty-table">
-              <mat-icon>description</mat-icon>
-              <span>Nenhum edital encontrado</span>
+            <div class="empty-table" role="status">
+              <mat-icon aria-hidden="true">search_off</mat-icon>
+              <strong>Nenhum edital encontrado</strong>
+              <small>Ajuste os filtros ou a busca</small>
             </div>
           </td>
         </tr>
       </table>
 
-      <mat-paginator [pageSizeOptions]="[10, 25, 50]" [pageSize]="25" showFirstLastButtons />
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
+                     [pageSize]="pageSize()"
+                     [pageIndex]="currentPage()"
+                     [length]="totalElements()"
+                     showFirstLastButtons
+                     (page)="onPageChange($event)"
+                     aria-label="Navegação de páginas" />
     </div>
   }
 
