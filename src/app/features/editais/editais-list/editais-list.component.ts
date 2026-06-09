@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -68,7 +68,6 @@ export class EditaisListComponent implements OnInit {
   totalPendentes   = computed(() => this.statsData()?.pendentes ?? 0);
   totalErros       = computed(() => this.statsData()?.erros ?? 0);
   totalValor       = computed(() => this.statsData()?.valorTotalEstimado ?? 0);
-  totalPages       = computed(() => Math.ceil(this.totalElements() / this.pageSize()) || 1);
 
   statusOptions = [
     { label: 'Todos',       value: '' as const,            cls: '' },
@@ -95,13 +94,14 @@ export class EditaisListComponent implements OnInit {
   private loadStats(): void {
     this.editaisService.getStats().subscribe({
       next: (s) => this.statsData.set(s),
+      error: (e) => console.warn('Stats unavailable', e),
     });
   }
 
   loadEditais(): void {
     this.loading.set(true);
     const rawStatus = this.selectedStatus();
-    const status = rawStatus ? rawStatus as EditalStatus : undefined;
+    const status = rawStatus || undefined;
     this.editaisService.getAll({ page: this.currentPage(), size: this.pageSize(), status }).subscribe({
       next: (page) => {
         this.dataSource.data = page.content ?? [];
@@ -117,6 +117,7 @@ export class EditaisListComponent implements OnInit {
 
   applyFilter(event: Event): void {
     this.searchText.set((event.target as HTMLInputElement).value.trim().toLowerCase());
+    this.currentPage.set(0);
     this.dataSource.filter = this.searchText();
   }
 
@@ -132,16 +133,16 @@ export class EditaisListComponent implements OnInit {
     this.loadEditais();
   }
 
-  statusCount(value: string): number {
+  statusCount(value: string): number | undefined {
     const s = this.statsData();
-    if (!s) return 0;
+    if (!s) return undefined;
     if (!value) return s.totalEditais;
     const m: Record<string, number> = {
       PROCESSADO: s.processados,
       PENDENTE:   s.pendentes,
       ERRO:       s.erros,
     };
-    return m[value] ?? 0;
+    return value in m ? m[value] : undefined;
   }
 
   viewDetails(edital: EditalResponse): void { this.router.navigate(['/editais', edital.id]); }
@@ -158,7 +159,7 @@ export class EditaisListComponent implements OnInit {
 
   reprocessar(edital: EditalResponse): void {
     this.editaisService.reprocessar(edital.id).subscribe({
-      next: () => { this.toast.success(`Edital ${edital.numero} reprocessado`); this.loadEditais(); },
+      next: () => { this.toast.success(`Edital ${edital.numero} reprocessado`); this.loadEditais(); this.loadStats(); },
       error: () => this.toast.error('Erro ao reprocessar'),
     });
   }
@@ -170,7 +171,7 @@ export class EditaisListComponent implements OnInit {
     ref.afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
       this.editaisService.delete(edital.id).subscribe({
-        next: () => { this.toast.success(`Edital ${edital.numero} excluído`); this.loadEditais(); },
+        next: () => { this.toast.success(`Edital ${edital.numero} excluído`); this.loadEditais(); this.loadStats(); },
         error: () => this.toast.error('Erro ao excluir edital'),
       });
     });
