@@ -1,0 +1,14 @@
+<div class="paginator">
+  <button class="page-btn" (click)="prev()" [disabled]="page === 0">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <span class="page-info">
+    Página {{ page + 1 }} de {{ totalPages }}
+    @if (totalElements !== undefined) {
+      <span class="total-hint">· {{ totalElements | number:'1.0-0' }} registro{{ totalElements !== 1 ? 's' : '' }}</span>
+    }
+  </span>
+  <button class="page-btn" (click)="next()" [disabled]="page + 1 >= totalPages">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
