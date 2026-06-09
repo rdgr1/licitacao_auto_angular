@@ -6,24 +6,49 @@
       <h1 class="leads-title">Leads</h1>
       <p class="leads-sub">Matérias coletadas das fontes oficiais classificadas para análise</p>
     </div>
+    <button class="btn-historico" [class.active]="historicoAtivo()" (click)="toggleHistorico()"
+            matTooltip="Rastreabilidade de coletas">
+      <mat-icon>{{ historicoAtivo() ? 'query_stats' : 'history' }}</mat-icon>
+      Rastreabilidade
+    </button>
   </div>
 
   <!-- ── Painel de Coleta ─────────────────────────────────────────── -->
   <div class="coleta-panel">
 
-    <!-- Estado colapsado: botão de entrada -->
+    <!-- Estado colapsado: botão de entrada ou indicador ao vivo -->
     @if (!buscaAtiva()) {
       <div class="busca-trigger">
-        <div class="busca-trigger-info">
-          <mat-icon>manage_search</mat-icon>
-          <div>
-            <span class="trigger-title">Buscar leads</span>
-            <span class="trigger-sub">Colete matérias do DODF, DOU ou filtre por PNCP</span>
+        @if (coletaAndamento.ativa()) {
+          <div class="busca-andando">
+            <span class="live-pulse"></span>
+            <div>
+              <span class="trigger-title">
+                Coletando {{ coletaAndamento.andamento().etapaAtual?.fonte ?? '...' }}
+                @if (coletaAndamento.andamento().total > 1) {
+                  · etapa {{ coletaAndamento.andamento().step }}/{{ coletaAndamento.andamento().total }}
+                }
+              </span>
+              <span class="trigger-sub">
+                {{ coletaAndamento.andamento().etapaAtual?.dataDisplay ?? '' }}
+                @if (coletaAndamento.andamento().acumulado.salvos > 0) {
+                  · {{ coletaAndamento.andamento().acumulado.salvos }} encontrados até agora
+                }
+              </span>
+            </div>
           </div>
-        </div>
-        <button class="btn-buscar-leads" (click)="buscaAtiva.set(true)">
-          <mat-icon>search</mat-icon>
-          Buscar leads
+        } @else {
+          <div class="busca-trigger-info">
+            <mat-icon>manage_search</mat-icon>
+            <div>
+              <span class="trigger-title">Buscar leads</span>
+              <span class="trigger-sub">Colete matérias do DODF, DOU ou filtre por PNCP</span>
+            </div>
+          </div>
+        }
+        <button class="btn-buscar-leads" (click)="buscaAtiva.set(true)" [disabled]="coletaAndamento.ativa()">
+          <mat-icon>{{ coletaAndamento.ativa() ? 'hourglass_empty' : 'search' }}</mat-icon>
+          {{ coletaAndamento.ativa() ? 'Aguarde...' : 'Buscar leads' }}
         </button>
       </div>
     }
@@ -99,9 +124,11 @@
 
           <div class="coleta-actions">
             @if (hasCollectableFonte()) {
-              <button mat-flat-button color="primary" (click)="coletar()" [disabled]="coletando() || !canSubmit()">
-                @if (coletando()) { <mat-spinner diameter="16" /> } @else { <mat-icon>download</mat-icon> }
-                {{ coletando() ? coletaProgress() : 'Coletar agora' }}
+              <button class="btn-coletar" (click)="coletar()" [disabled]="coletaAndamento.ativa() || !canSubmit()">
+                <span class="btn-coletar-inner">
+                  @if (coletaAndamento.ativa()) { <mat-spinner diameter="15" /> } @else { <mat-icon>download</mat-icon> }
+                  {{ coletaAndamento.ativa() ? coletaProgress() : 'Coletar agora' }}
+                </span>
               </button>
             }
           </div>
@@ -118,6 +145,168 @@
     } <!-- fim @if selectedFontes -->
   } <!-- fim @if buscaAtiva -->
   </div>
+
+  <!-- ── Rastreabilidade de Coletas ─────────────────────────────────── -->
+  @if (historicoAtivo()) {
+    <div class="historico-section">
+
+      <div class="historico-head">
+        <div class="historico-head-left">
+          <mat-icon>query_stats</mat-icon>
+          <span class="historico-titulo">Rastreabilidade de Coletas</span>
+          <span class="historico-sub">{{ historicoEntradas().length }} sessão(ões) registrada(s)</span>
+        </div>
+        <button class="btn-historico-refresh" (click)="carregarHistorico()" matTooltip="Recarregar">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <!-- Coleta em andamento (visível mesmo vindo de outra aba) -->
+      @if (coletaAndamento.ativa()) {
+        <div class="andamento-card">
+          <div class="andamento-live-badge">
+            <span class="live-pulse-sm"></span>
+            Em andamento
+          </div>
+          <div class="andamento-body">
+            <div class="andamento-etapa">
+              <span class="andamento-portal">{{ coletaAndamento.andamento().etapaAtual?.fonte ?? '...' }}</span>
+              <span class="andamento-data">{{ coletaAndamento.andamento().etapaAtual?.dataDisplay ?? '' }}</span>
+              @if (coletaAndamento.andamento().total > 1) {
+                <span class="andamento-step">
+                  Etapa {{ coletaAndamento.andamento().step }} de {{ coletaAndamento.andamento().total }}
+                </span>
+              }
+            </div>
+            <div class="andamento-bar-wrap">
+              <div class="andamento-bar">
+                <div class="andamento-bar-fill" [style.width.%]="coletaAndamento.andamento().total > 0
+                  ? (coletaAndamento.andamento().step / coletaAndamento.andamento().total) * 100
+                  : 0"></div>
+              </div>
+            </div>
+            <div class="andamento-acum">
+              <span><strong>{{ coletaAndamento.andamento().acumulado.materias }}</strong> matérias lidas</span>
+              <span class="acum-sep">·</span>
+              <span class="acum-green"><strong>{{ coletaAndamento.andamento().acumulado.salvos }}</strong> salvas</span>
+              @if (coletaAndamento.andamento().acumulado.duplicados > 0) {
+                <span class="acum-sep">·</span>
+                <span>{{ coletaAndamento.andamento().acumulado.duplicados }} repetidas</span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (!historicoLoading() && historicoResumo(); as r) {
+        <div class="historico-resumo">
+          <span class="resumo-chip"><span class="resumo-val">{{ r.totalSessoes }}</span>sessões</span>
+          <span class="resumo-chip mat"><span class="resumo-val">{{ r.totalMaterias }}</span>matérias analisadas</span>
+          <span class="resumo-chip salv"><span class="resumo-val">{{ r.totalSalvos }}</span>leads salvos</span>
+          <span class="resumo-chip dup"><span class="resumo-val">{{ r.totalDuplicados }}</span>repetidos</span>
+          @if (r.totalErros > 0) {
+            <span class="resumo-chip err"><span class="resumo-val">{{ r.totalErros }}</span>erros</span>
+          }
+        </div>
+      }
+
+      @if (historicoLoading()) {
+        <div class="historico-loading">
+          <mat-spinner diameter="24" />
+          <span>Carregando histórico...</span>
+        </div>
+      } @else if (historicoEntradas().length === 0) {
+        <div class="historico-vazio">
+          <mat-icon>history_toggle_off</mat-icon>
+          <span>Nenhuma coleta registrada ainda. Colete matérias para ver o histórico aqui.</span>
+        </div>
+      } @else {
+        <div class="historico-table">
+
+          <div class="hist-thead">
+            <span class="hcol-data">Data</span>
+            <span class="hcol-fonte">Fonte</span>
+            <span class="hcol-num">Encontradas</span>
+            <span class="hcol-num salv">Salvas</span>
+            <span class="hcol-num">Repetidas</span>
+            <span class="hcol-num red">Rejeitadas</span>
+            <span class="hcol-num">Erros</span>
+            <span class="hcol-expand"></span>
+          </div>
+
+          @for (entry of historicoEntradas(); track entry.logId) {
+            <div class="hist-row" [class.hist-row-expanded]="isHistoricoExpandido(entry.logId + '')">
+
+              <div class="hist-cells"
+                   [class.hist-cells-clickable]="entry.rejeitados > 0"
+                   (click)="entry.rejeitados > 0 && toggleHistoricoExpand(entry.logId + '')">
+                <span class="hcol-data mono">{{ entry.dataDisplay }}</span>
+                <span class="hcol-fonte">
+                  <span class="fonte-badge fonte-badge-{{ entry.fonte.toLowerCase() }}">{{ entry.fonte }}</span>
+                </span>
+                <span class="hcol-num">{{ entry.totalMaterias }}</span>
+                <span class="hcol-num"><span class="num-salv">{{ entry.salvos }}</span></span>
+                <span class="hcol-num">
+                  @if (entry.duplicados > 0) { {{ entry.duplicados }} } @else { <span class="num-zero">—</span> }
+                </span>
+                <span class="hcol-num">
+                  @if (entry.rejeitados > 0) {
+                    <span class="num-red">{{ entry.rejeitados }}</span>
+                  } @else {
+                    <span class="num-zero">—</span>
+                  }
+                </span>
+                <span class="hcol-num">
+                  @if (entry.erros > 0) {
+                    <span class="num-err" [matTooltip]="'Erro durante coleta'">{{ entry.erros }}</span>
+                  } @else {
+                    <span class="num-zero">—</span>
+                  }
+                </span>
+                <span class="hcol-expand">
+                  @if (entry.rejeitados > 0) {
+                    <mat-icon class="expand-chevron">
+                      {{ isHistoricoExpandido(entry.logId + '') ? 'expand_less' : 'expand_more' }}
+                    </mat-icon>
+                  }
+                </span>
+              </div>
+
+              @if (isHistoricoExpandido(entry.logId + '')) {
+                <div class="hist-rejected-list">
+                  <div class="rejected-header">
+                    <mat-icon>block</mat-icon>
+                    {{ entry.rejeitados }} lead(s) rejeitado(s) nesta sessão — use para ajustar seus critérios
+                  </div>
+                  @for (lead of entry.leadsRejeitados; track lead.uuid) {
+                    <div class="rejected-item" (click)="verDetalhe(lead)">
+                      <div class="rejected-item-main">
+                        <span class="rejected-titulo">{{ normalizeCase(lead.titulo) }}</span>
+                        <span class="rejected-orgao">{{ lead.orgao }}</span>
+                      </div>
+                      @if (lead.observacao) {
+                        <span class="rejected-obs">"{{ lead.observacao }}"</span>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+
+            </div>
+          }
+        </div>
+
+        <p class="historico-note">
+          <mat-icon>info_outline</mat-icon>
+          <strong>Encontradas:</strong> total de matérias lidas no diário.
+          <strong>Salvas:</strong> passaram pelos seus filtros de palavras-chave.
+          <strong>Repetidas:</strong> já estavam no sistema.
+          <strong>Rejeitadas:</strong> salvas, mas descartadas manualmente pelo analista — use para afinar seus filtros.
+        </p>
+      }
+
+    </div>
+  }
 
   <!-- ── Status Tabs ───────────────────────────────────────────────── -->
   <div class="status-bar">
@@ -197,13 +386,7 @@
               <mat-icon>open_in_new</mat-icon>
               Detalhes
             </button>
-            @if (lead.status !== 'QUALIFICADO') {
-              <button class="act-btn act-qualify" matTooltip="Qualificar lead"
-                      (click)="atualizarStatus(lead, 'QUALIFICADO', $event)">
-                <mat-icon>verified</mat-icon>
-                Qualificar
-              </button>
-            } @else {
+            @if (lead.status === 'QUALIFICADO') {
               <span class="act-done"><mat-icon>check_circle</mat-icon> Qualificado</span>
             }
             @if (lead.status !== 'DESCARTADO' && lead.status !== 'QUALIFICADO') {
@@ -217,17 +400,14 @@
       }
     </div>
 
-    <!-- Paginação simples -->
-    @if (totalPages() > 1) {
-      <div class="pagination">
-        <button class="page-btn" (click)="onPrev()" [disabled]="currentPage() === 0">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
-        <span class="page-info">{{ currentPage() + 1 }} / {{ totalPages() }}</span>
-        <button class="page-btn" (click)="onNext()" [disabled]="currentPage() + 1 >= totalPages()">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
-      </div>
+    <!-- Paginação -->
+    @if (totalElements() > 0) {
+      <app-paginator
+        [page]="currentPage()"
+        [totalPages]="totalPages()"
+        [totalElements]="totalElements()"
+        [pageSize]="pageSize()"
+        (pageChange)="onPageChange($event)" />
     }
   }
 
