@@ -1,9 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Lead, LeadStatus, AtualizarStatusRequest } from '../models/lead.model';
 import { Page, EditalResponse } from '../models/edital.model';
+
+const toPage = <T>(res: Page<T> | T[]): Page<T> =>
+  Array.isArray(res)
+    ? { content: res, totalElements: res.length, totalPages: 1, size: res.length, number: 0, first: true, last: true, empty: res.length === 0 }
+    : res;
 
 @Injectable({ providedIn: 'root' })
 export class LeadService {
@@ -16,7 +22,7 @@ export class LeadService {
       .set('size', filtros.size ?? 20);
     if (filtros.status) params = params.set('status', filtros.status);
     if (filtros.fonte) params = params.set('fonte', filtros.fonte);
-    return this.http.get<Page<Lead>>(this.base, { params });
+    return this.http.get<Page<Lead> | Lead[]>(this.base, { params }).pipe(map(toPage));
   }
 
   obter(uuid: string): Observable<Lead> {

@@ -235,7 +235,7 @@ export class LeadsComponent implements OnInit {
     this.carregarLeads();
   }
 
-  totalPages = computed(() => Math.ceil(this.totalElements() / this.pageSize()));
+  totalPages = computed(() => Math.max(1, Math.ceil(this.totalElements() / this.pageSize())));
 
   // ── Coleta ──────────────────────────────────────────────────────
 
