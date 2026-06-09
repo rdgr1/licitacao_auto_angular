@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { EditalResponse, LeadResponse, EstatisticasDTO, LeadParams, EditalStatus, ItemEdital, Page } from '../models/edital.model';
+import { EditalResponse, LeadResponse, EstatisticasDTO, LeadParams, EditalStatus, ItemEdital, ArquivoEdital, ContratoEdital, AtaRegistroPreco, HistoricoEdital, Page } from '../models/edital.model';
 
 const extractContent = <T>(res: Page<T> | T[]): T[] =>
   Array.isArray(res) ? res : (res?.content ?? []);
@@ -15,11 +15,12 @@ export class EditaisService {
 
   // ── Endpoints disponíveis no backend ────────────────────────────────────
 
-  getAll(status?: EditalStatus): Observable<EditalResponse[]> {
-    const params = status ? new HttpParams().set('status', status) : {};
-    return this.http.get<Page<EditalResponse> | EditalResponse[]>(this.apiUrl, { params }).pipe(
-      map(extractContent)
-    );
+  getAll(opts: { page?: number; size?: number; status?: EditalStatus } = {}): Observable<Page<EditalResponse>> {
+    let params = new HttpParams()
+      .set('page', opts.page ?? 0)
+      .set('size', opts.size ?? 25);
+    if (opts.status) params = params.set('status', opts.status);
+    return this.http.get<Page<EditalResponse>>(this.apiUrl, { params });
   }
 
   getById(id: string): Observable<EditalResponse> {
@@ -58,6 +59,26 @@ export class EditaisService {
 
   getItens(id: string): Observable<ItemEdital[]> {
     return this.http.get<ItemEdital[]>(`${this.apiUrl}/${id}/itens`);
+  }
+
+  sincronizarItens(id: string): Observable<ItemEdital[]> {
+    return this.http.post<ItemEdital[]>(`${this.apiUrl}/${id}/sincronizar-itens`, {});
+  }
+
+  getArquivos(id: string): Observable<ArquivoEdital[]> {
+    return this.http.get<ArquivoEdital[]>(`${this.apiUrl}/${id}/arquivos`);
+  }
+
+  getContratos(id: string): Observable<ContratoEdital[]> {
+    return this.http.get<ContratoEdital[]>(`${this.apiUrl}/${id}/contratos`);
+  }
+
+  getAtas(id: string): Observable<AtaRegistroPreco[]> {
+    return this.http.get<AtaRegistroPreco[]>(`${this.apiUrl}/${id}/atas`);
+  }
+
+  getHistorico(id: string): Observable<HistoricoEdital[]> {
+    return this.http.get<HistoricoEdital[]>(`${this.apiUrl}/${id}/historico`);
   }
 
   search(q: string): Observable<EditalResponse[]> {
