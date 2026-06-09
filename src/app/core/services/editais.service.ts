@@ -1,12 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { EditalResponse, LeadResponse, EstatisticasDTO, LeadParams, EditalStatus, ItemEdital, ArquivoEdital, ContratoEdital, AtaRegistroPreco, HistoricoEdital, Page } from '../models/edital.model';
-
-const extractContent = <T>(res: Page<T> | T[]): T[] =>
-  Array.isArray(res) ? res : (res?.content ?? []);
 
 @Injectable({ providedIn: 'root' })
 export class EditaisService {
@@ -31,30 +27,32 @@ export class EditaisService {
     return this.http.get<EditalResponse>(`${this.apiUrl}/${numero}`);
   }
 
-  getProximos(): Observable<EditalResponse[]> {
-    return this.http.get<Page<EditalResponse> | EditalResponse[]>(`${this.apiUrl}/proximos`).pipe(
-      map(extractContent)
-    );
+  getProximos(opts: { page?: number; size?: number } = {}): Observable<Page<EditalResponse>> {
+    const params = new HttpParams()
+      .set('page', opts.page ?? 0)
+      .set('size', opts.size ?? 20);
+    return this.http.get<Page<EditalResponse>>(`${this.apiUrl}/proximos`, { params });
   }
 
-  getLeads(params: LeadParams): Observable<LeadResponse[]> {
-    let httpParams = new HttpParams();
+  getLeads(params: LeadParams, opts: { page?: number; size?: number } = {}): Observable<Page<LeadResponse>> {
+    let httpParams = new HttpParams()
+      .set('page', opts.page ?? 0)
+      .set('size', opts.size ?? 20);
     if (params.scoreMinimo !== undefined) httpParams = httpParams.set('scoreMinimo', params.scoreMinimo);
     if (params.categoria) httpParams = httpParams.set('categoria', params.categoria);
     if (params.uf) httpParams = httpParams.set('uf', params.uf);
-    return this.http.get<Page<LeadResponse> | LeadResponse[]>(`${this.apiUrl}/leads`, { params: httpParams }).pipe(
-      map(extractContent)
-    );
+    return this.http.get<Page<LeadResponse>>(`${this.apiUrl}/leads`, { params: httpParams });
   }
 
   getStats(): Observable<EstatisticasDTO> {
     return this.http.get<EstatisticasDTO>(`${this.apiUrl}/stats`);
   }
 
-  getErros(): Observable<EditalResponse[]> {
-    return this.http.get<Page<EditalResponse> | EditalResponse[]>(`${this.apiUrl}/erros`).pipe(
-      map(extractContent)
-    );
+  getErros(opts: { page?: number; size?: number } = {}): Observable<Page<EditalResponse>> {
+    const params = new HttpParams()
+      .set('page', opts.page ?? 0)
+      .set('size', opts.size ?? 20);
+    return this.http.get<Page<EditalResponse>>(`${this.apiUrl}/erros`, { params });
   }
 
   getItens(id: string): Observable<ItemEdital[]> {
@@ -81,10 +79,12 @@ export class EditaisService {
     return this.http.get<HistoricoEdital[]>(`${this.apiUrl}/${id}/historico`);
   }
 
-  search(q: string): Observable<EditalResponse[]> {
-    return this.http.get<Page<EditalResponse> | EditalResponse[]>(`${this.apiUrl}/search`, {
-      params: new HttpParams().set('q', q)
-    }).pipe(map(extractContent));
+  search(q: string, opts: { page?: number; size?: number } = {}): Observable<Page<EditalResponse>> {
+    const params = new HttpParams()
+      .set('q', q)
+      .set('page', opts.page ?? 0)
+      .set('size', opts.size ?? 20);
+    return this.http.get<Page<EditalResponse>>(`${this.apiUrl}/search`, { params });
   }
 
   processar(): Observable<void> {

@@ -145,7 +145,8 @@ export class DashboardComponent implements OnInit {
     });
 
     this.editaisService.getLeads({ scoreMinimo: 0 }).subscribe({
-      next: (leads) => {
+      next: (page) => {
+        const leads = page.content ?? [];
         if (!leads?.length) return;
         const today = Date.now();
         const items = leads
