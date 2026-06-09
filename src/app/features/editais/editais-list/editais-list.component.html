@@ -20,7 +20,7 @@
                (input)="applyFilter($event)" />
       </div>
       <button class="reload-btn"
-              (click)="loadEditais()"
+              (click)="refresh()"
               aria-label="Recarregar editais"
               [class.spinning]="loading()">
         <mat-icon aria-hidden="true">refresh</mat-icon>
@@ -75,7 +75,9 @@
           <span class="pill-dot {{ s.cls }}" aria-hidden="true"></span>
         }
         {{ s.label }}
-        <span class="pill-count" aria-hidden="true">{{ statusCount(s.value) }}</span>
+        @if (statusCount(s.value) !== undefined) {
+          <span class="pill-count" aria-hidden="true">{{ statusCount(s.value) }}</span>
+        }
       </button>
     }
   </nav>

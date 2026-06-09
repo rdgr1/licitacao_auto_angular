@@ -98,6 +98,11 @@ export class EditaisListComponent implements OnInit {
     });
   }
 
+  refresh(): void {
+    this.loadStats();
+    this.loadEditais();
+  }
+
   loadEditais(): void {
     this.loading.set(true);
     const rawStatus = this.selectedStatus();
