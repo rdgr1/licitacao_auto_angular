@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, effect } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -67,12 +67,12 @@ interface TooltipPos { top: string; left: string; }
     .btn-pular { font-size: 12px; color: #94A3B8; margin-left: auto; }
   `],
 })
-export class TourOverlayComponent implements OnInit {
+export class TourOverlayComponent {
   readonly tour = inject(TourService);
   private router = inject(Router);
   tooltipPos = signal<TooltipPos | null>(null);
 
-  ngOnInit(): void {
+  constructor() {
     effect(() => {
       if (this.tour.ativo()) {
         const step = this.tour.step();
