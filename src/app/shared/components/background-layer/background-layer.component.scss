@@ -1,0 +1,90 @@
+.bg-layer {
+  position: fixed; inset: 0;
+  z-index: 0; pointer-events: none; overflow: hidden;
+
+  .bg-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+}
+
+/* ── Aurora ──────────────────────────────────────────────────── */
+.aurora .blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(90px); opacity: .5; will-change: transform;
+}
+.aurora .b1 {
+  width: 62vmax; height: 62vmax; left: -18vmax; top: -24vmax;
+  background: conic-gradient(from 90deg, var(--lf-indigo), var(--lf-cyan), transparent 60%);
+  animation: lf-spin 38s linear infinite;
+}
+.aurora .b2 {
+  width: 50vmax; height: 50vmax; right: -16vmax; bottom: -20vmax;
+  background: conic-gradient(from 240deg, var(--lf-teal), var(--lf-indigo) 45%, transparent 70%);
+  animation: lf-spin 52s linear infinite reverse;
+}
+.aurora .b3 {
+  width: 34vmax; height: 34vmax; left: 46%; top: 30%;
+  background: radial-gradient(circle at 30% 30%, rgba(240,180,41,.35), transparent 65%);
+  animation: lf-drift 26s ease-in-out infinite alternate;
+}
+.aurora::after {
+  content: ""; position: absolute; inset: 0; opacity: .07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Grid / Beams ─────────────────────────────────────────────── */
+.grid {
+  background: linear-gradient(180deg, var(--lf-bg) 0%, var(--lf-bg-soft) 100%);
+  &::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--lf-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--lf-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, #000 55%, transparent 100%);
+  }
+}
+.grid .beam {
+  position: absolute; will-change: transform;
+  &.h {
+    height: 1px; width: 30vw; left: -30vw;
+    background: linear-gradient(90deg, transparent, var(--lf-cyan), transparent);
+    box-shadow: 0 0 12px 1px rgba(56,189,248,.55);
+    animation: lf-beam-h linear infinite;
+  }
+  &.v {
+    width: 1px; height: 26vh; top: -26vh;
+    background: linear-gradient(180deg, transparent, var(--lf-teal), transparent);
+    box-shadow: 0 0 12px 1px rgba(45,212,191,.5);
+    animation: lf-beam-v linear infinite;
+  }
+  &:nth-child(1) { top: 112px;   animation-duration: 7s; }
+  &:nth-child(2) { top: 336px;   animation-duration: 11s; animation-delay: 2s; }
+  &:nth-child(3) { top: 616px;   animation-duration: 9s;  animation-delay: 5s; }
+  &:nth-child(4) { left: 224px;  animation-duration: 8s;  animation-delay: 1s; }
+  &:nth-child(5) { left: 560px;  animation-duration: 12s; animation-delay: 4s; }
+  &:nth-child(6) { left: 1008px; animation-duration: 10s; animation-delay: 7s; }
+}
+.grid .pulse {
+  position: absolute; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--lf-gold); box-shadow: 0 0 14px 3px rgba(240,180,41,.45);
+  animation: lf-pulse 4.5s ease-in-out infinite;
+  &:nth-of-type(7) { left: 224px;  top: 112px; }
+  &:nth-of-type(8) { left: 560px;  top: 336px; animation-delay: 1.4s; }
+  &:nth-of-type(9) { left: 1008px; top: 616px; animation-delay: 2.8s; }
+}
+
+/* ── Keyframes ────────────────────────────────────────────────── */
+@keyframes lf-spin  { to { transform: rotate(360deg); } }
+@keyframes lf-drift {
+  from { transform: translate(-6vmax, -2vmax) scale(1); }
+  to   { transform: translate(5vmax, 4vmax) scale(1.15); }
+}
+@keyframes lf-beam-h { to { transform: translateX(calc(100vw + 60vw)); } }
+@keyframes lf-beam-v { to { transform: translateY(calc(100vh + 52vh)); } }
+@keyframes lf-pulse  {
+  0%, 100% { transform: scale(.4); opacity: .25; }
+  50%       { transform: scale(1);  opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-layer * { animation: none !important; }
+}
