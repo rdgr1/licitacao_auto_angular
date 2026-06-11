@@ -173,12 +173,9 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
           }
 
           @if (data.status === 'SEGUNDA_APROVACAO_PRESIDENCIA') {
+            <div class="act-pending"><mat-icon>hourglass_top</mat-icon>Aguardando aprovação da presidência</div>
             <button class="act-btn act-discard" (click)="moverPara('DESCARTADO')" [disabled]="salvando">
               <mat-icon>block</mat-icon>
-            </button>
-            <button class="act-btn act-qualify" (click)="aprovar()" [disabled]="salvando">
-              @if (salvando) { <span class="saving-dot"></span> } @else { <mat-icon>verified</mat-icon> }
-              Aprovar
             </button>
           }
 
@@ -261,7 +258,8 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
       &.act-cotacao  { background: #EFF6FF; border-color: #BFDBFE; color: #1E40AF; &:hover { background: #DBEAFE; } } }
     .saving-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .act-done { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; color: #11BF7F; mat-icon { font-size: 16px; width: 16px; height: 16px; } }
+    .act-done    { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; color: #11BF7F; mat-icon { font-size: 16px; width: 16px; height: 16px; } }
+    .act-pending { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: #8B5CF6; mat-icon { font-size: 16px; width: 16px; height: 16px; } }
   `]
 })
 export class LeadDetalheDialogComponent implements OnInit {
@@ -322,29 +320,6 @@ export class LeadDetalheDialogComponent implements OnInit {
       }).subscribe({
         next: () => { this.toast.success(label); this.dialogRef.close(true); },
         error: () => { this.toast.error('Erro ao atualizar status'); this.salvando = false; },
-      });
-    });
-  }
-
-  aprovar(): void {
-    const ref = this.dialog.open(JustificativaDialogComponent, {
-      data: { titulo: 'Aprovar lead — criar processo licitatório' },
-      width: '460px',
-      disableClose: true,
-    });
-    ref.afterClosed().subscribe((justificativa: string | undefined) => {
-      if (!justificativa) return;
-      this.salvando = true;
-      this.leadService.atualizarStatus(this.data.uuid, {
-        status: 'QUALIFICADO',
-        revisadoPor: 'analista@brasfort.com.br',
-        observacao: justificativa,
-      }).subscribe({
-        next: () => {
-          this.toast.success('Lead aprovado — criando processo...');
-          this.dialogRef.close('aprovado');
-        },
-        error: () => { this.toast.error('Erro ao aprovar lead'); this.salvando = false; },
       });
     });
   }

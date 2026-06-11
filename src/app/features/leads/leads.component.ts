@@ -79,8 +79,12 @@ export class LeadsComponent implements OnInit {
     { label: 'Descartado',         value: 'DESCARTADO' },
   ];
 
-  selectedTabIdx  = signal(0);
-  selectedStatus  = signal<LeadStatus | null>(null);
+  selectedTabIdx  = signal(
+    parseInt(sessionStorage.getItem('leads_filter_tab') ?? '0', 10)
+  );
+  selectedStatus  = signal<LeadStatus | null>(
+    (sessionStorage.getItem('leads_filter_status') as LeadStatus | null) ?? null
+  );
   selectedFontes  = signal<string[]>([]);
   allLeads        = signal<Lead[]>([]);
   totalElements   = signal(0);
@@ -229,11 +233,18 @@ export class LeadsComponent implements OnInit {
     });
   }
 
-  onTabChange(idx: number): void {
-    this.selectedTabIdx.set(idx);
-    this.selectedStatus.set(this.statusTabs[idx].value);
-    this.currentPage.set(0);
+  setStatusFilter(status: LeadStatus | null, tabIdx: number): void {
+    this.selectedStatus.set(status);
+    this.selectedTabIdx.set(tabIdx);
+    if (status) sessionStorage.setItem('leads_filter_status', status);
+    else sessionStorage.removeItem('leads_filter_status');
+    sessionStorage.setItem('leads_filter_tab', String(tabIdx));
     this.carregarLeads();
+  }
+
+  onTabChange(idx: number): void {
+    this.setStatusFilter(this.statusTabs[idx].value, idx);
+    this.currentPage.set(0);
   }
 
   onPageChange(event: PageEvent): void {

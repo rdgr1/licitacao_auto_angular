@@ -412,7 +412,7 @@
       @if (selectedStatus()) {
         <h2>Nenhum lead com este status</h2>
         <p>Tente outro filtro ou aguarde novas coletas.</p>
-        <button mat-stroked-button (click)="selectedStatus.set(null); selectedTabIdx.set(0)">
+        <button mat-stroked-button (click)="setStatusFilter(null, 0)">
           <mat-icon>filter_list_off</mat-icon> Limpar filtros
         </button>
       } @else {
