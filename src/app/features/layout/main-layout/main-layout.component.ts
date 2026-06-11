@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -62,7 +62,7 @@ interface NavSection {
 
         <!-- Navigation -->
         <nav class="sidebar-nav">
-          @for (section of visibleSections; track section.label) {
+          @for (section of visibleSections(); track section.label) {
             <div class="nav-section">
               @if (!collapsed()) {
                 <span class="nav-section-label">{{ section.label }}</span>
@@ -868,10 +868,10 @@ export class MainLayoutComponent implements OnInit {
     },
   ];
 
-  get visibleSections(): NavSection[] {
+  readonly visibleSections = computed(() => {
     const enabled = this.auth.currentUser()?.enabledModules ?? ['licitacoes'];
     return this.navSections.filter(s => enabled.includes(s.moduleKey));
-  }
+  });
 
   ngOnInit(): void {
     this.notifSvc.startSSE();

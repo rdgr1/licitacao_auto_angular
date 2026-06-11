@@ -109,11 +109,11 @@ export class AuthService {
     return this.http.get<MeProfile>(`${environment.apiUrl}/auth/me`).pipe(
       tap(profile => {
         const current = this._currentUser()!;
-        const merged: UserInfo = {
+        const merged: UserInfo = this.normalizeUser({
           ...current,
           funcao: profile.funcao,
           imageUrl: profile.imageUrl,
-        };
+        });
         localStorage.setItem(USER_KEY, JSON.stringify(merged));
         this._currentUser.set(merged);
       }),
