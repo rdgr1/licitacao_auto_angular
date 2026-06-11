@@ -579,3 +579,38 @@
 ::ng-deep .cpp-bar .mdc-linear-progress__buffer-bar { background: #E2E8F0; }
 ::ng-deep .cpp-bar .mdc-linear-progress__primary-bar { background: #3B82F6; }
 ::ng-deep .cpp-bar-done .mdc-linear-progress__primary-bar { background: #11BF7F; }
+
+// ── Skeleton de Leads ─────────────────────────────────────────────────────────
+.leads-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+}
+.lsk-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: flex; flex-direction: column; gap: var(--spacing-sm);
+}
+.lsk-row   { display: flex; gap: var(--spacing-sm); }
+.lsk-badge { width: 48px;  height: 20px; }
+.lsk-date  { width: 80px;  height: 20px; margin-left: auto; }
+.lsk-title { width: 100%;  height: 16px; }
+.lsk-org   { width: 60%;   height: 14px; }
+.lsk-footer { display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-xs); }
+.lsk-chip  { width: 64px;  height: 22px; }
+.lsk-score { width: 40px;  height: 22px; margin-left: auto; }
+
+// ── Estados vazio / erro ─────────────────────────────────────────────────────
+.leads-error-state,
+.leads-empty-state {
+  display: flex; flex-direction: column; align-items: center; gap: var(--spacing-md);
+  padding: var(--spacing-2xl) var(--spacing-lg); text-align: center;
+
+  mat-icon { font-size: 48px; width: 48px; height: 48px; color: var(--text-muted); opacity: 0.5; }
+  h2 { font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 0; }
+  p  { font-size: 14px; color: var(--text-secondary); margin: 0; max-width: 380px; line-height: 1.5; }
+}
+.leads-error-state mat-icon { color: var(--status-erro); opacity: 0.7; }

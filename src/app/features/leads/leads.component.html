@@ -372,34 +372,58 @@
   </div>
 
   <!-- ── Card Grid ─────────────────────────────────────────────────── -->
+
+  <!-- Estado: carregando -->
   @if (loading()) {
-    <div class="leads-grid">
-      @for (n of [1,2,3,4,5,6]; track n) {
-        <div class="lead-card skeleton">
-          <div class="sk sk-meta"></div>
-          <div class="sk sk-title"></div>
-          <div class="sk sk-title short"></div>
-          <div class="sk sk-org"></div>
-          <div class="sk sk-footer"></div>
+    <div class="leads-skeleton" aria-label="Carregando leads..." role="status">
+      @for (i of [1,2,3,4,5,6]; track i) {
+        <div class="lsk-card">
+          <div class="lsk-row">
+            <div class="skeleton lsk-badge"></div>
+            <div class="skeleton lsk-date"></div>
+          </div>
+          <div class="skeleton lsk-title"></div>
+          <div class="skeleton lsk-org"></div>
+          <div class="lsk-footer">
+            <div class="skeleton lsk-chip"></div>
+            <div class="skeleton lsk-score"></div>
+          </div>
         </div>
       }
     </div>
-  } @else if (apiError()) {
-    <div class="empty-state error">
-      <mat-icon>cloud_off</mat-icon>
-      <strong>Não foi possível carregar os leads</strong>
-      <span>Verifique se o backend está rodando e tente novamente.</span>
-      <button mat-stroked-button (click)="carregarLeads()">
+  }
+
+  <!-- Estado: erro -->
+  @if (!loading() && apiError()) {
+    <div class="leads-error-state" role="alert">
+      <mat-icon aria-hidden="true">cloud_off</mat-icon>
+      <h2>Não foi possível carregar os leads</h2>
+      <p>Verifique a conexão com o servidor e tente novamente.</p>
+      <button mat-flat-button (click)="carregarLeads()">
         <mat-icon>refresh</mat-icon> Tentar novamente
       </button>
     </div>
-  } @else if (filteredLeads().length === 0) {
-    <div class="empty-state">
-      <mat-icon>inbox</mat-icon>
-      <strong>Nenhum lead encontrado</strong>
-      <span>{{ selectedStatus() || selectedFontes().length ? 'Nenhum lead com esses filtros.' : 'Selecione uma fonte e colete matérias do diário oficial para começar.' }}</span>
+  }
+
+  <!-- Estado: vazio -->
+  @if (!loading() && !apiError() && filteredLeads().length === 0) {
+    <div class="leads-empty-state">
+      <mat-icon aria-hidden="true">inbox</mat-icon>
+      @if (selectedStatus()) {
+        <h2>Nenhum lead com este status</h2>
+        <p>Tente outro filtro ou aguarde novas coletas.</p>
+        <button mat-stroked-button (click)="selectedStatus.set(null); selectedTabIdx.set(0)">
+          <mat-icon>filter_list_off</mat-icon> Limpar filtros
+        </button>
+      } @else {
+        <h2>Nenhum lead encontrado</h2>
+        <p>Dispare uma busca nas fontes DODF, DOU ou PNCP para começar.</p>
+      }
     </div>
-  } @else {
+  }
+
+  <!-- Grade de cards -->
+  @if (!loading() && !apiError() && filteredLeads().length > 0) {
     <div class="leads-grid">
       @for (lead of filteredLeads(); track lead.uuid) {
         <div class="lead-card status-border-{{ lead.status }}" (click)="verDetalhe(lead)">
