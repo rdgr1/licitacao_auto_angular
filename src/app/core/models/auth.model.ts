@@ -1,27 +1,38 @@
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  MANAGER = 'MANAGER',
-  ANALYST = 'ANALYST',
-  VIEWER = 'VIEWER'
-}
+export type UserRole = 'EMPLOYEE' | 'ADMIN' | 'USER' | 'PRESIDENT';
 
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
-export interface AuthResponse {
-  token: string;
-  refreshToken?: string;
-  user: UserInfo;
-  expiresIn: number;
-}
-
 export interface UserInfo {
-  id: number;
+  uuid: string;
   name: string;
   email: string;
   role: UserRole;
   company?: string;
-  avatar?: string;
+  funcao?: string;
+  imageUrl?: string;
+  enabledModules: string[];   // ['licitacoes'] as MVP default
+  tourCompleted: boolean;
+}
+
+export interface AuthResponse {
+  token: string;
+  refreshToken: string;
+  expiresIn: number;
+  user: UserInfo;
+}
+
+export interface RefreshResponse {
+  token: string;
+  expiresIn: number;
+}
+
+export interface MeProfile {
+  username: string;
+  email: string;
+  funcao?: string;
+  empresa?: string;
+  imageUrl?: string;
 }

@@ -8,6 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificacoesService } from '../../../core/services/notificacoes.service';
+import { ColetaAndamentoService } from '../../../core/services/coleta-andamento.service';
 import { NotificacaoEvent } from '../../../core/models/edital.model';
 
 interface NavItem {
@@ -19,6 +20,7 @@ interface NavItem {
 
 interface NavSection {
   label: string;
+  moduleKey: string;
   items: NavItem[];
 }
 
@@ -60,7 +62,7 @@ interface NavSection {
 
         <!-- Navigation -->
         <nav class="sidebar-nav">
-          @for (section of navSections; track section.label) {
+          @for (section of visibleSections; track section.label) {
             <div class="nav-section">
               @if (!collapsed()) {
                 <span class="nav-section-label">{{ section.label }}</span>
@@ -125,6 +127,22 @@ interface NavSection {
           </div>
 
           <div class="topbar-right">
+
+            <!-- Indicador de coleta em andamento -->
+            @if (coletaAndamento.ativa()) {
+              <div class="coleta-pill" [routerLink]="['/leads']" matTooltip="Ver andamento da coleta">
+                <span class="coleta-pill-dot"></span>
+                <span class="coleta-pill-text">
+                  Coletando {{ coletaAndamento.andamento().etapaAtual?.fonte ?? '' }}
+                </span>
+                @if (coletaAndamento.andamento().total > 1) {
+                  <span class="coleta-pill-step">
+                    {{ coletaAndamento.andamento().step }}/{{ coletaAndamento.andamento().total }}
+                  </span>
+                }
+              </div>
+            }
+
             <button class="icon-btn hide-mobile"
                     matTooltip="Central de ajuda">
               <mat-icon>help_outline</mat-icon>
@@ -204,17 +222,13 @@ interface NavSection {
         </div>
       </div>
       <mat-divider></mat-divider>
-      <button mat-menu-item>
+      <button mat-menu-item [routerLink]="['/configuracoes']">
         <mat-icon>person_outline</mat-icon>
         Meu Perfil
       </button>
-      <button mat-menu-item>
-        <mat-icon>business</mat-icon>
-        Empresa
-      </button>
-      <button mat-menu-item>
-        <mat-icon>credit_card</mat-icon>
-        Plano e Faturamento
+      <button mat-menu-item [routerLink]="['/configuracoes']">
+        <mat-icon>settings</mat-icon>
+        Configurações
       </button>
       <mat-divider></mat-divider>
       <button mat-menu-item class="logout-item" (click)="auth.logout()">
@@ -569,6 +583,30 @@ interface NavSection {
       flex-shrink: 0;
     }
 
+    /* ── Coleta ao vivo pill ───────────────────────────────────────────── */
+    @keyframes coleta-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(17,191,127,0.5); }
+      50%       { box-shadow: 0 0 0 5px rgba(17,191,127,0); }
+    }
+    .coleta-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 12px 5px 9px; border-radius: 20px;
+      background: rgba(17,191,127,0.10); border: 1.5px solid rgba(17,191,127,0.3);
+      cursor: pointer; transition: background 150ms;
+      &:hover { background: rgba(17,191,127,0.18); }
+    }
+    .coleta-pill-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #11BF7F; flex-shrink: 0;
+      animation: coleta-pulse 1.6s ease-in-out infinite;
+    }
+    .coleta-pill-text {
+      font-size: 12px; font-weight: 600; color: #0DA66E; white-space: nowrap;
+    }
+    .coleta-pill-step {
+      font-size: 11px; font-weight: 700; color: #094; background: rgba(17,191,127,0.15);
+      border-radius: 8px; padding: 1px 6px; white-space: nowrap;
+    }
+
 
     .icon-btn {
       background: none;
@@ -795,6 +833,7 @@ interface NavSection {
 export class MainLayoutComponent implements OnInit {
   auth = inject(AuthService);
   notifSvc = inject(NotificacoesService);
+  readonly coletaAndamento = inject(ColetaAndamentoService);
 
   collapsed = signal(false);
   mobileOpen = signal(false);
@@ -803,6 +842,7 @@ export class MainLayoutComponent implements OnInit {
   navSections: NavSection[] = [
     {
       label: 'Licitações',
+      moduleKey: 'licitacoes',
       items: [
         { label: 'Leads', icon: 'list_alt', route: '/leads' },
         { label: 'Pipeline', icon: 'view_kanban', route: '/pipeline' },
@@ -811,6 +851,7 @@ export class MainLayoutComponent implements OnInit {
     },
     {
       label: 'Inteligência',
+      moduleKey: 'inteligencia',
       items: [
         { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
         { label: 'Impugnação', icon: 'gavel', route: '/impugnacao' },
@@ -819,18 +860,18 @@ export class MainLayoutComponent implements OnInit {
     },
     {
       label: 'Cotação',
+      moduleKey: 'cotacao',
       items: [
         { label: 'Fornecedores', icon: 'storefront', route: '/cotacao/fornecedores' },
         { label: 'Itens', icon: 'inventory_2', route: '/cotacao/itens' },
       ],
     },
-    {
-      label: 'Configurações',
-      items: [
-        { label: 'Configurações', icon: 'settings', route: '/configuracoes' },
-      ],
-    },
   ];
+
+  get visibleSections(): NavSection[] {
+    const enabled = this.auth.currentUser()?.enabledModules ?? ['licitacoes'];
+    return this.navSections.filter(s => enabled.includes(s.moduleKey));
+  }
 
   ngOnInit(): void {
     this.notifSvc.startSSE();
