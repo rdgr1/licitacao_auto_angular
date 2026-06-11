@@ -142,9 +142,8 @@ import { AuthService } from '../../../core/services/auth.service';
               <mat-checkbox formControlName="rememberMe" color="primary">
                 Lembrar por 30 dias
               </mat-checkbox>
-              <a routerLink="/forgot-password" class="forgot-link">
-                Esqueci minha senha
-              </a>
+              <!-- MVP: endpoint não existe ainda no backend -->
+              <!-- <a routerLink="/forgot-password" class="forgot-link">Esqueci minha senha</a> -->
             </div>
 
             <button mat-flat-button type="submit"
