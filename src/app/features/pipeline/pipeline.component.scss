@@ -149,7 +149,7 @@
 
   &.src-dodf { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
   &.src-pncp { background: #F5F3FF; color: #5B21B6; border: 1px solid #DDD6FE; }
-  &.src-dou  { background: rgba(17,191,127,0.06); color: #1E40AF; border: 1px solid #BFDBFE; }
+  &.src-dou  { background: #F0FDFA; color: #0F766E; border: 1px solid #99F6E4; }
 }
 
 .kcard-date {
@@ -164,8 +164,9 @@
 
 .kcard-title {
   font-size: 12.5px; font-weight: 600; color: #1E293B; margin: 0;
-  line-height: 1.5; overflow: hidden;
+  line-height: 1.45; overflow: hidden;
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  min-height: calc(1.45em * 3);
 }
 
 /* ── Card footer ────────────────────────────────────────────────────────── */
@@ -205,10 +206,10 @@
 
 .kcard-click-hint {
   font-size: 9px; color: #CBD5E1; text-align: right; margin-top: 2px;
-  opacity: 0;
-  transition: opacity 150ms;
-
-  .kcard:hover & { opacity: 1; }
+  opacity: 0; transition: opacity 150ms;
+  .kcard:hover &,
+  .kcard:focus &,
+  .kcard:focus-within & { opacity: 1; }
 }
 
 /* ── Empty column ───────────────────────────────────────────────────────── */
@@ -223,3 +224,24 @@
 /* ── CDK ─────────────────────────────────────────────────────────────────── */
 .cdk-drop-list-dragging .kcard:not(.cdk-drag-placeholder) { transition: transform 250ms; }
 .cdk-drag-animating { transition: transform 280ms cubic-bezier(0.2, 0, 0, 1); }
+
+// ── Pipeline Skeleton ──────────────────────────────────────────────────────
+.pipeline-skeleton {
+  display: flex; gap: var(--spacing-md); overflow-x: auto;
+  padding: var(--spacing-md) 0; flex: 1;
+}
+.psk-col {
+  min-width: 260px; display: flex; flex-direction: column;
+  gap: var(--spacing-sm); flex-shrink: 0;
+}
+.psk-header { height: 36px; width: 100%; border-radius: var(--radius-md); }
+.psk-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: var(--spacing-md);
+  display: flex; flex-direction: column; gap: var(--spacing-sm);
+}
+.psk-row   { display: flex; gap: var(--spacing-sm); }
+.psk-badge { width: 48px; height: 18px; }
+.psk-date  { width: 72px; height: 18px; margin-left: auto; }
+.psk-title { width: 100%; height: 14px; }
+.psk-org   { width: 60%; height: 12px; }

@@ -55,6 +55,7 @@ export class EditaisListComponent implements OnInit {
   }
 
   loading    = signal(false);
+  apiError   = signal(false);
   dataSource = new MatTableDataSource<EditalResponse>([]);
   displayedColumns = ['numero', 'objeto', 'modalidade', 'valorEstimado', 'dataAbertura', 'status', 'actions'];
 
@@ -109,20 +110,25 @@ export class EditaisListComponent implements OnInit {
 
   loadEditais(): void {
     this.loading.set(true);
+    this.apiError.set(false);
     const rawStatus = this.selectedStatus();
     const status = rawStatus || undefined;
     this.editaisService.getAll({ page: this.currentPage(), size: this.pageSize(), status }).subscribe({
       next: (page) => {
         this.dataSource.data = page.content ?? [];
         this.totalElements.set(page.totalElements ?? 0);
+        this.apiError.set(false);
         this.loading.set(false);
       },
       error: () => {
         this.toast.error('Erro ao carregar editais');
+        this.apiError.set(true);
         this.loading.set(false);
       },
     });
   }
+
+  reload(): void { this.refresh(); }
 
   applyFilter(event: Event): void {
     this.searchText.set((event.target as HTMLInputElement).value.trim().toLowerCase());

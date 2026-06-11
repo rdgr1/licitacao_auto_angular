@@ -88,16 +88,32 @@
     }
   </nav>
 
-  <!-- ── Loading ───────────────────────────────────────────────────── -->
+  <!-- ── Loading skeleton ──────────────────────────────────────────── -->
   @if (loading()) {
-    <div class="loading-state" role="status" aria-live="polite" aria-busy="true">
-      <mat-spinner diameter="26" />
-      <span>Carregando editais...</span>
+    <div class="editais-skeleton" aria-label="Carregando editais..." role="status">
+      @for (i of [1,2,3,4,5,6,7,8]; track i) {
+        <div class="esk-row">
+          <div class="skeleton esk-num"></div>
+          <div class="skeleton esk-obj"></div>
+          <div class="skeleton esk-org"></div>
+          <div class="skeleton esk-badge"></div>
+          <div class="skeleton esk-val"></div>
+        </div>
+      }
+    </div>
+  }
+  @if (!loading() && apiError()) {
+    <div class="editais-error-state" role="alert">
+      <mat-icon aria-hidden="true">cloud_off</mat-icon>
+      <p>Não foi possível carregar os editais.</p>
+      <button mat-flat-button (click)="reload()">
+        <mat-icon>refresh</mat-icon> Tentar novamente
+      </button>
     </div>
   }
 
   <!-- ── Tabela + Paginação ─────────────────────────────────────────── -->
-  @if (!loading()) {
+  @if (!loading() && !apiError()) {
     <div class="table-wrap">
       <table mat-table [dataSource]="dataSource" matSort
              class="editais-table"

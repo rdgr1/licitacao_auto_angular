@@ -38,7 +38,23 @@
   <!-- ── QUALIFICAÇÃO ─────────────────────────────────────────────── -->
   @if (active() === 'qual') {
     @if (loadingQual()) {
-      <div class="loading-state"><mat-spinner diameter="32" /><span>Carregando leads...</span></div>
+      <div class="pipeline-skeleton" aria-label="Carregando pipeline..." role="status">
+        @for (col of [1,2,3,4,5]; track col) {
+          <div class="psk-col">
+            <div class="skeleton psk-header"></div>
+            @for (card of [1,2,3]; track card) {
+              <div class="psk-card">
+                <div class="psk-row">
+                  <div class="skeleton psk-badge"></div>
+                  <div class="skeleton psk-date"></div>
+                </div>
+                <div class="skeleton psk-title"></div>
+                <div class="skeleton psk-org"></div>
+              </div>
+            }
+          </div>
+        }
+      </div>
     } @else {
       <div class="board cols-5" cdkDropListGroup>
         @for (col of qualColumns; track col.id) {
@@ -58,14 +74,20 @@
                  (cdkDropListDropped)="dropQual($event)">
 
               @for (lead of col.leads; track lead.uuid) {
-                <div class="kcard" cdkDrag [cdkDragData]="lead">
+                <div class="kcard" cdkDrag [cdkDragData]="lead"
+                     role="button" tabindex="0"
+                     [attr.aria-label]="'Ver detalhes do lead: ' + lead.titulo"
+                     (click)="openLeadDetalhe(lead)"
+                     (keydown.enter)="openLeadDetalhe(lead)"
+                     (keydown.space)="openLeadDetalhe(lead)">
                   <div class="kcard-placeholder" *cdkDragPlaceholder></div>
 
                   <!-- Source + date + drag -->
                   <div class="kcard-meta">
-                    <span class="src src-{{ lead.fonte?.toLowerCase() }}">{{ lead.fonte }}</span>
-                    <span class="kcard-date">{{ formatDate(lead.dataPublicacao) }}</span>
-                    <mat-icon class="kcard-drag">drag_indicator</mat-icon>
+                    <span class="src src-{{ lead.fonte?.toLowerCase() }}"
+                          aria-hidden="true">{{ lead.fonte }}</span>
+                    <span class="kcard-date" aria-hidden="true">{{ formatDate(lead.dataPublicacao) }}</span>
+                    <mat-icon class="kcard-drag" aria-hidden="true" aria-label="">drag_indicator</mat-icon>
                   </div>
 
                   <!-- Title -->
@@ -74,13 +96,15 @@
                   <!-- Footer: org + tipo -->
                   <div class="kcard-footer">
                     <div class="kcard-org">
-                      <span class="org-dot" [style.background]="orgColor(lead.orgao)">{{ orgInitial(lead.orgao) }}</span>
+                      <span class="org-dot" [style.background]="orgColor(lead.orgao)" aria-hidden="true">{{ orgInitial(lead.orgao) }}</span>
                       <span class="org-name">{{ lead.orgao | truncate:26 }}</span>
                     </div>
                     @if (lead.tipo) {
                       <span class="tipo-tag">{{ tipoShort(lead.tipo) | truncate:20 }}</span>
                     }
                   </div>
+
+                  <div class="kcard-click-hint" aria-hidden="true">Clique para detalhes</div>
                 </div>
               }
 
@@ -100,7 +124,23 @@
   <!-- ── PROCESSO LICITATÓRIO ─────────────────────────────────────── -->
   @if (active() === 'proc') {
     @if (loadingProc()) {
-      <div class="loading-state"><mat-spinner diameter="32" /><span>Carregando processos...</span></div>
+      <div class="pipeline-skeleton" aria-label="Carregando pipeline..." role="status">
+        @for (col of [1,2,3,4,5]; track col) {
+          <div class="psk-col">
+            <div class="skeleton psk-header"></div>
+            @for (card of [1,2,3]; track card) {
+              <div class="psk-card">
+                <div class="psk-row">
+                  <div class="skeleton psk-badge"></div>
+                  <div class="skeleton psk-date"></div>
+                </div>
+                <div class="skeleton psk-title"></div>
+                <div class="skeleton psk-org"></div>
+              </div>
+            }
+          </div>
+        }
+      </div>
     } @else {
       <div class="board cols-7" cdkDropListGroup>
         @for (col of procColumns; track col.id) {
