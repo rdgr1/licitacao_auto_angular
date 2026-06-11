@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth.service';
+import { BackgroundLayerComponent } from '../../../shared/components/background-layer/background-layer.component';
 
 @Component({
   selector: 'app-login',
@@ -21,9 +22,11 @@ import { AuthService } from '../../../core/services/auth.service';
     MatIconModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    BackgroundLayerComponent,
   ],
   template: `
     <div class="auth-shell">
+      <app-bg-layer variant="network"></app-bg-layer>
 
       <!-- ── Left panel ──────────────────────────────────────────────── -->
       <aside class="auth-brand">
@@ -167,6 +170,8 @@ import { AuthService } from '../../../core/services/auth.service';
           </p>
         </div>
       </main>
+
+      <p class="login-tagline">Monitoramento inteligente de licitações públicas</p>
     </div>
   `,
   styles: [`
@@ -174,8 +179,23 @@ import { AuthService } from '../../../core/services/auth.service';
     .auth-shell {
       display: flex;
       min-height: 100vh;
-      background: #F1F5F9;
+      background: var(--lf-bg, #0D1526);
       font-family: 'Inter Tight', sans-serif;
+      position: relative;
+    }
+
+    .login-tagline {
+      position: relative;
+      z-index: 1;
+      font-size: 13px;
+      color: rgba(139, 155, 180, 0.7);
+      margin-top: 16px;
+      text-align: center;
+      letter-spacing: 0.02em;
+      align-self: flex-end;
+      padding-bottom: 20px;
+      width: 55%; /* aligns with the right panel */
+      margin-left: auto;
     }
 
     /* ── Left panel ─────────────────────────────────────────────────── */
@@ -347,8 +367,10 @@ import { AuthService } from '../../../core/services/auth.service';
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #FFFFFF;
+      background: transparent;
       padding: 32px;
+      position: relative;
+      z-index: 1;
 
       @media (max-width: 480px) { padding: 24px 20px; align-items: flex-start; padding-top: 48px; }
     }
@@ -356,6 +378,15 @@ import { AuthService } from '../../../core/services/auth.service';
     .form-inner {
       width: 100%;
       max-width: 400px;
+      background: rgba(16, 26, 46, 0.60) !important;
+      border: 1px solid var(--lf-line, rgba(255,255,255,0.08)) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 18px 50px rgba(3, 8, 20, 0.45) !important;
+      border-radius: 18px;
+      padding: 36px 32px;
+      position: relative;
+      z-index: 1;
     }
 
     .mobile-logo {
@@ -365,7 +396,7 @@ import { AuthService } from '../../../core/services/auth.service';
       margin-bottom: 32px;
       font-size: 18px;
       font-weight: 700;
-      color: #0D1526;
+      color: #e8eef7;
 
       @media (max-width: 900px) { display: flex; }
     }
@@ -376,14 +407,14 @@ import { AuthService } from '../../../core/services/auth.service';
       h2 {
         font-size: 26px;
         font-weight: 800;
-        color: #0D1526;
+        color: #e8eef7 !important;
         letter-spacing: -0.4px;
         margin-bottom: 6px;
       }
 
       p {
         font-size: 14px;
-        color: #64748B;
+        color: #8b9bb4 !important;
       }
     }
 
@@ -472,14 +503,50 @@ import { AuthService } from '../../../core/services/auth.service';
       text-align: center;
       margin-top: 24px;
       font-size: 13px;
-      color: #64748B;
+      color: #8b9bb4;
 
       a {
-        color: #0DA66E;
+        color: #11BF7F;
         text-decoration: none;
         font-weight: 600;
         &:hover { text-decoration: underline; }
       }
+    }
+
+    /* Material checkbox label color in dark context */
+    ::ng-deep .form-inner .mdc-label {
+      color: #8b9bb4 !important;
+    }
+    /* Material input label + text color in dark glassmorphism */
+    ::ng-deep .form-inner .mat-mdc-form-field .mdc-floating-label {
+      color: rgba(139, 155, 180, 0.75) !important;
+    }
+    ::ng-deep .form-inner .mat-mdc-form-field input.mat-mdc-input-element {
+      color: #e8eef7 !important;
+    }
+    /* Input outline borders */
+    ::ng-deep .form-inner .mdc-notched-outline__leading,
+    ::ng-deep .form-inner .mdc-notched-outline__notch,
+    ::ng-deep .form-inner .mdc-notched-outline__trailing {
+      border-color: rgba(141, 166, 200, 0.3) !important;
+    }
+    ::ng-deep .form-inner .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+    ::ng-deep .form-inner .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+    ::ng-deep .form-inner .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+      border-color: rgba(141, 166, 200, 0.55) !important;
+    }
+    ::ng-deep .form-inner .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+    ::ng-deep .form-inner .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+    ::ng-deep .form-inner .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+      border-color: var(--brand-primary, #11BF7F) !important;
+    }
+    /* Prefix icons in dark bg */
+    ::ng-deep .form-inner .mat-mdc-form-field mat-icon[matPrefix] {
+      color: rgba(139, 155, 180, 0.6) !important;
+    }
+    /* Suffix icon button */
+    ::ng-deep .form-inner .mat-mdc-icon-button mat-icon {
+      color: rgba(139, 155, 180, 0.6) !important;
     }
   `],
 })
