@@ -141,6 +141,47 @@
             <span class="res-chip"><span class="res-val">{{ r.duplicados }}</span> duplicados</span>
           </div>
         }
+
+        <!-- Painel de progresso por fonte -->
+        @if (coletaAndamento.fontes().length > 0) {
+          <div class="coleta-progress-panel">
+            <div class="cpp-header">
+              @if (coletaAndamento.ativa()) {
+                <span class="cpp-pulse"></span>
+                <span class="cpp-title">Buscando em {{ coletaAndamento.fontes().length }} fonte(s)…</span>
+              } @else {
+                <mat-icon class="cpp-done-icon">check_circle</mat-icon>
+                <span class="cpp-title">Busca concluída — {{ coletaAndamento.totalSalvos() }} lead(s) encontrado(s)</span>
+              }
+            </div>
+
+            @for (f of coletaAndamento.fontes(); track f.fonte) {
+              <div class="cpp-fonte" [class]="'cpp-' + f.status">
+                <div class="cpp-fonte-header">
+                  @if (f.status === 'done') {
+                    <mat-icon class="cpp-status-icon">check_circle</mat-icon>
+                  } @else if (f.status === 'error') {
+                    <mat-icon class="cpp-status-icon">error_outline</mat-icon>
+                  } @else {
+                    <mat-spinner diameter="16" class="cpp-spinner"></mat-spinner>
+                  }
+                  <span class="cpp-fonte-name">{{ f.fonte }}</span>
+                  <span class="cpp-fonte-step">
+                    @if (f.status === 'running') { {{ f.stepAtual }}/{{ f.totalSteps }} }
+                    @else if (f.status === 'done') { {{ f.salvos }} leads · {{ f.materias }} matérias }
+                    @else if (f.status === 'error') { Erro na coleta }
+                    @else { Aguardando… }
+                  </span>
+                </div>
+                @if (f.status === 'running') {
+                  <mat-progress-bar mode="indeterminate" class="cpp-bar"></mat-progress-bar>
+                } @else if (f.status === 'done') {
+                  <mat-progress-bar mode="determinate" value="100" class="cpp-bar cpp-bar-done"></mat-progress-bar>
+                }
+              </div>
+            }
+          </div>
+        }
       </div>
     } <!-- fim @if selectedFontes -->
   } <!-- fim @if buscaAtiva -->

@@ -528,3 +528,46 @@
   .mat-mdc-icon-button { color: #64748B; }
   .mat-mdc-icon-button:disabled { opacity: 0.3; }
 }
+
+/* ── Coleta progress panel ───────────────────────────────────────────────── */
+.coleta-progress-panel {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 10px;
+  padding: 14px 16px; margin-top: 10px; display: flex; flex-direction: column; gap: 10px;
+}
+.cpp-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+@keyframes coleta-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+.cpp-pulse {
+  width: 8px; height: 8px; border-radius: 50%; background: #11BF7F; flex-shrink: 0;
+  animation: coleta-pulse 1.6s ease-in-out infinite;
+}
+.cpp-title { font-size: 13px; font-weight: 600; color: #0D1526; }
+.cpp-done-icon { font-size: 18px; width: 18px; height: 18px; color: #11BF7F; }
+
+.cpp-fonte {
+  border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: border-color 200ms ease;
+
+  &.cpp-running { border-color: #BFDBFE; background: #EFF6FF; }
+  &.cpp-done    { border-color: #D1FAE5; background: #F0FDF4; }
+  &.cpp-error   { border-color: #FECACA; background: #FEF2F2; }
+  &.cpp-pending { opacity: 0.5; }
+}
+.cpp-fonte-header { display: flex; align-items: center; gap: 8px; }
+.cpp-status-icon {
+  font-size: 16px; width: 16px; height: 16px; flex-shrink: 0;
+  .cpp-done & { color: #10B981; }
+  .cpp-error & { color: #EF4444; }
+}
+::ng-deep .cpp-spinner circle { stroke: #3B82F6 !important; }
+.cpp-fonte-name { font-size: 13px; font-weight: 600; color: #0D1526; flex: 1; }
+.cpp-fonte-step { font-size: 12px; color: #64748B; }
+.cpp-bar { border-radius: 2px; height: 3px; }
+::ng-deep .cpp-bar .mdc-linear-progress__buffer-bar { background: #E2E8F0; }
+::ng-deep .cpp-bar .mdc-linear-progress__primary-bar { background: #3B82F6; }
+::ng-deep .cpp-bar-done .mdc-linear-progress__primary-bar { background: #11BF7F; }

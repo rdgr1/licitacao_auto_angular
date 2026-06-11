@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LeadService } from '../../core/services/lead.service';
 import { ColetaService } from '../../core/services/coleta.service';
 import { ColetaAndamentoService } from '../../core/services/coleta-andamento.service';
@@ -51,7 +52,7 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
   standalone: true,
   imports: [
     CommonModule, FormsModule, MatButtonModule, MatIconModule, MatTooltipModule,
-    MatProgressSpinnerModule, MatDatepickerModule, MatFormFieldModule,
+    MatProgressSpinnerModule, MatProgressBarModule, MatDatepickerModule, MatFormFieldModule,
     MatInputModule, MatNativeDateModule, TruncatePipe, MatPaginatorModule,
   ],
   templateUrl: './leads.component.html',
@@ -241,36 +242,57 @@ export class LeadsComponent implements OnInit {
   // ── Coleta ──────────────────────────────────────────────────────
 
   async coletar(): Promise<void> {
-    if (!this.canSubmit() || this.coletaAndamento.ativa()) return;
+    if (this.coletaAndamento.ativa()) return;
     const dates = this.buildDateList();
     if (!dates.length) return;
 
+    const collectableFontes = this.selectedFontes()
+      .filter(k => FONTES.find(f => f.key === k)?.canCollect);
+    if (!collectableFontes.length) return;
+
     this.coletaResultado.set(null);
+    this.coletaAndamento.iniciarColeta(collectableFontes);
 
-    const collectableFontes = this.selectedFontes().filter(k => FONTES.find(f => f.key === k)?.canCollect);
-    const totalOps = collectableFontes.reduce((n, f) => n + (f === 'PNCP' ? 1 : dates.length), 0);
-    this.coletaAndamento.iniciar(totalOps);
+    const tarefas = collectableFontes.map(fonte =>
+      this.coletarFonte(fonte, dates)
+    );
 
-    let step = 0, totalMaterias = 0, totalSalvos = 0, totalDuplicados = 0;
-    for (const fonte of collectableFontes) {
-      for (let i = 0; i < dates.length; i++) {
-        this.coletaAndamento.avancarEtapa(++step, { fonte, dataDisplay: this.formatDate(dates[i]) });
-        try {
-          const r = await this.coletaService.dispararColeta(fonte, dates[i]).toPromise();
-          if (r) {
-            totalMaterias += r.totalMaterias ?? 0;
-            totalSalvos   += r.salvos ?? 0;
-            totalDuplicados += r.duplicados ?? 0;
-            this.coletaAndamento.acumular(r.totalMaterias ?? 0, r.salvos ?? 0, r.duplicados ?? 0);
-          }
-        } catch { this.toast.error(`Erro ao coletar ${fonte} em ${this.formatDate(dates[i])}`); }
+    await Promise.allSettled(tarefas);
+
+    const fontes = this.coletaAndamento.fontes();
+    const totalSalvos = fontes.reduce((n, f) => n + f.salvos, 0);
+    const totalMaterias = fontes.reduce((n, f) => n + f.materias, 0);
+
+    this.coletaResultado.set({ totalMaterias, salvos: totalSalvos, duplicados: 0, data: '' } as any);
+
+    if (totalSalvos > 0) {
+      this.toast.success(`${totalSalvos} lead(s) encontrados em ${collectableFontes.length} fonte(s)`);
+      this.carregarLeads();
+    } else {
+      this.toast.info('Nenhum lead novo encontrado neste período');
+    }
+  }
+
+  private async coletarFonte(fonte: string, dates: Date[]): Promise<void> {
+    const inicio = Date.now();
+    let totalSalvos = 0, totalMaterias = 0;
+
+    const datesParaFonte = fonte === 'PNCP' ? [dates[0]] : dates;
+
+    for (let i = 0; i < datesParaFonte.length; i++) {
+      this.coletaAndamento.avancarEtapa(fonte, i + 1, datesParaFonte.length, this.formatDate(datesParaFonte[i]));
+      try {
+        const r = await this.coletaService.dispararColeta(fonte, datesParaFonte[i]).toPromise();
+        if (r) {
+          totalSalvos   += r.salvos ?? 0;
+          totalMaterias += r.totalMaterias ?? 0;
+        }
+      } catch {
+        this.toast.error(`Erro ao coletar ${fonte} em ${this.formatDate(datesParaFonte[i])}`);
       }
     }
 
-    this.coletaAndamento.encerrar();
-    this.coletaResultado.set({ totalMaterias, salvos: totalSalvos, duplicados: totalDuplicados, data: '' } as any);
-    if (totalSalvos > 0) { this.toast.success(`${totalSalvos} lead(s) encontrados`); this.carregarLeads(); }
-    else { this.toast.info('Nenhum lead novo encontrado neste período'); }
+    this.coletaAndamento.concluirFonte(fonte, totalSalvos, totalMaterias, Date.now() - inicio);
   }
 
   private buildDateList(): Date[] {
