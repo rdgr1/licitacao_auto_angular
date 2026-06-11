@@ -21,6 +21,7 @@ import { DateBrPipe } from '../../../shared/pipes/date-br.pipe';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ItensDialogComponent } from '../itens-dialog/itens-dialog.component';
+import { BackgroundLayerComponent } from '../../../shared/components/background-layer/background-layer.component';
 
 @Component({
   selector: 'app-editais-list',
@@ -40,6 +41,7 @@ import { ItensDialogComponent } from '../itens-dialog/itens-dialog.component';
     CurrencyBrPipe,
     DateBrPipe,
     TruncatePipe,
+    BackgroundLayerComponent,
   ],
   templateUrl: './editais-list.component.html',
   styleUrl:    './editais-list.component.scss',

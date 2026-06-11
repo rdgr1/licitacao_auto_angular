@@ -1,5 +1,7 @@
 <main class="det-shell">
 
+  <app-bg-layer variant="aurora" [opacity]="0.35"></app-bg-layer>
+
   <!-- ── Skeleton loading ──────────────────────────────────────────── -->
   @if (loading()) {
     <div class="det-skeleton" role="status" aria-label="Carregando edital" aria-busy="true">
@@ -30,6 +32,38 @@
         {{ formatStatus(edital()!.status) }}
       </span>
     </nav>
+
+    <!-- ── Cabeçalho-documento: faixa PNCP + timeline ───────────── -->
+    @if (edital()) {
+      <div class="edital-doc-header">
+
+        <!-- Número de controle + Modalidade -->
+        <div class="edital-pncp-strip">
+          <span class="edital-pncp-label">Controle</span>
+          <code class="edital-pncp-num">{{ edital()!.numero }}</code>
+          @if (edital()!.modalidade) {
+            <span class="edital-modalidade-seal">{{ formatModalidade(edital()!.modalidade) }}</span>
+          }
+        </div>
+
+        <!-- Timeline horizontal — apenas dataAbertura disponível no modelo -->
+        @if (edital()!.dataAbertura) {
+          <div class="edital-timeline" role="list" aria-label="Cronograma do edital">
+            <div class="etl-track">
+              <div class="etl-step"
+                   [class.etl-past]="isPast(edital()!.dataAbertura)"
+                   [class.etl-today]="isToday(edital()!.dataAbertura)"
+                   role="listitem">
+                <div class="etl-dot"></div>
+                <div class="etl-label">Abertura</div>
+                <div class="etl-date">{{ edital()!.dataAbertura | date:'dd/MM/yy':'':'pt-BR' }}</div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+    }
 
     <!-- ── Hero: métricas principais ─────────────────────────────── -->
     <header class="det-hero" aria-label="Dados principais do edital">

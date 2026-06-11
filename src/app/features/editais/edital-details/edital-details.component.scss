@@ -1,5 +1,6 @@
 /* ── Shell ───────────────────────────────────────────────────────────────── */
 .det-shell {
+  position: relative;
   padding: 24px 32px;
   display: flex; flex-direction: column; gap: 0;
   @media (max-width: 767px) { padding: 16px; }
@@ -451,4 +452,54 @@
   .ar-spin { animation: none; }
   .status-processado .spill-dot,
   .status-processando .spill-dot { animation: none; }
+}
+
+// ── Cabeçalho-documento ────────────────────────────────────────────────────
+.edital-doc-header {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 12px 0 16px; border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.edital-pncp-strip {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.edital-pncp-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--text-muted);
+}
+.edital-pncp-num {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+  background: var(--content-bg); padding: 2px 8px;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.edital-modalidade-seal {
+  background: color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  color: var(--brand-primary); font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: var(--radius-full);
+  text-transform: uppercase; letter-spacing: .05em;
+}
+// ── Timeline ────────────────────────────────────────────────────────────────
+.edital-timeline { overflow: hidden; }
+.etl-track {
+  display: flex; align-items: flex-start; position: relative; padding-top: 18px;
+}
+.etl-step {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 76px;
+}
+.etl-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid var(--border); background: var(--card-bg);
+  transition: all 150ms;
+  .etl-past &   { background: var(--brand-primary); border-color: var(--brand-primary); }
+  .etl-today &  { background: var(--status-pendente); border-color: var(--status-pendente);
+                  box-shadow: 0 0 0 4px rgba(245,158,11,.2); }
+}
+.etl-label {
+  font-size: 10px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .04em; white-space: nowrap;
+}
+.etl-date { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+.etl-line {
+  flex: 1; height: 2px; background: var(--border); margin-top: 5px; min-width: 20px;
 }

@@ -16,6 +16,7 @@ import {
 import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { DateBrPipe } from '../../../shared/pipes/date-br.pipe';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { BackgroundLayerComponent } from '../../../shared/components/background-layer/background-layer.component';
 
 type SectionState = 'idle' | 'loading' | 'loaded' | 'error' | 'empty';
 interface Section<T> { open: boolean; state: SectionState; data: T[]; }
@@ -26,7 +27,7 @@ const mkSection = <T>(): Section<T> => ({ open: false, state: 'idle', data: [] }
   standalone: true,
   imports: [
     CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule,
-    CurrencyBrPipe, DateBrPipe,
+    CurrencyBrPipe, DateBrPipe, BackgroundLayerComponent,
   ],
   templateUrl: './edital-details.component.html',
   styleUrl:    './edital-details.component.scss',
@@ -154,6 +155,28 @@ export class EditalDetailsComponent implements OnInit {
         error: () => this.toast.error('Erro ao excluir edital'),
       });
     });
+  }
+
+  isPast(dateStr: string): boolean {
+    return !!dateStr && new Date(dateStr) < new Date();
+  }
+
+  isToday(dateStr: string): boolean {
+    if (!dateStr) return false;
+    const d = new Date(dateStr);
+    const now = new Date();
+    return d.getFullYear() === now.getFullYear()
+        && d.getMonth() === now.getMonth()
+        && d.getDate() === now.getDate();
+  }
+
+  getTodayProgress(startStr: string, endStr: string): number {
+    if (!startStr || !endStr) return -1;
+    const start = new Date(startStr).getTime();
+    const end   = new Date(endStr).getTime();
+    const now   = Date.now();
+    if (now <= start || now >= end) return -1;
+    return Math.round(((now - start) / (end - start)) * 100);
   }
 
   formatStatus(s: string): string {
