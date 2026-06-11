@@ -71,13 +71,6 @@ import { AuthService } from '../../../core/services/auth.service';
             </li>
           </ul>
 
-          <div class="brand-footer">
-            <div class="trust-badges">
-              <span>🔒 SOC 2</span>
-              <span>🇧🇷 LGPD</span>
-              <span>⚡ 99.9% SLA</span>
-            </div>
-          </div>
         </div>
 
         <!-- Decorative grid -->
@@ -149,8 +142,8 @@ import { AuthService } from '../../../core/services/auth.service';
               <mat-checkbox formControlName="rememberMe" color="primary">
                 Lembrar por 30 dias
               </mat-checkbox>
-              <a href="#" class="forgot-link" (click)="$event.preventDefault()">
-                Esqueceu a senha?
+              <a routerLink="/forgot-password" class="forgot-link">
+                Esqueci minha senha
               </a>
             </div>
 
@@ -497,8 +490,8 @@ export class LoginComponent {
   private router = inject(Router);
 
   form = this.fb.group({
-    email: ['admin@licitaflow.com', [Validators.required, Validators.email]],
-    password: ['123456', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
     rememberMe: [false],
   });
 
@@ -516,7 +509,10 @@ export class LoginComponent {
 
     const { email, password } = this.form.value;
     this.auth.login({ email: email!, password: password! }).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => {
+        this.loading.set(false);
+        this.router.navigate(['/dashboard']);
+      },
       error: (err: Error) => {
         this.errorMsg.set(err.message);
         this.loading.set(false);
