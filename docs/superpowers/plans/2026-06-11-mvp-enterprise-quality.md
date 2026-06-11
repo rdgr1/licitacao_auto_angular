@@ -709,11 +709,774 @@ Global classes: .status-chip(.processado|.pendente|.erro), .score-badge(.hot|.wa
 
 ---
 
-## FASE 4 — Animações com propósito (Task 9-10)
+## FASE 3b — Backgrounds animados e enriquecimentos visuais (Task 9-13)
+
+> **Contexto:** 4 variantes de background (Aurora CSS, Grid/Beams CSS, Network canvas, Flow canvas).
+> Atribuição por tela: Login→Network(3), Leads→Aurora(1) 40%, Pipeline→Grid(2), Editais→Aurora(1).
+> Crossfade 400ms na troca de rota. Tudo respeita `prefers-reduced-motion`.
+> **Canvas usa `afterNextRender()` + `ngOnDestroy` — nunca `document.getElementById` direto.**
 
 ---
 
-### Task 9: Angular Animations — rota + stagger de lista
+### Task 9: `BackgroundLayerComponent` + variantes CSS (Aurora e Grid)
+
+**Files:**
+- Create: `src/app/shared/components/background-layer/background-layer.component.ts`
+- Create: `src/app/shared/components/background-layer/background-layer.component.scss`
+- Modify: `src/styles.scss`
+
+- [ ] **Adicionar tokens de background em `styles.scss`** (após os tokens de fonte):
+  ```scss
+  // Backgrounds animados
+  --lf-bg:       #0c1322;
+  --lf-bg-soft:  #101a2e;
+  --lf-ink:      #e8eef7;
+  --lf-teal:     #2dd4bf;
+  --lf-cyan:     #38bdf8;
+  --lf-indigo:   #6366f1;
+  --lf-gold:     #f0b429;
+  --lf-line:     rgba(141,166,200,.14);
+  ```
+
+- [ ] **Criar `background-layer.component.ts`** com as 4 variantes como `@Input`:
+  ```typescript
+  import {
+    Component, Input, OnDestroy, AfterRenderPhase,
+    afterNextRender, ElementRef, inject, signal,
+    ChangeDetectionStrategy
+  } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+
+  export type BgVariant = 'aurora' | 'grid' | 'network' | 'flow' | 'none';
+
+  @Component({
+    selector: 'app-bg-layer',
+    standalone: true,
+    imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
+      <div class="bg-layer" [class]="variant" aria-hidden="true">
+
+        @if (variant === 'aurora') {
+          <div class="blob b1"></div>
+          <div class="blob b2"></div>
+          <div class="blob b3"></div>
+        }
+
+        @if (variant === 'grid') {
+          <div class="beam h"></div>
+          <div class="beam h"></div>
+          <div class="beam h"></div>
+          <div class="beam v"></div>
+          <div class="beam v"></div>
+          <div class="beam v"></div>
+          <div class="pulse"></div>
+          <div class="pulse"></div>
+          <div class="pulse"></div>
+        }
+
+        @if (variant === 'network' || variant === 'flow') {
+          <canvas #cvs></canvas>
+        }
+
+      </div>
+    `,
+    styleUrl: './background-layer.component.scss',
+  })
+  export class BackgroundLayerComponent implements OnDestroy {
+    @Input() variant: BgVariant = 'none';
+    @Input() opacity = 1;
+
+    private el = inject(ElementRef);
+    private raf = 0;
+    private reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    constructor() {
+      afterNextRender(() => {
+        const canvas = this.el.nativeElement.querySelector('canvas') as HTMLCanvasElement | null;
+        if (!canvas) return;
+        if (this.variant === 'network') this.runNetwork(canvas);
+        if (this.variant === 'flow')    this.runFlow(canvas);
+      });
+    }
+
+    ngOnDestroy(): void {
+      cancelAnimationFrame(this.raf);
+    }
+
+    private runNetwork(canvas: HTMLCanvasElement): void {
+      const ctx = canvas.getContext('2d')!;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const N = window.innerWidth < 768 ? 45 : 85;
+      const LINK = 150;
+      let w = 0, h = 0, t = 0;
+      let mouse = { x: -9999, y: -9999 };
+
+      const onMouse = (e: PointerEvent) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+      window.addEventListener('pointermove', onMouse);
+
+      const nodes = Array.from({ length: N }, () => ({
+        x: Math.random(), y: Math.random(),
+        vx: (Math.random() - .5) * .0006,
+        vy: (Math.random() - .5) * .0006,
+        r: Math.random() * 1.6 + .8,
+        gold: Math.random() < .08,
+      }));
+
+      const resize = () => {
+        w = canvas.clientWidth; h = canvas.clientHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      resize();
+      window.addEventListener('resize', resize);
+
+      const frame = () => {
+        if (this.reduced.matches) { ctx.clearRect(0, 0, w, h); return; }
+        t += 1 / 60;
+        ctx.clearRect(0, 0, w, h);
+        for (const n of nodes) {
+          n.x += n.vx; n.y += n.vy;
+          if (n.x < 0 || n.x > 1) n.vx *= -1;
+          if (n.y < 0 || n.y > 1) n.vy *= -1;
+        }
+        for (let i = 0; i < N; i++) {
+          for (let j = i + 1; j < N; j++) {
+            const a = nodes[i], b = nodes[j];
+            const dx = (a.x - b.x) * w, dy = (a.y - b.y) * h;
+            const d = Math.hypot(dx, dy);
+            if (d < LINK) {
+              ctx.strokeStyle = `rgba(56,189,248,${(1 - d / LINK) * .35})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(a.x * w, a.y * h);
+              ctx.lineTo(b.x * w, b.y * h);
+              ctx.stroke();
+            }
+          }
+        }
+        for (const n of nodes) {
+          let px = n.x * w, py = n.y * h;
+          const dm = Math.hypot(px - mouse.x, py - mouse.y);
+          if (dm < 120) {
+            const f = (120 - dm) / 120 * 14;
+            px += (px - mouse.x) / (dm || 1) * f;
+            py += (py - mouse.y) / (dm || 1) * f;
+          }
+          ctx.fillStyle = n.gold ? 'rgba(240,180,41,.95)' : 'rgba(45,212,191,.8)';
+          ctx.shadowColor = n.gold ? 'rgba(240,180,41,.8)' : 'rgba(45,212,191,.5)';
+          ctx.shadowBlur = n.gold ? 10 : 5;
+          ctx.beginPath();
+          ctx.arc(px, py, n.gold ? n.r + 1 : n.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+        this.raf = requestAnimationFrame(frame);
+      };
+      this.raf = requestAnimationFrame(frame);
+    }
+
+    private runFlow(canvas: HTMLCanvasElement): void {
+      const ctx = canvas.getContext('2d')!;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      let w = 0, h = 0, t = 0;
+      const waves = [
+        { amp: 46, len: .006, speed: .55, y: .62, color: 'rgba(99,102,241,.28)',  lw: 1.5 },
+        { amp: 34, len: .009, speed: .8,  y: .68, color: 'rgba(56,189,248,.30)',  lw: 1.5 },
+        { amp: 26, len: .013, speed: 1.15,y: .74, color: 'rgba(45,212,191,.35)',  lw: 2   },
+        { amp: 60, len: .004, speed: .35, y: .56, color: 'rgba(240,180,41,.14)',  lw: 1   },
+      ];
+      const resize = () => {
+        w = canvas.clientWidth; h = canvas.clientHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      resize();
+      window.addEventListener('resize', resize);
+      const frame = () => {
+        if (!this.reduced.matches) t += 1 / 60;
+        ctx.clearRect(0, 0, w, h);
+        const g = ctx.createRadialGradient(w * .5, -h * .2, 0, w * .5, -h * .2, h);
+        g.addColorStop(0, 'rgba(56,189,248,.10)');
+        g.addColorStop(1, 'transparent');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+        for (const wv of waves) {
+          ctx.beginPath();
+          for (let x = 0; x <= w; x += 4) {
+            const y = h * wv.y
+              + Math.sin(x * wv.len + t * wv.speed) * wv.amp
+              + Math.sin(x * wv.len * 2.7 + t * wv.speed * 1.6) * wv.amp * .35;
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = wv.color; ctx.lineWidth = wv.lw; ctx.stroke();
+        }
+        if (!this.reduced.matches) this.raf = requestAnimationFrame(frame);
+      };
+      this.raf = requestAnimationFrame(frame);
+    }
+  }
+  ```
+
+- [ ] **Criar `background-layer.component.scss`** com o CSS das variantes Aurora e Grid (adaptado do HTML de referência):
+  ```scss
+  .bg-layer {
+    position: fixed; inset: 0;
+    z-index: 0; pointer-events: none; overflow: hidden;
+
+    canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  }
+
+  /* ── Aurora ─────────────────────────────────────────────────────── */
+  .aurora .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); opacity: .5; will-change: transform;
+  }
+  .aurora .b1 {
+    width: 62vmax; height: 62vmax; left: -18vmax; top: -24vmax;
+    background: conic-gradient(from 90deg, var(--lf-indigo), var(--lf-cyan), transparent 60%);
+    animation: lf-spin 38s linear infinite;
+  }
+  .aurora .b2 {
+    width: 50vmax; height: 50vmax; right: -16vmax; bottom: -20vmax;
+    background: conic-gradient(from 240deg, var(--lf-teal), var(--lf-indigo) 45%, transparent 70%);
+    animation: lf-spin 52s linear infinite reverse;
+  }
+  .aurora .b3 {
+    width: 34vmax; height: 34vmax; left: 46%; top: 30%;
+    background: radial-gradient(circle at 30% 30%, rgba(240,180,41,.35), transparent 65%);
+    animation: lf-drift 26s ease-in-out infinite alternate;
+  }
+  .aurora::after {
+    content: ""; position: absolute; inset: 0; opacity: .07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ── Grid / Beams ────────────────────────────────────────────────── */
+  .grid {
+    background: linear-gradient(180deg, var(--lf-bg) 0%, var(--lf-bg-soft) 100%);
+    &::before {
+      content: ""; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--lf-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--lf-line) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, #000 55%, transparent 100%);
+    }
+  }
+  .grid .beam {
+    position: absolute; will-change: transform;
+    &.h {
+      height: 1px; width: 30vw; left: -30vw;
+      background: linear-gradient(90deg, transparent, var(--lf-cyan), transparent);
+      box-shadow: 0 0 12px 1px rgba(56,189,248,.55);
+      animation: lf-beam-h linear infinite;
+    }
+    &.v {
+      width: 1px; height: 26vh; top: -26vh;
+      background: linear-gradient(180deg, transparent, var(--lf-teal), transparent);
+      box-shadow: 0 0 12px 1px rgba(45,212,191,.5);
+      animation: lf-beam-v linear infinite;
+    }
+    &:nth-child(1) { top: 112px;  animation-duration: 7s; }
+    &:nth-child(2) { top: 336px;  animation-duration: 11s; animation-delay: 2s; }
+    &:nth-child(3) { top: 616px;  animation-duration: 9s;  animation-delay: 5s; }
+    &:nth-child(4) { left: 224px; animation-duration: 8s;  animation-delay: 1s; }
+    &:nth-child(5) { left: 560px; animation-duration: 12s; animation-delay: 4s; }
+    &:nth-child(6) { left: 1008px;animation-duration: 10s; animation-delay: 7s; }
+  }
+  .grid .pulse {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--lf-gold); box-shadow: 0 0 14px 3px rgba(240,180,41,.45);
+    animation: lf-pulse 4.5s ease-in-out infinite;
+    &:nth-of-type(7) { left: 224px;  top: 112px; }
+    &:nth-of-type(8) { left: 560px;  top: 336px; animation-delay: 1.4s; }
+    &:nth-of-type(9) { left: 1008px; top: 616px; animation-delay: 2.8s; }
+  }
+
+  /* ── Keyframes ────────────────────────────────────────────────────── */
+  @keyframes lf-spin  { to { transform: rotate(360deg); } }
+  @keyframes lf-drift {
+    from { transform: translate(-6vmax, -2vmax) scale(1); }
+    to   { transform: translate(5vmax, 4vmax) scale(1.15); }
+  }
+  @keyframes lf-beam-h { to { transform: translateX(calc(100vw + 60vw)); } }
+  @keyframes lf-beam-v { to { transform: translateY(calc(100vh + 52vh)); } }
+  @keyframes lf-pulse  {
+    0%, 100% { transform: scale(.4); opacity: .25; }
+    50%       { transform: scale(1);  opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bg-layer * { animation: none !important; }
+  }
+  ```
+
+- [ ] **Commit:**
+  ```bash
+  git add src/app/shared/components/background-layer/ src/styles.scss
+  git commit -m "feat(fase3b): BackgroundLayerComponent com variantes Aurora, Grid, Network, Flow"
+  ```
+
+---
+
+### Task 10: Login com Network background + glassmorphism
+
+**Files:**
+- Modify: `src/app/features/auth/login/login.component.ts`
+
+- [ ] **Ler `login.component.ts`** inteiro para entender o template atual.
+
+- [ ] **Adicionar `BackgroundLayerComponent` nos imports** do `LoginComponent`.
+
+- [ ] **Adicionar `<app-bg-layer variant="network">` como primeiro elemento** do template, antes do card de login. O card de login deve ter `position: relative; z-index: 1` para ficar sobre o fundo.
+
+- [ ] **Aplicar glassmorphism no card de login** — encontrar o elemento raiz do card de login no template e adicionar a classe `glass-card`, ou inlinear no SCSS existente do componente:
+  ```scss
+  // No scss do login:
+  .auth-shell {
+    min-height: 100vh;
+    background: var(--lf-bg); // fundo escuro — o canvas fica embaixo
+    position: relative; // para o bg-layer ficar fixed atrás
+  }
+  .auth-card {
+    background: rgba(16, 26, 46, 0.55) !important;
+    border: 1px solid var(--lf-line) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 18px 50px rgba(3, 8, 20, 0.45) !important;
+    // Cores de texto adaptadas para fundo escuro:
+    h1, .logo-name { color: var(--lf-ink) !important; }
+    p, .auth-header p { color: var(--lf-muted) !important; }
+  }
+  // Input fields: borda clara sobre fundo escuro
+  ::ng-deep .mat-mdc-outlined-field .mdc-notched-outline__leading,
+  ::ng-deep .mat-mdc-outlined-field .mdc-notched-outline__notch,
+  ::ng-deep .mat-mdc-outlined-field .mdc-notched-outline__trailing {
+    border-color: var(--lf-line) !important;
+  }
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background: rgba(255,255,255,0.04) !important;
+  }
+  ::ng-deep .mat-mdc-form-field-infix input {
+    color: var(--lf-ink) !important;
+  }
+  ```
+
+- [ ] **Adicionar frase de posicionamento** abaixo do card (ajustar no template):
+  ```html
+  <!-- Abaixo do auth-card, ainda dentro do auth-shell: -->
+  <p class="login-tagline">
+    Monitoramento inteligente de licitações públicas
+  </p>
+  ```
+  ```scss
+  .login-tagline {
+    position: relative; z-index: 1;
+    font-size: 13px; color: var(--lf-muted);
+    margin-top: var(--spacing-lg); text-align: center;
+    letter-spacing: 0.02em;
+  }
+  ```
+
+- [ ] **Commit:**
+  ```bash
+  git add src/app/features/auth/login/login.component.ts
+  git commit -m "feat(fase3b): login com Network background e glassmorphism"
+  ```
+
+---
+
+### Task 11: Leads — Aurora background + donut score + pulse em leads novos
+
+**Files:**
+- Modify: `src/app/features/leads/leads.component.ts`
+- Modify: `src/app/features/leads/leads.component.html`
+- Modify: `src/app/features/leads/leads.component.scss`
+
+- [ ] **Adicionar Aurora ao layout de Leads.** Ler `leads.component.ts` e adicionar `BackgroundLayerComponent` nos imports. No template, adicionar como primeiro elemento:
+  ```html
+  <app-bg-layer variant="aurora" style="opacity: 0.4"></app-bg-layer>
+  ```
+  O conteúdo existente já deve ter `position: relative; z-index: 1` — verificar e adicionar se necessário na classe `.leads-shell` ou equivalente do SCSS.
+
+- [ ] **Substituir score numérico por donut SVG.** No template, localizar onde o score aparece nos cards de lead (provavelmente `{{ lead.leadScore }}`). Substituir por:
+  ```html
+  <!-- Score donut — vai no topo do card -->
+  <svg class="score-donut"
+       width="44" height="44" viewBox="0 0 44 44"
+       [attr.aria-label]="'Score ' + lead.leadScore">
+    <!-- trilha -->
+    <circle cx="22" cy="22" r="16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3.5"/>
+    <!-- arco colorido — stroke-dasharray = circunferência * (score/100) -->
+    <circle cx="22" cy="22" r="16" fill="none"
+      [attr.stroke]="lead.leadScore >= 70 ? 'var(--score-hot)' : lead.leadScore >= 40 ? 'var(--status-pendente)' : 'var(--color-info)'"
+      stroke-width="3.5"
+      stroke-linecap="round"
+      [attr.stroke-dasharray]="(lead.leadScore / 100 * 100.53) + ' 100.53'"
+      stroke-dashoffset="25.13"
+      transform="rotate(-90 22 22)"/>
+    <!-- valor central -->
+    <text x="22" y="27" text-anchor="middle"
+      [attr.fill]="lead.leadScore >= 70 ? 'var(--score-hot)' : lead.leadScore >= 40 ? 'var(--status-pendente)' : 'var(--color-info)'"
+      font-size="11" font-weight="700" font-family="var(--font-primary)">
+      {{ lead.leadScore }}
+    </text>
+  </svg>
+  ```
+
+  Adicionar estilo em `leads.component.scss`:
+  ```scss
+  .score-donut {
+    flex-shrink: 0;
+    circle { transition: stroke-dasharray var(--transition-md); }
+  }
+  ```
+
+- [ ] **Pulse em leads novos** (status `NOVO`). No card do lead, adicionar um ponto pulsante quando `lead.status === 'NOVO'`:
+  ```html
+  @if (lead.status === 'NOVO') {
+    <span class="lead-novo-pulse" aria-hidden="true"></span>
+  }
+  ```
+  ```scss
+  .lead-novo-pulse {
+    position: absolute; top: 10px; right: 10px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--brand-primary);
+    &::after {
+      content: '';
+      position: absolute; inset: -4px;
+      border-radius: 50%; border: 2px solid var(--brand-primary);
+      opacity: 0;
+      animation: lf-novo-ring 1.8s ease-out infinite;
+    }
+  }
+  @keyframes lf-novo-ring {
+    0%   { transform: scale(.6); opacity: .8; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lead-novo-pulse::after { animation: none; }
+  }
+  ```
+
+- [ ] **Commit:**
+  ```bash
+  git add src/app/features/leads/
+  git commit -m "feat(fase3b): Leads com Aurora, donut score SVG e pulse em leads novos"
+  ```
+
+---
+
+### Task 12: Pipeline — Grid background + totais de coluna + score bar + drop flash dourado
+
+**Files:**
+- Modify: `src/app/features/pipeline/pipeline.component.ts`
+- Modify: `src/app/features/pipeline/pipeline.component.html`
+- Modify: `src/app/features/pipeline/pipeline.component.scss`
+
+- [ ] **Adicionar Grid ao Pipeline.** Ler `pipeline.component.ts`, adicionar `BackgroundLayerComponent`. No template, adicionar como primeiro filho do `.pipeline-shell`:
+  ```html
+  <app-bg-layer variant="grid"></app-bg-layer>
+  ```
+  Garantir que `.pipeline-shell` e `.board` tenham `position: relative; z-index: 1`.
+
+- [ ] **Somatório de R$ por coluna.** Ler `pipeline.component.ts` para ver como cada coluna tem a lista de leads/cards. Adicionar computed `colTotal(col)`:
+  ```typescript
+  colTotalValue(leads: Lead[]): number {
+    return leads.reduce((sum, l) => sum + (l.valorEstimado ?? 0), 0);
+  }
+  formatMillion(val: number): string {
+    if (val >= 1_000_000) return `R$ ${(val / 1_000_000).toFixed(1)}M`;
+    if (val >= 1_000)     return `R$ ${(val / 1_000).toFixed(0)}K`;
+    return val > 0 ? `R$ ${val}` : '';
+  }
+  ```
+
+  No template, no cabeçalho de cada coluna (`col-header`), adicionar:
+  ```html
+  <div class="col-header">
+    <mat-icon class="col-icon" aria-hidden="true">{{ col.icon }}</mat-icon>
+    <span class="col-label">{{ col.label }}</span>
+    <span class="col-count" aria-label="{{ col.leads.length }} leads">{{ col.leads.length }}</span>
+    @if (colTotalValue(col.leads) > 0) {
+      <span class="col-total" aria-label="Total {{ formatMillion(colTotalValue(col.leads)) }}">
+        {{ formatMillion(colTotalValue(col.leads)) }}
+      </span>
+    }
+  </div>
+  ```
+
+  Adicionar estilo:
+  ```scss
+  .col-total {
+    margin-left: auto; font-size: 11px; font-weight: 700;
+    color: var(--brand-primary); opacity: 0.8; white-space: nowrap;
+  }
+  ```
+
+- [ ] **Barra lateral de score nos cards.** No SCSS do `.kcard`, adicionar barra colorida à esquerda via `border-left` dinâmico. No template, adicionar `[style.--score-color]` no card:
+  ```html
+  <div class="kcard"
+       [style.--score-color]="lead.leadScore >= 70 ? 'var(--score-hot)' : lead.leadScore >= 40 ? 'var(--status-pendente)' : 'var(--color-info)'"
+       ...>
+  ```
+  No SCSS:
+  ```scss
+  .kcard {
+    // dentro do seletor existente:
+    border-left: 3px solid var(--score-color, var(--border));
+  }
+  ```
+
+- [ ] **Flash dourado no drop.** No SCSS, adicionar keyframe que é acionado via classe CSS aplicada por um breve timeout após o drop:
+  ```scss
+  @keyframes lf-drop-flash {
+    0%   { box-shadow: 0 0 0 0 rgba(240,180,41,0); }
+    30%  { box-shadow: 0 0 0 6px rgba(240,180,41,0.5); }
+    100% { box-shadow: 0 0 0 0 rgba(240,180,41,0); }
+  }
+  .kcard.just-dropped {
+    animation: lf-drop-flash 600ms cubic-bezier(0.2,0,0,1) forwards;
+  }
+  ```
+  No `pipeline.component.ts`, no método `dropQual()` (ou equivalente), após mover o card, marcar o lead como `just-dropped` brevemente:
+  ```typescript
+  dropQual(event: CdkDragDrop<Lead[]>): void {
+    // código existente de mover...
+    // após mover:
+    this.justDroppedId.set(lead.uuid);
+    setTimeout(() => this.justDroppedId.set(null), 700);
+  }
+  ```
+  Adicionar `justDroppedId = signal<string | null>(null)` e no template:
+  ```html
+  <div class="kcard" [class.just-dropped]="justDroppedId() === lead.uuid" ...>
+  ```
+
+- [ ] **Commit:**
+  ```bash
+  git add src/app/features/pipeline/
+  git commit -m "feat(fase3b): Pipeline com Grid, totais de coluna, score bar, drop flash"
+  ```
+
+---
+
+### Task 13: Editais — Aurora + cabeçalho-documento + timeline PNCP
+
+**Files:**
+- Modify: `src/app/features/editais/editais-list/editais-list.component.ts`
+- Modify: `src/app/features/editais/edital-details/edital-details.component.ts`
+- Modify: `src/app/features/editais/edital-details/edital-details.component.html`
+- Modify: `src/app/features/editais/edital-details/edital-details.component.scss`
+
+- [ ] **Aurora na lista de editais.** Ler `editais-list.component.ts`. Adicionar `BackgroundLayerComponent` nos imports e `<app-bg-layer variant="aurora" style="opacity:0.35">` como primeiro filho do template (mesma abordagem das tasks anteriores).
+
+- [ ] **Ler `edital-details.component.html`** e `edital-details.component.ts` inteiros para entender o modelo de dados do `EditalResponse` (campos: número PNCP, modalidade, datas de publicação/abertura/encerramento).
+
+- [ ] **Adicionar cabeçalho-documento no detalhe do edital.** Logo após o `<header>` ou título principal existente, inserir:
+  ```html
+  <div class="edital-doc-header">
+    <!-- Faixa de número PNCP em fonte mono -->
+    <div class="edital-pncp-strip">
+      <span class="edital-pncp-label">Controle PNCP</span>
+      <code class="edital-pncp-num">{{ edital()?.numeroPncp ?? edital()?.numero }}</code>
+      <span class="edital-modalidade-seal">{{ edital()?.modalidade }}</span>
+    </div>
+
+    <!-- Timeline horizontal: publicação → abertura → encerramento -->
+    @if (edital()?.dataPublicacao || edital()?.dataAbertura || edital()?.dataEncerramentoPropostas) {
+      <div class="edital-timeline" role="list" aria-label="Cronograma do edital">
+        <div class="etl-track">
+          @if (edital()?.dataPublicacao) {
+            <div class="etl-step" [class.etl-past]="isPast(edital()!.dataPublicacao!)" role="listitem">
+              <div class="etl-dot"></div>
+              <div class="etl-label">Publicação</div>
+              <div class="etl-date">{{ edital()!.dataPublicacao! | date:'dd/MM/yy' }}</div>
+            </div>
+          }
+          @if (edital()?.dataAbertura) {
+            <div class="etl-line"></div>
+            <div class="etl-step" [class.etl-past]="isPast(edital()!.dataAbertura!)"
+                 [class.etl-today]="isToday(edital()!.dataAbertura!)" role="listitem">
+              <div class="etl-dot"></div>
+              <div class="etl-label">Abertura</div>
+              <div class="etl-date">{{ edital()!.dataAbertura! | date:'dd/MM/yy' }}</div>
+            </div>
+          }
+          @if (edital()?.dataEncerramentoPropostas) {
+            <div class="etl-line"></div>
+            <div class="etl-step" [class.etl-past]="isPast(edital()!.dataEncerramentoPropostas!)"
+                 [class.etl-today]="isToday(edital()!.dataEncerramentoPropostas!)" role="listitem">
+              <div class="etl-dot"></div>
+              <div class="etl-label">Encerramento</div>
+              <div class="etl-date">{{ edital()!.dataEncerramentoPropostas! | date:'dd/MM/yy' }}</div>
+            </div>
+          }
+          <!-- Marcador "hoje" se estiver entre datas -->
+          <div class="etl-today-marker" aria-label="Hoje" title="Hoje"
+               [style.left]="getTodayPosition() + '%'">
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  ```
+
+- [ ] **Adicionar métodos auxiliares em `edital-details.component.ts`**:
+  ```typescript
+  isPast(dateStr: string): boolean {
+    return new Date(dateStr) < new Date();
+  }
+  isToday(dateStr: string): boolean {
+    const d = new Date(dateStr);
+    const today = new Date();
+    return d.getFullYear() === today.getFullYear()
+        && d.getMonth() === today.getMonth()
+        && d.getDate() === today.getDate();
+  }
+  getTodayPosition(): number {
+    const e = this.edital();
+    if (!e?.dataPublicacao || !e?.dataEncerramentoPropostas) return -1;
+    const start = new Date(e.dataPublicacao).getTime();
+    const end   = new Date(e.dataEncerramentoPropostas).getTime();
+    const now   = Date.now();
+    if (now <= start || now >= end) return -1;
+    return Math.round(((now - start) / (end - start)) * 100);
+  }
+  ```
+  Adicionar `DatePipe` nos imports do componente se ainda não estiver (ou usar `date` pipe no template via `| date`).
+
+- [ ] **Adicionar estilos em `edital-details.component.scss`**:
+  ```scss
+  .edital-doc-header {
+    display: flex; flex-direction: column; gap: var(--spacing-md);
+    padding: var(--spacing-md) 0 var(--spacing-lg);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--spacing-lg);
+  }
+  .edital-pncp-strip {
+    display: flex; align-items: center; gap: var(--spacing-md); flex-wrap: wrap;
+  }
+  .edital-pncp-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--text-muted);
+  }
+  .edital-pncp-num {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 13px; font-weight: 700; color: var(--text-primary);
+    background: var(--content-bg); padding: 2px 8px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .edital-modalidade-seal {
+    background: color-mix(in srgb, var(--brand-primary) 12%, transparent);
+    color: var(--brand-primary); font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: var(--radius-full);
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+
+  /* Timeline */
+  .edital-timeline { padding: var(--spacing-xs) 0; overflow: hidden; }
+  .etl-track {
+    display: flex; align-items: flex-start; gap: 0;
+    position: relative; padding-top: 20px;
+  }
+  .etl-step {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    min-width: 80px;
+  }
+  .etl-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--card-bg);
+    transition: all var(--transition);
+    .etl-past &   { background: var(--brand-primary); border-color: var(--brand-primary); }
+    .etl-today & { background: var(--status-pendente); border-color: var(--status-pendente);
+                   box-shadow: 0 0 0 4px rgba(245,158,11,.2); }
+  }
+  .etl-label {
+    font-size: 10px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: .04em; white-space: nowrap;
+  }
+  .etl-date {
+    font-size: 12px; font-weight: 600; color: var(--text-primary);
+  }
+  .etl-line {
+    flex: 1; height: 2px; background: var(--border); margin-top: 5px; min-width: 24px;
+  }
+  .etl-today-marker {
+    position: absolute; top: 0; width: 2px; height: 100%;
+    background: var(--status-pendente);
+    &::before {
+      content: 'Hoje'; position: absolute; top: -18px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px; font-weight: 700; color: var(--status-pendente);
+      white-space: nowrap;
+    }
+    &[style*="-1"] { display: none; } // fora do intervalo
+  }
+  ```
+
+- [ ] **Verificar campos do `EditalResponse` no model** — ler `src/app/core/models/edital.model.ts` e confirmar os nomes exatos dos campos de data e número PNCP. Ajustar o template para usar os nomes corretos (ex: `dataPublicacao`, `dataAberturaPropostas`, `dataEncerramentoPropostas`, `numeroPncp`, `modalidade`).
+
+- [ ] **Build:**
+  ```bash
+  npx ng build --configuration production 2>&1 | tail -5
+  ```
+
+- [ ] **Commit:**
+  ```bash
+  git add src/app/features/editais/
+  git commit -m "feat(fase3b): Editais com Aurora, cabeçalho-documento e timeline PNCP"
+  ```
+
+---
+
+### Task 13b: Crossfade 400ms entre backgrounds na troca de rota
+
+**Files:**
+- Modify: `src/app/features/layout/main-layout/main-layout.component.ts`
+- Modify: `src/styles.scss`
+
+- [ ] **Adicionar transição CSS suave no `bg-layer`** em `styles.scss`:
+  ```scss
+  .bg-layer {
+    transition: opacity 400ms ease;
+    &.fade-out { opacity: 0; }
+    &.fade-in  { opacity: 1; }
+  }
+  ```
+
+- [ ] **No `main-layout.component.ts`**, ao detectar mudança de rota, fazer crossfade entre os backgrounds. A lógica é: o background muda conforme a rota ativa. Usar `Router.events` para detectar `NavigationStart`:
+  ```typescript
+  // O main-layout já tem a estrutura de nav — não precisa gerenciar os bg-layers diretamente
+  // já que cada tela embute seu próprio <app-bg-layer>
+  // O crossfade acontece naturalmente pela animação de rota (fadeSlideIn da Fase 4)
+  // Verificar se a animação de rota já cobre o crossfade; se sim, esta task está done.
+  // Se não, adicionar opacity transition na .page-content:
+  ```
+  ```scss
+  // Em main-layout.component.ts (inline styles):
+  .page-content {
+    // adicionar dentro do seletor existente:
+    transition: opacity 200ms ease;
+  }
+  ```
+
+- [ ] **Commit:**
+  ```bash
+  git add src/app/features/layout/ src/styles.scss
+  git commit -m "feat(fase3b): crossfade suave na transição de background por rota"
+  ```
+
+---
+
+## FASE 4 — Animações com propósito (Task 14-15)
+
+> **Nota:** As animações de background já foram adicionadas na Fase 3b. Esta fase cobre Angular Animations (stagger, expand/collapse) e micro-interações adicionais.
+
+---
+
+### Task 14: Angular Animations — rota + stagger de lista
 
 **Files:**
 - Modify: `src/app/app.config.ts`
@@ -831,7 +1594,7 @@ Global classes: .status-chip(.processado|.pendente|.erro), .score-badge(.hot|.wa
 
 ---
 
-### Task 10: Micro-interações nos cards do Pipeline + route transition
+### Task 15: Micro-interações nos cards do Pipeline + route transition
 
 **Files:**
 - Modify: `src/app/features/layout/main-layout/main-layout.component.ts`
@@ -898,11 +1661,11 @@ Global classes: .status-chip(.processado|.pendente|.erro), .score-badge(.hot|.wa
 
 ---
 
-## FASE 5 — Acessibilidade WCAG 2.1 AA (Task 11-12)
+## FASE 5 — Acessibilidade WCAG 2.1 AA (Task 16-17)
 
 ---
 
-### Task 11: ARIA landmarks, headings e acessibilidade básica
+### Task 16: ARIA landmarks, headings e acessibilidade básica
 
 **Files:**
 - Modify: `src/app/features/leads/leads.component.html`
@@ -1027,7 +1790,7 @@ Global classes: .status-chip(.processado|.pendente|.erro), .score-badge(.hot|.wa
 
 ---
 
-### Task 12: Focus management + `.sr-only` + `focus-visible`
+### Task 17: Focus management + `.sr-only` + `focus-visible`
 
 **Files:**
 - Modify: `src/styles.scss`
@@ -1080,11 +1843,11 @@ Global classes: .status-chip(.processado|.pendente|.erro), .score-badge(.hot|.wa
 
 ---
 
-## FASE 6 — Verificação final (Task 13)
+## FASE 6 — Verificação final (Task 18)
 
 ---
 
-### Task 13: Checklist de verificação e resumo final
+### Task 18: Checklist de verificação e resumo final
 
 **Files:** Nenhum — verificação manual.
 
