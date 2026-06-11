@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { listStagger, fadeSlideIn } from '../../shared/animations/app-animations';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
@@ -60,6 +61,7 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
   ],
   templateUrl: './leads.component.html',
   styleUrl: './leads.component.scss',
+  animations: [listStagger, fadeSlideIn],
 })
 export class LeadsComponent implements OnInit {
   private leadService   = inject(LeadService);

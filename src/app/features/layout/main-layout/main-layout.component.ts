@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { routeFade } from '../../../shared/animations/app-animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -38,6 +39,7 @@ interface NavSection {
     MatTooltipModule,
     MatBadgeModule,
   ],
+  animations: [routeFade],
   template: `
     <div class="app-shell" [class.collapsed]="collapsed()">
 
@@ -171,8 +173,8 @@ interface NavSection {
         </header>
 
         <!-- Page content -->
-        <main class="page-content">
-          <router-outlet />
+        <main class="page-content" [@routeFade]="outlet.isActivated ? outlet.activatedRoute : ''">
+          <router-outlet #outlet="outlet" />
         </main>
       </div>
     </div>

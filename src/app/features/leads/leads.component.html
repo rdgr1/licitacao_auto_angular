@@ -425,9 +425,9 @@
 
   <!-- Grade de cards -->
   @if (!loading() && !apiError() && filteredLeads().length > 0) {
-    <div class="leads-grid">
+    <div class="leads-grid" [@listStagger]="filteredLeads().length">
       @for (lead of filteredLeads(); track lead.uuid) {
-        <div class="lead-card status-border-{{ lead.status }}" (click)="verDetalhe(lead)">
+        <div class="lead-card status-border-{{ lead.status }}" (click)="verDetalhe(lead)" [@fadeSlideIn]>
 
           @if (lead.status === 'NOVO') {
             <span class="lead-novo-pulse" aria-hidden="true"></span>

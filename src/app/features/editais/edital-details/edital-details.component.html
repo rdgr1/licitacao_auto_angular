@@ -177,7 +177,7 @@
               <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
             </button>
             @if (itensSection().open) {
-              <div class="sec-body" role="region" aria-label="Itens do edital">
+              <div class="sec-body" role="region" aria-label="Itens do edital" [@expandCollapse]>
                 @if (itensSection().state === 'loading') {
                   <div class="sec-loading">
                     <div class="skel skel-row"></div>
@@ -275,7 +275,7 @@
               <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
             </button>
             @if (arquivosSection().open) {
-              <div class="sec-body" role="region" aria-label="Arquivos do edital">
+              <div class="sec-body" role="region" aria-label="Arquivos do edital" [@expandCollapse]>
                 @if (arquivosSection().state === 'loading') { <div class="sec-loading"><div class="skel skel-row"></div><div class="skel skel-row"></div></div> }
                 @if (arquivosSection().state === 'empty')   { <div class="sec-empty"><mat-icon aria-hidden="true">folder_off</mat-icon><span>Nenhum arquivo encontrado</span></div> }
                 @if (arquivosSection().state === 'error')   { <div class="sec-error"><mat-icon aria-hidden="true">error_outline</mat-icon><span>Erro ao carregar</span><button class="retry-btn" type="button" (click)="retryArquivos()">Tentar novamente</button></div> }
@@ -318,7 +318,7 @@
               <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
             </button>
             @if (atasSection().open) {
-              <div class="sec-body" role="region" aria-label="Atas de registro de preço">
+              <div class="sec-body" role="region" aria-label="Atas de registro de preço" [@expandCollapse]>
                 @if (atasSection().state === 'loading') { <div class="sec-loading"><div class="skel skel-row"></div><div class="skel skel-row"></div></div> }
                 @if (atasSection().state === 'empty')   { <div class="sec-empty"><mat-icon aria-hidden="true">assignment_late</mat-icon><span>Nenhuma ARP encontrada</span></div> }
                 @if (atasSection().state === 'error')   { <div class="sec-error"><mat-icon aria-hidden="true">error_outline</mat-icon><span>Erro ao carregar</span><button class="retry-btn" type="button" (click)="retryAtas()">Tentar novamente</button></div> }
@@ -374,7 +374,7 @@
               <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
             </button>
             @if (contratosSection().open) {
-              <div class="sec-body" role="region" aria-label="Contratos e empenhos">
+              <div class="sec-body" role="region" aria-label="Contratos e empenhos" [@expandCollapse]>
                 @if (contratosSection().state === 'loading') { <div class="sec-loading"><div class="skel skel-row"></div><div class="skel skel-row"></div></div> }
                 @if (contratosSection().state === 'empty')   { <div class="sec-empty"><mat-icon aria-hidden="true">receipt</mat-icon><span>Nenhum contrato encontrado</span></div> }
                 @if (contratosSection().state === 'error')   { <div class="sec-error"><mat-icon aria-hidden="true">error_outline</mat-icon><span>Erro ao carregar</span><button class="retry-btn" type="button" (click)="retryContratos()">Tentar novamente</button></div> }
@@ -437,7 +437,7 @@
               <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
             </button>
             @if (historicoSection().open) {
-              <div class="sec-body" role="region" aria-label="Histórico do edital">
+              <div class="sec-body" role="region" aria-label="Histórico do edital" [@expandCollapse]>
                 @if (historicoSection().state === 'loading') { <div class="sec-loading"><div class="skel skel-row"></div><div class="skel skel-row"></div></div> }
                 @if (historicoSection().state === 'empty')   { <div class="sec-empty"><mat-icon aria-hidden="true">history_toggle_off</mat-icon><span>Nenhum evento encontrado</span></div> }
                 @if (historicoSection().state === 'error')   { <div class="sec-error"><mat-icon aria-hidden="true">error_outline</mat-icon><span>Erro ao carregar</span><button class="retry-btn" type="button" (click)="retryHistorico()">Tentar novamente</button></div> }

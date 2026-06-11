@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { expandCollapse } from '../../../shared/animations/app-animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,6 +32,7 @@ const mkSection = <T>(): Section<T> => ({ open: false, state: 'idle', data: [] }
   ],
   templateUrl: './edital-details.component.html',
   styleUrl:    './edital-details.component.scss',
+  animations: [expandCollapse],
 })
 export class EditalDetailsComponent implements OnInit {
   private route          = inject(ActivatedRoute);
