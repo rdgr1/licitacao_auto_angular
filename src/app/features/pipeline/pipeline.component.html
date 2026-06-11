@@ -20,19 +20,19 @@
     <div class="header-right">
       <div class="pipeline-toggle">
         <button class="toggle-btn" [class.active]="active() === 'qual'" (click)="active.set('qual')">
-          <mat-icon>filter_alt</mat-icon>
+          <mat-icon aria-hidden="true">filter_alt</mat-icon>
           Qualificação
-          <span class="toggle-count" [class.green]="active() === 'qual'">{{ qualTotal() }}</span>
+          <span class="toggle-count" [class.green]="active() === 'qual'" aria-hidden="true">{{ qualTotal() }}</span>
         </button>
         <button class="toggle-btn" [class.active]="active() === 'proc'" (click)="active.set('proc')">
-          <mat-icon>account_tree</mat-icon>
+          <mat-icon aria-hidden="true">account_tree</mat-icon>
           Processo Licitatório
-          <span class="toggle-count" [class.green]="active() === 'proc'">{{ procTotal() }}</span>
+          <span class="toggle-count" [class.green]="active() === 'proc'" aria-hidden="true">{{ procTotal() }}</span>
         </button>
       </div>
-      <button mat-icon-button matTooltip="Recarregar"
+      <button mat-icon-button matTooltip="Recarregar" aria-label="Recarregar pipeline"
               (click)="active() === 'qual' ? loadLeads() : loadProcessos()">
-        <mat-icon>refresh</mat-icon>
+        <mat-icon aria-hidden="true">refresh</mat-icon>
       </button>
     </div>
   </div>
@@ -64,7 +64,7 @@
 
             <!-- Column header -->
             <div class="col-header">
-              <mat-icon class="col-icon">{{ col.icon }}</mat-icon>
+              <mat-icon class="col-icon" aria-hidden="true">{{ col.icon }}</mat-icon>
               <span class="col-label">{{ col.label }}</span>
               <span class="col-count">{{ col.leads.length }}</span>
               @if (colTotalValue(col.leads) > 0) {
@@ -119,7 +119,7 @@
                           [matMenuTriggerFor]="moveMenu"
                           aria-label="Mover lead para outra coluna"
                           (click)="$event.stopPropagation()">
-                    <mat-icon>more_vert</mat-icon>
+                    <mat-icon aria-hidden="true">more_vert</mat-icon>
                   </button>
                   <mat-menu #moveMenu="matMenu">
                     @for (destCol of qualColumns; track destCol.id) {
@@ -135,7 +135,7 @@
 
               @if (col.leads.length === 0) {
                 <div class="col-empty">
-                  <mat-icon>{{ col.icon }}</mat-icon>
+                  <mat-icon aria-hidden="true">{{ col.icon }}</mat-icon>
                   <span>Vazio</span>
                 </div>
               }
@@ -173,7 +173,7 @@
                [class.col-final]="col.key === 'GANHO' || col.key === 'PERDIDO'">
 
             <div class="col-header">
-              <mat-icon class="col-icon">{{ col.icon }}</mat-icon>
+              <mat-icon class="col-icon" aria-hidden="true">{{ col.icon }}</mat-icon>
               <span class="col-label">{{ col.label }}</span>
               <span class="col-count">{{ col.processos.length }}</span>
               @if (colTotalValue(col.processos) > 0) {
@@ -220,7 +220,7 @@
 
               @if (col.processos.length === 0) {
                 <div class="col-empty">
-                  <mat-icon>{{ col.icon }}</mat-icon>
+                  <mat-icon aria-hidden="true">{{ col.icon }}</mat-icon>
                   <span>Vazio</span>
                 </div>
               }

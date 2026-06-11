@@ -9,7 +9,7 @@
     </div>
     <button class="btn-historico" [class.active]="historicoAtivo()" (click)="toggleHistorico()"
             matTooltip="Rastreabilidade de coletas">
-      <mat-icon>{{ historicoAtivo() ? 'query_stats' : 'history' }}</mat-icon>
+      <mat-icon aria-hidden="true">{{ historicoAtivo() ? 'query_stats' : 'history' }}</mat-icon>
       Rastreabilidade
     </button>
   </div>
@@ -40,7 +40,7 @@
           </div>
         } @else {
           <div class="busca-trigger-info">
-            <mat-icon>manage_search</mat-icon>
+            <mat-icon aria-hidden="true">manage_search</mat-icon>
             <div>
               <span class="trigger-title">Buscar leads</span>
               <span class="trigger-sub">Colete matérias do DODF, DOU ou filtre por PNCP</span>
@@ -48,7 +48,7 @@
           </div>
         }
         <button class="btn-buscar-leads" (click)="buscaAtiva.set(true)" [disabled]="coletaAndamento.ativa()">
-          <mat-icon>{{ coletaAndamento.ativa() ? 'hourglass_empty' : 'search' }}</mat-icon>
+          <mat-icon aria-hidden="true">{{ coletaAndamento.ativa() ? 'hourglass_empty' : 'search' }}</mat-icon>
           {{ coletaAndamento.ativa() ? 'Aguarde...' : 'Buscar leads' }}
         </button>
       </div>
@@ -64,9 +64,9 @@
             <button class="fonte-chip pop-in" [style.animation-delay]="(i * 80) + 'ms'"
                     [class.active]="isFonteSelected(f.key)" (click)="toggleFonte(f.key)">
               <div class="fonte-check">
-                <mat-icon>{{ isFonteSelected(f.key) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+                <mat-icon aria-hidden="true">{{ isFonteSelected(f.key) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
               </div>
-              <mat-icon class="fonte-icon">{{ f.icon }}</mat-icon>
+              <mat-icon class="fonte-icon" aria-hidden="true">{{ f.icon }}</mat-icon>
               <div class="fonte-info">
                 <span class="fonte-key">{{ f.label }}</span>
                 <span class="fonte-sub">{{ f.sublabel }}</span>
@@ -77,8 +77,8 @@
             </button>
           }
         </div>
-        <button class="btn-fechar-busca" (click)="fecharBusca()" matTooltip="Fechar">
-          <mat-icon>close</mat-icon>
+        <button class="btn-fechar-busca" (click)="fecharBusca()" matTooltip="Fechar" aria-label="Fechar painel de busca">
+          <mat-icon aria-hidden="true">close</mat-icon>
         </button>
       </div>
 
@@ -90,10 +90,10 @@
 
           <div class="date-mode-toggle">
             <button class="mode-btn" [class.active]="dateMode() === 'single'" (click)="setDateMode('single')">
-              <mat-icon>event</mat-icon>Dia específico
+              <mat-icon aria-hidden="true">event</mat-icon>Dia específico
             </button>
             <button class="mode-btn" [class.active]="dateMode() === 'range'" (click)="setDateMode('range')">
-              <mat-icon>date_range</mat-icon>Período
+              <mat-icon aria-hidden="true">date_range</mat-icon>Período
             </button>
           </div>
 
@@ -127,7 +127,7 @@
             @if (hasCollectableFonte()) {
               <button class="btn-coletar" (click)="coletar()" [disabled]="coletaAndamento.ativa() || !canSubmit()">
                 <span class="btn-coletar-inner">
-                  @if (coletaAndamento.ativa()) { <mat-spinner diameter="15" /> } @else { <mat-icon>download</mat-icon> }
+                  @if (coletaAndamento.ativa()) { <mat-spinner diameter="15" /> } @else { <mat-icon aria-hidden="true">download</mat-icon> }
                   {{ coletaAndamento.ativa() ? coletaProgress() : 'Coletar agora' }}
                 </span>
               </button>
@@ -194,12 +194,12 @@
 
       <div class="historico-head">
         <div class="historico-head-left">
-          <mat-icon>query_stats</mat-icon>
+          <mat-icon aria-hidden="true">query_stats</mat-icon>
           <span class="historico-titulo">Rastreabilidade de Coletas</span>
           <span class="historico-sub">{{ historicoTotal() }} sessão(ões) registrada(s)</span>
         </div>
-        <button class="btn-historico-refresh" (click)="carregarHistorico()" matTooltip="Recarregar">
-          <mat-icon>refresh</mat-icon>
+        <button class="btn-historico-refresh" (click)="carregarHistorico()" matTooltip="Recarregar" aria-label="Recarregar histórico">
+          <mat-icon aria-hidden="true">refresh</mat-icon>
         </button>
       </div>
 
@@ -259,7 +259,7 @@
         </div>
       } @else if (historicoEntradas().length === 0) {
         <div class="historico-vazio">
-          <mat-icon>history_toggle_off</mat-icon>
+          <mat-icon aria-hidden="true">history_toggle_off</mat-icon>
           <span>Nenhuma coleta registrada ainda. Colete matérias para ver o histórico aqui.</span>
         </div>
       } @else {
@@ -317,7 +317,7 @@
               @if (isHistoricoExpandido(entry.logId + '')) {
                 <div class="hist-rejected-list">
                   <div class="rejected-header">
-                    <mat-icon>block</mat-icon>
+                    <mat-icon aria-hidden="true">block</mat-icon>
                     {{ entry.rejeitados }} lead(s) rejeitado(s) nesta sessão — use para ajustar seus critérios
                   </div>
                   @for (lead of entry.leadsRejeitados; track lead.uuid) {
@@ -339,7 +339,7 @@
         </div>
 
         <p class="historico-note">
-          <mat-icon>info_outline</mat-icon>
+          <mat-icon aria-hidden="true">info_outline</mat-icon>
           <strong>Encontradas:</strong> total de matérias lidas no diário.
           <strong>Salvas:</strong> passaram pelos seus filtros de palavras-chave.
           <strong>Repetidas:</strong> já estavam no sistema.
@@ -403,7 +403,7 @@
       <h2>Não foi possível carregar os leads</h2>
       <p>Verifique a conexão com o servidor e tente novamente.</p>
       <button mat-flat-button (click)="carregarLeads()">
-        <mat-icon>refresh</mat-icon> Tentar novamente
+        <mat-icon aria-hidden="true">refresh</mat-icon> Tentar novamente
       </button>
     </div>
   }
@@ -416,7 +416,7 @@
         <h2>Nenhum lead com este status</h2>
         <p>Tente outro filtro ou aguarde novas coletas.</p>
         <button mat-stroked-button (click)="setStatusFilter(null, 0)">
-          <mat-icon>filter_list_off</mat-icon> Limpar filtros
+          <mat-icon aria-hidden="true">filter_list_off</mat-icon> Limpar filtros
         </button>
       } @else {
         <h2>Nenhum lead encontrado</h2>
@@ -456,7 +456,7 @@
           <!-- Date + observacao + score donut -->
           <div class="lc-bottom">
             <span class="lc-date">
-              <mat-icon>calendar_today</mat-icon>
+              <mat-icon aria-hidden="true">calendar_today</mat-icon>
               {{ formatDate(lead.dataPublicacao) }}
             </span>
             @if (lead.observacao) {
@@ -485,16 +485,16 @@
           <!-- Actions -->
           <div class="lc-actions" (click)="$event.stopPropagation()">
             <button class="act-btn" matTooltip="Ver detalhes" (click)="verDetalhe(lead)">
-              <mat-icon>open_in_new</mat-icon>
+              <mat-icon aria-hidden="true">open_in_new</mat-icon>
               Detalhes
             </button>
             @if (lead.status === 'QUALIFICADO') {
-              <span class="act-done"><mat-icon>check_circle</mat-icon> Qualificado</span>
+              <span class="act-done"><mat-icon aria-hidden="true">check_circle</mat-icon> Qualificado</span>
             }
             @if (lead.status !== 'DESCARTADO' && lead.status !== 'QUALIFICADO') {
-              <button class="act-btn act-discard" matTooltip="Descartar"
+              <button class="act-btn act-discard" matTooltip="Descartar" aria-label="Descartar lead"
                       (click)="atualizarStatus(lead, 'DESCARTADO', $event)">
-                <mat-icon>block</mat-icon>
+                <mat-icon aria-hidden="true">block</mat-icon>
               </button>
             }
           </div>
