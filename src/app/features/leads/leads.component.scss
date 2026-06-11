@@ -164,10 +164,10 @@
 .btn-coletar {
   display: inline-flex; align-items: center; justify-content: center;
   padding: 8px 20px; border-radius: 8px; border: none;
-  background: #3B82F6; color: #fff; font-size: 13.5px; font-weight: 700;
+  background: #11BF7F; color: #fff; font-size: 13.5px; font-weight: 700;
   font-family: inherit; cursor: pointer; transition: background 150ms, box-shadow 150ms;
-  &:hover:not(:disabled) { background: #2563EB; box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
-  &:disabled { background: #93C5FD; cursor: not-allowed; }
+  &:hover:not(:disabled) { background: #0DA66E; box-shadow: 0 4px 12px rgba(17,191,127,0.3); }
+  &:disabled { background: rgba(17,191,127,0.4); cursor: not-allowed; }
 }
 .btn-coletar-inner {
   display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;

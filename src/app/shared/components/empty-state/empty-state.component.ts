@@ -29,21 +29,21 @@ import { MatButtonModule } from '@angular/material/button';
     }
 
     .empty-icon {
-      font-size: 96px;
-      width: 96px;
-      height: 96px;
-      color: var(--mat-sys-outline);
-      opacity: 0.3;
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #64748B;
+      opacity: 0.4;
     }
 
     h3 {
       margin: 16px 0 8px;
-      color: var(--mat-sys-on-surface);
+      color: #0D1526;
     }
 
     p {
       margin: 0 0 24px;
-      color: var(--mat-sys-on-surface-variant);
+      color: #64748B;
       max-width: 400px;
     }
   `]
