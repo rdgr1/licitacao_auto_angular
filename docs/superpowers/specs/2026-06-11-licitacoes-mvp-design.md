@@ -263,12 +263,70 @@ Salvo via `PATCH /users/me/preferences`.
 
 ---
 
-## 8. Backend — Mudanças necessárias (resumo)
+## 8. Self-service de perfil e recuperação de senha
+
+### 8.1 Edição de perfil (usuário logado)
+
+Tab **Perfil** em Configurações tem dois blocos editáveis:
+
+**Bloco de dados pessoais** (card com `mat-form-field`):
+- Nome de exibição (`input`)
+- Função / cargo (`input`)
+- Empresa (`input`, read-only se vier do tenant)
+- Foto de perfil: botão "Alterar foto" que abre file picker (`<input type="file" accept="image/*">`); preview imediato; upload via `POST /users/me/photo` (multipart); redimensionado para 200x200 no backend
+- Botão "Salvar alterações" (`mat-flat-button` cor primária) — chama `PATCH /users/me`
+- Feedback: `MatSnackBar` "Perfil atualizado" ou mensagem de erro inline
+
+**Bloco de senha** (card separado abaixo):
+- Campo "Senha atual" + "Nova senha" + "Confirmar nova senha"
+- Validação client-side: nova senha ≠ senha atual, confirmação igual, mínimo 8 caracteres
+- Botão "Alterar senha" — chama `PATCH /users/me/password`
+- Campos limpos após sucesso; erro "Senha atual incorreta" exibido inline (não toast)
+
+**Botão "Refazer tour"** — no rodapé do card de dados pessoais, link discreto (`mat-button` sem cor).
+
+### 8.2 Recuperação de senha (fora do app)
+
+**Tela de login** — link "Esqueci minha senha" abaixo do botão de entrar. Abre rota pública `/forgot-password` (mesma estética da tela de login — form centralizado, logo, sem sidebar).
+
+**Rota `/forgot-password`:**
+- Campo e-mail + botão "Enviar link de recuperação"
+- Chama `POST /auth/forgot-password` com `{ email }`
+- Independente do resultado (segurança: não revela se e-mail existe), exibe: "Se esse e-mail estiver cadastrado, você receberá um link em instantes."
+- Link "Voltar ao login"
+
+**Rota pública `/reset-password`:**
+- Recebe `?token=xxx` na URL
+- Dois campos: "Nova senha" + "Confirmar nova senha"
+- Chama `POST /auth/reset-password` com `{ token, newPassword }`
+- Sucesso: redireciona para `/login` com `MatSnackBar` "Senha redefinida com sucesso"
+- Token inválido/expirado: exibe estado de erro com link "Solicitar novo link"
+- Mesma estética de `/forgot-password` — rota pública, sem layout principal
+
+**Guards:** `/forgot-password` e `/reset-password` usam o `guestGuard` existente (redireciona para `/leads` se já logado).
+
+### Backend necessário (self-service)
+
+| Endpoint | Ação |
+|---|---|
+| `PATCH /users/me` | Atualizar nome, função, empresa |
+| `POST /users/me/photo` | Upload de foto (multipart) |
+| `PATCH /users/me/password` | Trocar senha (requer senha atual) |
+| `POST /auth/forgot-password` | Envia e-mail com link de reset |
+| `POST /auth/reset-password` | Valida token e redefine senha |
+
+---
+
+## 9. Backend — Mudanças necessárias (resumo)
 
 | Endpoint | Mudança | Quando |
 |---|---|---|
 | `GET /auth/me` ou login | Retornar `enabledModules`, `tourCompleted` | MVP |
-| `PATCH /users/me` | Aceitar `tourCompleted: boolean` | MVP (tour) |
+| `PATCH /users/me` | Atualizar nome, função, empresa, `tourCompleted` | MVP |
+| `POST /users/me/photo` | Upload de foto de perfil | MVP |
+| `PATCH /users/me/password` | Trocar senha (requer senha atual) | MVP |
+| `POST /auth/forgot-password` | Enviar e-mail de recuperação | MVP |
+| `POST /auth/reset-password` | Validar token e redefinir senha | MVP |
 | `PATCH /users/me/preferences` | Salvar `UserPreferences` | MVP (configurações) |
 | `GET /users/me/preferences` | Retornar preferências salvas | MVP (configurações) |
 | `GET /users/me/sessions` | Listar sessões ativas | Pós-MVP |
@@ -277,12 +335,24 @@ Salvo via `PATCH /users/me/preferences`.
 
 ---
 
-## 9. Ordem de implementação sugerida
+## 10. Rotas públicas novas
+
+```typescript
+{ path: 'forgot-password', canActivate: [guestGuard], loadComponent: () => import('./features/auth/forgot-password/forgot-password.component') },
+{ path: 'reset-password',  canActivate: [guestGuard], loadComponent: () => import('./features/auth/reset-password/reset-password.component') },
+```
+
+Ambas compartilham o estilo da `LoginComponent` existente (form centralizado, logo, fundo escuro).
+
+---
+
+## 11. Ordem de implementação sugerida
 
 1. **Token fix + polimento** — corrigir `--mat-sys-*` em todos os componentes, ajustar fontes e cores inconsistentes (sem risco, máximo impacto visual imediato)
 2. **Navegação modular** — `moduleKey` + `enabledModules` + redirect para `/leads`
-3. **Configurações reescrita** — `MatTabGroup` + tabs de perfil/notificações/busca/sessões
-4. **Multi-coleta paralela** — expandir `ColetaAndamentoService` + refatorar `coletar()`
-5. **Notificações reescrita** — `MatList` + filtros + skeleton + tipo `busca_concluida`
-6. **Tour interativo** — `TourService` + `TourOverlayComponent`
-7. **Padronização de paginação** — `mat-paginator` no Leads
+3. **Auth self-service** — `/forgot-password` + `/reset-password` + link na tela de login
+4. **Configurações reescrita** — `MatTabGroup` + tabs de perfil (com edição + trocar senha) / notificações / busca / sessões
+5. **Multi-coleta paralela** — expandir `ColetaAndamentoService` + refatorar `coletar()`
+6. **Notificações reescrita** — `MatList` + filtros + skeleton + tipo `busca_concluida`
+7. **Tour interativo** — `TourService` + `TourOverlayComponent`
+8. **Padronização de paginação** — `mat-paginator` no Leads
