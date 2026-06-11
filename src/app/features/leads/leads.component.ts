@@ -17,6 +17,7 @@ import { LeadService } from '../../core/services/lead.service';
 import { ColetaService } from '../../core/services/coleta.service';
 import { ColetaAndamentoService } from '../../core/services/coleta-andamento.service';
 import { ToastService } from '../../core/services/toast.service';
+import { NotificacoesService } from '../../core/services/notificacoes.service';
 import { Lead, LeadStatus } from '../../core/models/lead.model';
 import { ColetaLog, ColetaResumo } from '../../core/models/coleta-log.model';
 import { ColetaResultado } from '../../core/models/dodf.model';
@@ -63,6 +64,7 @@ export class LeadsComponent implements OnInit {
   private coletaService = inject(ColetaService);
   private toast         = inject(ToastService);
   private dialog        = inject(MatDialog);
+  private notifSvc      = inject(NotificacoesService);
   readonly coletaAndamento = inject(ColetaAndamentoService);
 
   fontes = FONTES;
@@ -266,6 +268,7 @@ export class LeadsComponent implements OnInit {
     this.coletaResultado.set({ totalMaterias, salvos: totalSalvos, duplicados: 0, data: '' } as any);
 
     if (totalSalvos > 0) {
+      this.notifSvc.emitirBuscaConcluida(totalSalvos, collectableFontes);
       this.toast.success(`${totalSalvos} lead(s) encontrados em ${collectableFontes.length} fonte(s)`);
       this.carregarLeads();
     } else {

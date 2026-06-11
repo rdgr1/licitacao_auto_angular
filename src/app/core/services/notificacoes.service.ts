@@ -48,4 +48,21 @@ export class NotificacoesService {
   clearNovas(): void {
     this._novas.set(0);
   }
+
+  emitirBuscaConcluida(salvos: number, fontes: string[]): void {
+    const evento: NotificacaoEvent = {
+      tipo: 'BUSCA_CONCLUIDA',
+      timestamp: new Date().toISOString(),
+      editalId: 0,
+      numero: '',
+      objeto: `${salvos} lead(s) encontrado(s) em ${fontes.join(', ')}`,
+      leadScore: 0,
+      categoria: '',
+      totalSalvos: salvos,
+      totalFontes: fontes.length,
+      fontesNomes: fontes,
+    };
+    this._stream$.next(evento);
+    this._novas.update(n => n + 1);
+  }
 }

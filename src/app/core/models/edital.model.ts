@@ -115,17 +115,66 @@ export interface RegraAnalise {
 }
 
 export interface ItemEdital {
-  id: number;
   numeroItem: number;
   descricao: string;
   quantidade: number;
   unidadeMedida: string;
   valorUnitarioEstimado: number;
   valorTotal: number;
+  materialOuServico?: string;
+  materialOuServicoNome?: string;
+  criterioJulgamentoNome?: string;
+  situacaoCompraItemNome?: string;
+  tipoBeneficioNome?: string;
+  temResultado?: boolean;
+  orcamentoSigiloso?: boolean;
+  ncmNbsCodigo?: string;
+  ncmNbsDescricao?: string;
+  informacaoComplementar?: string;
 }
 
+/** Documento PNCP (edital, anexo, minuta, retificação) */
+export interface ArquivoEdital {
+  sequencialDocumento?: number;
+  titulo: string;
+  url: string;
+  tipoDocumentoDescricao?: string;
+  dataPublicacaoPncp?: string;
+  descricao?: string;
+}
+
+export interface ContratoEdital {
+  sequencialContrato?: number;
+  numero: string;
+  objeto?: string;
+  valorInicial?: number;
+  dataAssinatura?: string;
+  dataVigenciaInicio?: string;
+  dataVigenciaFim?: string;
+  nomeRazaoSocialFornecedor?: string;
+  numeroCnpjFornecedor?: string;
+  nomeStatusContrato?: string;
+}
+
+export interface AtaRegistroPreco {
+  sequencialAta?: number;
+  numero: string;
+  objeto?: string;
+  valorTotal?: number;
+  dataAssinatura?: string;
+  vigenciaDataInicio?: string;
+  vigenciaDataFim?: string;
+  nomeRazaoSocialFornecedor?: string;
+  numeroCnpjFornecedor?: string;
+}
+
+/** Histórico retorna os mesmos documentos PNCP que Arquivos */
+export type HistoricoEdital = ArquivoEdital;
+
+export type NotificacaoTipo = 'NOVO_LEAD' | 'BUSCA_CONCLUIDA';
+
 export interface NotificacaoEvent {
-  tipo: string;
+  tipo: NotificacaoTipo | string;  // string for backend compatibility
   timestamp: string;
   editalId: number;
   numero: string;
@@ -135,6 +184,10 @@ export interface NotificacaoEvent {
   leadScore: number;
   categoria: string;
   urlPncp?: string;
+  // fields for BUSCA_CONCLUIDA type:
+  totalSalvos?: number;
+  totalFontes?: number;
+  fontesNomes?: string[];
 }
 
 export interface ProcessarResult {

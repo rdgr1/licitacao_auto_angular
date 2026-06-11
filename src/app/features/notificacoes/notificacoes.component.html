@@ -1,42 +1,76 @@
-<div class="notif-page">
-  <div class="page-header">
+<div class="notif-shell">
+  <!-- Header -->
+  <div class="notif-header">
     <div>
-      <h1 class="page-title">Notificações</h1>
-      <p class="page-sub">Histórico dos últimos eventos de novos leads detectados.</p>
+      <h1>Notificações</h1>
+      <p class="notif-sub">{{ notificacoes().length }} notificação(ões)</p>
     </div>
-    <button mat-icon-button (click)="load()" matTooltip="Atualizar">
-      <mat-icon>refresh</mat-icon>
+    <button mat-stroked-button (click)="marcarTodasLidas()" class="btn-lidas">
+      <mat-icon>done_all</mat-icon> Marcar como lidas
     </button>
   </div>
 
+  <!-- Filtros -->
+  <mat-chip-listbox [ngModel]="filtro()" (ngModelChange)="filtro.set($event)" class="notif-filtros" aria-label="Filtro">
+    @for (f of filtros; track f.value) {
+      <mat-chip-option [value]="f.value">{{ f.label }}</mat-chip-option>
+    }
+  </mat-chip-listbox>
+
+  <!-- Loading skeleton -->
   @if (loading()) {
-    <div class="loading-center"><mat-spinner diameter="40"></mat-spinner></div>
-  } @else if (notificacoes().length === 0) {
-    <div class="empty-state">
-      <mat-icon>notifications_none</mat-icon>
-      <p>Nenhuma notificação ainda. Quando novos leads forem detectados, aparecerão aqui.</p>
-    </div>
-  } @else {
     <div class="notif-list">
-      @for (n of notificacoes(); track n.editalId + n.timestamp) {
-        <div class="notif-item">
-          <div class="notif-icon">
-            <mat-icon>gavel</mat-icon>
-          </div>
-          <div class="notif-body">
-            <div class="notif-title">{{ n.objeto }}</div>
-            <div class="notif-meta">
-              {{ n.numero }} · {{ n.categoria }} · {{ n.timestamp | date:'dd/MM/yyyy HH:mm':'America/Sao_Paulo' }}
-            </div>
-          </div>
-          <div class="notif-right">
-            <span class="score-badge {{ scoreColor(n.leadScore) }}">{{ n.leadScore }}</span>
-            @if (n.valorEstimado) {
-              <span class="notif-valor">{{ formatCurrency(n.valorEstimado) }}</span>
-            }
+      @for (i of [1,2,3,4,5]; track i) {
+        <div class="notif-skeleton">
+          <div class="sk-chip"></div>
+          <div class="sk-lines">
+            <div class="sk-line sk-line-lg"></div>
+            <div class="sk-line sk-line-sm"></div>
           </div>
         </div>
       }
     </div>
+  }
+
+  <!-- Lista -->
+  @if (!loading()) {
+    @if (notificacoes().length === 0) {
+      <div class="notif-empty">
+        <mat-icon>notifications_none</mat-icon>
+        <span>Nenhuma notificação encontrada</span>
+      </div>
+    } @else {
+      <mat-list class="notif-list">
+        @for (n of notificacoes(); track n.editalId + n.timestamp; let last = $last) {
+          <mat-list-item class="notif-item" [class.notif-busca]="n.tipo === 'BUSCA_CONCLUIDA'">
+
+            @if (n.tipo === 'BUSCA_CONCLUIDA') {
+              <mat-icon matListItemIcon class="busca-icon">search</mat-icon>
+              <div matListItemTitle class="notif-titulo">Busca concluída</div>
+              <div matListItemLine class="notif-objeto">{{ n.objeto }}</div>
+              <div matListItemMeta class="notif-meta">{{ formatTime(n.timestamp) }}</div>
+            } @else {
+              <div matListItemIcon class="score-chip {{ scoreClass(n.leadScore) }}">
+                {{ n.leadScore }}
+              </div>
+              <div matListItemTitle class="notif-titulo">
+                @if (n.editalId) {
+                  <a [routerLink]="['/editais', n.editalId]" class="notif-link">{{ n.numero || 'Lead' }}</a>
+                } @else {
+                  {{ n.numero || 'Lead' }}
+                }
+              </div>
+              <div matListItemLine class="notif-objeto">{{ n.objeto }}</div>
+              <div matListItemMeta class="notif-meta">
+                @if (n.categoria) { <span class="notif-cat">{{ n.categoria }}</span> }
+                {{ formatTime(n.timestamp) }}
+              </div>
+            }
+
+          </mat-list-item>
+          @if (!last) { <mat-divider></mat-divider> }
+        }
+      </mat-list>
+    }
   }
 </div>
