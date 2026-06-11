@@ -1,4 +1,5 @@
 <div class="pipeline-shell">
+  <app-bg-layer variant="grid"></app-bg-layer>
 
   <!-- ── Header ─────────────────────────────────────────────────── -->
   <div class="pipeline-header">
@@ -65,6 +66,9 @@
               <mat-icon class="col-icon">{{ col.icon }}</mat-icon>
               <span class="col-label">{{ col.label }}</span>
               <span class="col-count">{{ col.leads.length }}</span>
+              @if (colTotalValue(col.leads) > 0) {
+                <span class="col-total">{{ formatMillion(colTotalValue(col.leads)) }}</span>
+              }
             </div>
 
             <!-- Drop zone -->
@@ -77,6 +81,8 @@
                 <div class="kcard" cdkDrag [cdkDragData]="lead"
                      role="button" tabindex="0"
                      [attr.aria-label]="'Ver detalhes do lead: ' + lead.titulo"
+                     [class.just-dropped]="justDroppedId() === lead.uuid"
+                     [style.--score-color]="(lead.leadScore ?? 0) >= 70 ? 'var(--score-hot)' : (lead.leadScore ?? 0) >= 40 ? 'var(--status-pendente)' : 'var(--color-info)'"
                      (click)="openLeadDetalhe(lead)"
                      (keydown.enter)="openLeadDetalhe(lead)"
                      (keydown.space)="openLeadDetalhe(lead)">
@@ -151,6 +157,9 @@
               <mat-icon class="col-icon">{{ col.icon }}</mat-icon>
               <span class="col-label">{{ col.label }}</span>
               <span class="col-count">{{ col.processos.length }}</span>
+              @if (colTotalValue(col.processos) > 0) {
+                <span class="col-total">{{ formatMillion(colTotalValue(col.processos)) }}</span>
+              }
             </div>
 
             <div class="col-body" cdkDropList [id]="col.id"

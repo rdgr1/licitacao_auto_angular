@@ -15,6 +15,7 @@ import { ProcessoDetalheDialogComponent } from '../processos/processo-detalhe-di
 import { LeadDetalheDialogComponent } from '../leads/lead-detalhe-dialog/lead-detalhe-dialog.component';
 import { JustificativaDialogComponent } from '../../shared/components/justificativa-dialog/justificativa-dialog.component';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { BackgroundLayerComponent } from '../../shared/components/background-layer/background-layer.component';
 
 interface LeadCol  { id: string; key: LeadStatus;    label: string; icon: string; color: string; accent: string; leads: Lead[]; }
 interface ProcCol  { id: string; key: StatusProcesso; label: string; icon: string; color: string; accent: string; processos: ProcessoLicitatorio[]; }
@@ -24,7 +25,7 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
 @Component({
   selector: 'app-pipeline',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule, MatProgressSpinnerModule, DragDropModule, TruncatePipe, LeadDetalheDialogComponent],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule, MatProgressSpinnerModule, DragDropModule, TruncatePipe, LeadDetalheDialogComponent, BackgroundLayerComponent],
   templateUrl: './pipeline.component.html',
   styleUrl: './pipeline.component.scss',
 })
@@ -61,6 +62,7 @@ export class PipelineComponent implements OnInit {
 
   qualTotal = signal(0);
   procTotal = signal(0);
+  justDroppedId = signal<string | null>(null);
 
   private refreshQualTotal(): void { this.qualTotal.set(this.qualColumns.reduce((n, c) => n + c.leads.length, 0)); }
   private refreshProcTotal(): void { this.procTotal.set(this.procColumns.reduce((n, c) => n + c.processos.length, 0)); }
@@ -122,6 +124,8 @@ export class PipelineComponent implements OnInit {
 
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       this.refreshQualTotal();
+      this.justDroppedId.set(lead.uuid ?? null);
+      setTimeout(() => this.justDroppedId.set(null), 700);
 
       this.leadService.atualizarStatus(lead.uuid, {
         status: targetCol.key,
@@ -179,6 +183,16 @@ export class PipelineComponent implements OnInit {
       ?.replace('Dispensa de Licitação', 'Dispensa')
       ?.replace('Concorrência Eletrônica', 'Concorrência')
       ?? tipo ?? '';
+  }
+
+  colTotalValue(leads: any[]): number {
+    return leads.reduce((sum: number, l: any) => sum + (l.valorEstimado ?? 0), 0);
+  }
+
+  formatMillion(val: number): string {
+    if (val >= 1_000_000) return `R$ ${(val / 1_000_000).toFixed(1)}M`;
+    if (val >= 1_000)     return `R$ ${(val / 1_000).toFixed(0)}K`;
+    return val > 0 ? `R$ ${val}` : '';
   }
 
   formatDate(d: string): string {
