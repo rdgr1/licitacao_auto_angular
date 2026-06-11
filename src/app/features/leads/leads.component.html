@@ -1,4 +1,5 @@
 <div class="leads-shell">
+  <app-bg-layer variant="aurora" [opacity]="0.4"></app-bg-layer>
 
   <!-- ── Header ──────────────────────────────────────────────────── -->
   <div class="leads-header">
@@ -428,6 +429,10 @@
       @for (lead of filteredLeads(); track lead.uuid) {
         <div class="lead-card status-border-{{ lead.status }}" (click)="verDetalhe(lead)">
 
+          @if (lead.status === 'NOVO') {
+            <span class="lead-novo-pulse" aria-hidden="true"></span>
+          }
+
           <!-- Meta row -->
           <div class="lc-meta">
             <span class="lc-fonte fonte-{{ lead.fonte?.toLowerCase() }}">{{ lead.fonte }}</span>
@@ -446,7 +451,7 @@
             <span class="org-name">{{ lead.orgao }}</span>
           </div>
 
-          <!-- Date + observacao -->
+          <!-- Date + observacao + score donut -->
           <div class="lc-bottom">
             <span class="lc-date">
               <mat-icon>calendar_today</mat-icon>
@@ -454,6 +459,24 @@
             </span>
             @if (lead.observacao) {
               <span class="lc-obs">{{ lead.observacao }}</span>
+            }
+            @if (lead.leadScore != null) {
+              <svg class="score-donut" width="44" height="44" viewBox="0 0 44 44"
+                   [attr.aria-label]="'Score ' + lead.leadScore">
+                <circle cx="22" cy="22" r="16" fill="none"
+                        stroke="rgba(255,255,255,0.08)" stroke-width="3.5"/>
+                <circle cx="22" cy="22" r="16" fill="none"
+                  [attr.stroke]="lead.leadScore >= 70 ? 'var(--score-hot)' : lead.leadScore >= 40 ? 'var(--status-pendente)' : 'var(--color-info)'"
+                  stroke-width="3.5" stroke-linecap="round"
+                  [attr.stroke-dasharray]="(lead.leadScore / 100 * 100.53) + ' 100.53'"
+                  stroke-dashoffset="25.13"
+                  transform="rotate(-90 22 22)"/>
+                <text x="22" y="27" text-anchor="middle"
+                  [attr.fill]="lead.leadScore >= 70 ? 'var(--score-hot)' : lead.leadScore >= 40 ? 'var(--status-pendente)' : 'var(--color-info)'"
+                  font-size="11" font-weight="700" font-family="inherit">
+                  {{ lead.leadScore }}
+                </text>
+              </svg>
             }
           </div>
 

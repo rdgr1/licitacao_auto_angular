@@ -22,6 +22,8 @@ export interface Lead {
   revisadoPor: string | null;
   observacao: string | null;
   editalId?: string | null;
+  leadScore?: number;
+  valorEstimado?: number;
 }
 
 export interface AtualizarStatusRequest {

@@ -23,6 +23,7 @@ import { ColetaLog, ColetaResumo } from '../../core/models/coleta-log.model';
 import { ColetaResultado } from '../../core/models/dodf.model';
 import { LeadDetalheDialogComponent } from './lead-detalhe-dialog/lead-detalhe-dialog.component';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { BackgroundLayerComponent } from '../../shared/components/background-layer/background-layer.component';
 
 interface StatusTab { label: string; value: LeadStatus | null; }
 interface FonteBusca { key: string; label: string; sublabel: string; icon: string; canCollect: boolean; showBadge?: boolean; }
@@ -55,6 +56,7 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
     CommonModule, FormsModule, MatButtonModule, MatIconModule, MatTooltipModule,
     MatProgressSpinnerModule, MatProgressBarModule, MatDatepickerModule, MatFormFieldModule,
     MatInputModule, MatNativeDateModule, TruncatePipe, MatPaginatorModule,
+    BackgroundLayerComponent,
   ],
   templateUrl: './leads.component.html',
   styleUrl: './leads.component.scss',
