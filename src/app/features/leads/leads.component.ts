@@ -43,7 +43,7 @@ interface HistoricoEntrada {
 const FONTES: FonteBusca[] = [
   { key: 'DODF', label: 'DODF', sublabel: 'Diário Oficial do DF',        icon: 'article',       canCollect: true  },
   { key: 'DOU',  label: 'DOU',  sublabel: 'Diário Oficial da União',      icon: 'library_books', canCollect: true  },
-  { key: 'PNCP', label: 'PNCP', sublabel: 'Portal Nac. de Contratações', icon: 'public',        canCollect: false, showBadge: false },
+  { key: 'PNCP', label: 'PNCP', sublabel: 'Portal Nac. de Contratações', icon: 'public',        canCollect: true  },
 ];
 
 const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7','#00897B','#43A047','#FB8C00','#E53935'];

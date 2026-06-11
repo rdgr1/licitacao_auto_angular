@@ -3,10 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { NotificacaoEvent } from '../models/edital.model';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class NotificacoesService {
   private http = inject(HttpClient);
+  private auth = inject(AuthService);
   private apiUrl = environment.apiUrl;
 
   private _novas = signal(0);
@@ -23,7 +25,11 @@ export class NotificacoesService {
 
   startSSE(): void {
     if (this.eventSource) return;
-    const url = `${this.apiUrl.replace('/api', '')}/api/notificacoes/stream`;
+    const token = this.auth.getToken();
+    const base = this.apiUrl.replace('/api', '');
+    const url = token
+      ? `${base}/api/notificacoes/stream?token=${encodeURIComponent(token)}`
+      : `${base}/api/notificacoes/stream`;
     this.eventSource = new EventSource(url);
 
     this.eventSource.addEventListener('NOVO_LEAD', (e: MessageEvent) => {
@@ -34,10 +40,7 @@ export class NotificacoesService {
       } catch { /* ignore parse errors */ }
     });
 
-    // Silencia erros de conexão (backend offline / reconexão automática do SSE)
-    this.eventSource.onerror = () => {
-      // EventSource reconecta automaticamente — não precisa de ação
-    };
+    this.eventSource.onerror = () => {};
   }
 
   stopSSE(): void {
