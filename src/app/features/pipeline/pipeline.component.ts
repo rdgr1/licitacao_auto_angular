@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { LeadService } from '../../core/services/lead.service';
@@ -25,7 +26,7 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
 @Component({
   selector: 'app-pipeline',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule, MatProgressSpinnerModule, DragDropModule, TruncatePipe, LeadDetalheDialogComponent, BackgroundLayerComponent],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule, MatProgressSpinnerModule, MatMenuModule, DragDropModule, TruncatePipe, LeadDetalheDialogComponent, BackgroundLayerComponent],
   templateUrl: './pipeline.component.html',
   styleUrl: './pipeline.component.scss',
 })
@@ -63,6 +64,7 @@ export class PipelineComponent implements OnInit {
   qualTotal = signal(0);
   procTotal = signal(0);
   justDroppedId = signal<string | null>(null);
+  moveAnnouncement = signal('');
 
   private refreshQualTotal(): void { this.qualTotal.set(this.qualColumns.reduce((n, c) => n + c.leads.length, 0)); }
   private refreshProcTotal(): void { this.procTotal.set(this.procColumns.reduce((n, c) => n + c.processos.length, 0)); }
@@ -157,6 +159,31 @@ export class PipelineComponent implements OnInit {
         const prevCol = this.procColumns.find(c => c.id === event.previousContainer.id)!;
         if (fromIdx >= 0) transferArrayItem(event.container.data, prevCol.processos, fromIdx, event.previousIndex);
         this.toast.error('Erro ao atualizar processo');
+      }
+    });
+  }
+
+  moveLeadToColumn(lead: any, targetColId: string): void {
+    const srcCol = this.qualColumns.find(c => c.leads.some((l: any) => l.uuid === lead.uuid));
+    const tgtCol = this.qualColumns.find(c => c.id === targetColId);
+    if (!srcCol || !tgtCol || srcCol.id === tgtCol.id) return;
+    srcCol.leads = srcCol.leads.filter((l: any) => l.uuid !== lead.uuid);
+    tgtCol.leads = [...tgtCol.leads, lead];
+    this.refreshQualTotal();
+    this.moveAnnouncement.set(`Lead movido para ${tgtCol.label}`);
+    this.justDroppedId.set(lead.uuid ?? null);
+    setTimeout(() => this.justDroppedId.set(null), 700);
+    setTimeout(() => this.moveAnnouncement.set(''), 2000);
+    this.leadService.atualizarStatus(lead.uuid, {
+      status: tgtCol.key,
+      revisadoPor: 'pipeline-teclado',
+      observacao: `Movido para ${tgtCol.label} via teclado`,
+    }).subscribe({
+      error: () => {
+        tgtCol.leads = tgtCol.leads.filter((l: any) => l.uuid !== lead.uuid);
+        srcCol.leads = [...srcCol.leads, lead];
+        this.refreshQualTotal();
+        this.toast.error('Erro ao atualizar lead');
       }
     });
   }

@@ -1,5 +1,6 @@
 <div class="pipeline-shell">
   <app-bg-layer variant="aurora" [opacity]="0.15"></app-bg-layer>
+  <div class="sr-only" aria-live="polite" aria-atomic="true">{{ moveAnnouncement() }}</div>
 
   <!-- ── Header ─────────────────────────────────────────────────── -->
   <div class="pipeline-header">
@@ -111,6 +112,24 @@
                   </div>
 
                   <div class="kcard-click-hint" aria-hidden="true">Clique para detalhes</div>
+
+                  <!-- Keyboard-accessible move button -->
+                  <button class="kcard-move-btn"
+                          mat-icon-button
+                          [matMenuTriggerFor]="moveMenu"
+                          aria-label="Mover lead para outra coluna"
+                          (click)="$event.stopPropagation()">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #moveMenu="matMenu">
+                    @for (destCol of qualColumns; track destCol.id) {
+                      @if (destCol.id !== col.id) {
+                        <button mat-menu-item (click)="moveLeadToColumn(lead, destCol.id)">
+                          Mover para {{ destCol.label }}
+                        </button>
+                      }
+                    }
+                  </mat-menu>
                 </div>
               }
 

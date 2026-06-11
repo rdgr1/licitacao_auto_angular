@@ -363,11 +363,13 @@
   }
 
   <!-- ── Status Tabs ───────────────────────────────────────────────── -->
-  <div class="status-bar">
+  <div class="status-bar" role="group" aria-label="Filtros por status">
     @for (tab of statusTabs; track tab.label; let i = $index) {
-      <button class="status-pill" [class.active]="selectedTabIdx() === i" (click)="onTabChange(i)">
+      <button class="status-pill" [class.active]="selectedTabIdx() === i"
+              [attr.aria-pressed]="selectedTabIdx() === i"
+              (click)="onTabChange(i)">
         {{ tab.label }}
-        <span class="pill-count">{{ countByStatus(tab.value) }}</span>
+        <span class="pill-count" aria-hidden="true">{{ countByStatus(tab.value) }}</span>
       </button>
     }
   </div>
@@ -425,9 +427,9 @@
 
   <!-- Grade de cards -->
   @if (!loading() && !apiError() && filteredLeads().length > 0) {
-    <div class="leads-grid" [@listStagger]="filteredLeads().length">
+    <div class="leads-grid" role="list" [@listStagger]="filteredLeads().length">
       @for (lead of filteredLeads(); track lead.uuid) {
-        <div class="lead-card status-border-{{ lead.status }}" (click)="verDetalhe(lead)" [@fadeSlideIn]>
+        <div class="lead-card status-border-{{ lead.status }}" role="listitem" (click)="verDetalhe(lead)" [@fadeSlideIn]>
 
           @if (lead.status === 'NOVO') {
             <span class="lead-novo-pulse" aria-hidden="true"></span>
