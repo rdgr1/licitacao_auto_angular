@@ -75,6 +75,7 @@ export const routes: Routes = [
       },
       {
         path: 'configuracoes',
+        data: { title: 'Configurações — LicitaFlow' },
         loadComponent: () =>
           import('./features/configuracoes/configuracoes.component').then(m => m.ConfiguracoesComponent),
       },
