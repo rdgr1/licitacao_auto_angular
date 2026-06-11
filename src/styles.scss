@@ -83,6 +83,36 @@ html {
   --color-error:             #EF4444;
   --color-info:              #3B82F6;
 
+  // Fontes de coleta
+  --fonte-dodf-bg:    rgba(99,102,241,0.10);
+  --fonte-dodf-color: #4F46E5;
+  --fonte-dou-bg:     rgba(59,130,246,0.10);
+  --fonte-dou-color:  #2563EB;
+  --fonte-pncp-bg:    rgba(245,158,11,0.10);
+  --fonte-pncp-color: #D97706;
+
+  // Lead status
+  --lead-novo-bg:      rgba(59,130,246,0.10);
+  --lead-novo-color:   #1E40AF;
+  --lead-qual-bg:      rgba(17,191,127,0.10);
+  --lead-qual-color:   #065F46;
+  --lead-desc-bg:      #F1F5F9;
+  --lead-desc-color:   #64748B;
+
+  // Skeleton
+  --skeleton-base:  #E2E8F0;
+  --skeleton-shine: #F8FAFC;
+
+  // Backgrounds animados
+  --lf-bg:       #0c1322;
+  --lf-bg-soft:  #101a2e;
+  --lf-ink:      #e8eef7;
+  --lf-teal:     #2dd4bf;
+  --lf-cyan:     #38bdf8;
+  --lf-indigo:   #6366f1;
+  --lf-gold:     #f0b429;
+  --lf-line:     rgba(141,166,200,.14);
+
   // Spacing
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -115,6 +145,21 @@ html {
   --mat-sys-tertiary:             #0DA66E;
   --mat-sys-tertiary-container:   #D4F5E9;
   --mat-sys-secondary-container:  #E8F5F0;
+
+  // Superfícies neutras — elimina o tint amarelado gerado pelo spring-green-palette
+  --mat-sys-surface:                   #FFFFFF;
+  --mat-sys-on-surface:                #0F172A;
+  --mat-sys-surface-variant:           #F1F5F9;
+  --mat-sys-on-surface-variant:        #475569;
+  --mat-sys-surface-container-lowest:  #FFFFFF;
+  --mat-sys-surface-container-low:     #F8FAFC;
+  --mat-sys-surface-container:         #F1F5F9;
+  --mat-sys-surface-container-high:    #E2E8F0;
+  --mat-sys-surface-container-highest: #CBD5E1;
+  --mat-sys-background:                #F1F5F9;
+  --mat-sys-on-background:             #0F172A;
+  --mat-sys-outline:                   #E2E8F0;
+  --mat-sys-outline-variant:           #CBD5E1;
 
   // MDC Switch (slide-toggle)
   --mdc-switch-selected-track-color:           #11BF7F;
@@ -367,6 +412,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .mat-mdc-chip.mat-primary { background-color: rgba(17,191,127,0.10) !important; }
 
+// Componentes MDC — força branco/neutro nos containers internos
+html {
+  --mdc-filled-text-field-container-color:        #F8FAFC;
+  --mdc-filled-text-field-hover-container-color:  #F1F5F9;
+  --mat-select-panel-background-color:            #FFFFFF;
+  --mat-autocomplete-background-color:            #FFFFFF;
+  --mat-menu-container-color:                     #FFFFFF;
+  --mat-dialog-container-color:                   #FFFFFF;
+  --mat-table-background-color:                   #FFFFFF;
+  --mat-table-row-item-container-color:           #FFFFFF;
+  --mat-paginator-container-background-color:     #FAFBFC;
+  --mat-option-selected-state-layer-color:        rgba(17,191,127,0.10);
+}
+
 // Forçar cor verde em todos os estados do slide-toggle
 mat-slide-toggle.mat-primary {
   --mdc-switch-selected-track-color: #11BF7F !important;
@@ -612,6 +671,21 @@ html {
   animation: grid-drift 16s linear infinite;
 }
 
+@keyframes skeleton-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-shine) 50%,
+    var(--skeleton-base) 75%);
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
 // Reduced motion
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -619,4 +693,5 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  .skeleton { animation: none; background: var(--skeleton-base); }
 }
