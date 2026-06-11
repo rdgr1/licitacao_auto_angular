@@ -445,12 +445,6 @@ import { BackgroundLayerComponent } from '../../../shared/components/background-
         .mat-mdc-text-field-wrapper {
           border-radius: 8px !important;
         }
-        .mdc-outlined-text-field--outlined .mdc-notched-outline__leading {
-          border-radius: 8px 0 0 8px !important;
-        }
-        .mdc-outlined-text-field--outlined .mdc-notched-outline__trailing {
-          border-radius: 0 8px 8px 0 !important;
-        }
       }
     }
 
