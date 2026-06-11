@@ -686,6 +686,10 @@ html {
   border-radius: var(--radius-md);
 }
 
+.page-content {
+  transition: opacity 200ms ease;
+}
+
 // Reduced motion
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
