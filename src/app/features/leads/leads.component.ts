@@ -102,6 +102,9 @@ export class LeadsComponent implements OnInit {
   historicoResumoApi  = signal<ColetaResumo | null>(null);
   descartadosLeads    = signal<Lead[]>([]);
   historicoExpandidos = signal<Set<string>>(new Set());
+  historicoPage       = signal(0);
+  historicoPageSize   = signal(20);
+  historicoTotal      = signal(0);
 
   // ── Computeds ──────────────────────────────────────────────────
 
@@ -333,19 +336,27 @@ export class LeadsComponent implements OnInit {
 
   carregarHistorico(): void {
     this.historicoLoading.set(true);
+    this.historicoExpandidos.set(new Set());
     forkJoin({
-      logs:       this.coletaService.getHistorico({ size: 200 }),
+      logs:        this.coletaService.getHistorico({ page: this.historicoPage(), size: this.historicoPageSize() }),
       descartados: this.leadService.listar({ status: 'DESCARTADO', size: 500 }),
-      resumo:     this.coletaService.getResumo(),
+      resumo:      this.coletaService.getResumo(),
     }).subscribe({
       next: ({ logs, descartados, resumo }) => {
         this.historicoLogs.set(logs.content ?? []);
+        this.historicoTotal.set(logs.totalElements ?? 0);
         this.descartadosLeads.set(descartados.content ?? []);
         this.historicoResumoApi.set(resumo);
         this.historicoLoading.set(false);
       },
       error: () => { this.historicoLoading.set(false); this.toast.error('Erro ao carregar histórico'); },
     });
+  }
+
+  onHistoricoPageChange(event: PageEvent): void {
+    this.historicoPage.set(event.pageIndex);
+    this.historicoPageSize.set(event.pageSize);
+    this.carregarHistorico();
   }
 
   toggleHistoricoExpand(key: string): void {

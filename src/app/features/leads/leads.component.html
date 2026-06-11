@@ -195,7 +195,7 @@
         <div class="historico-head-left">
           <mat-icon>query_stats</mat-icon>
           <span class="historico-titulo">Rastreabilidade de Coletas</span>
-          <span class="historico-sub">{{ historicoEntradas().length }} sessão(ões) registrada(s)</span>
+          <span class="historico-sub">{{ historicoTotal() }} sessão(ões) registrada(s)</span>
         </div>
         <button class="btn-historico-refresh" (click)="carregarHistorico()" matTooltip="Recarregar">
           <mat-icon>refresh</mat-icon>
@@ -344,6 +344,18 @@
           <strong>Repetidas:</strong> já estavam no sistema.
           <strong>Rejeitadas:</strong> salvas, mas descartadas manualmente pelo analista — use para afinar seus filtros.
         </p>
+
+        @if (historicoTotal() > historicoPageSize()) {
+          <mat-paginator
+            [length]="historicoTotal()"
+            [pageSize]="historicoPageSize()"
+            [pageIndex]="historicoPage()"
+            [pageSizeOptions]="[10, 20, 50]"
+            [showFirstLastButtons]="true"
+            (page)="onHistoricoPageChange($event)"
+            class="historico-paginator">
+          </mat-paginator>
+        }
       }
 
     </div>

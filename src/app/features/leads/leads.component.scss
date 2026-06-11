@@ -346,6 +346,14 @@
   code   { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; background: #E8EDF5; border-radius: 3px; padding: 1px 4px; }
 }
 
+.historico-paginator {
+  border-top: 1px solid #E2E8F0; margin-top: 4px;
+  ::ng-deep .mat-mdc-paginator-container { padding: 4px 0; }
+  ::ng-deep .mat-mdc-paginator-range-label { color: #64748B; font-size: 12px; }
+  ::ng-deep .mat-mdc-icon-button { color: #64748B; }
+  ::ng-deep .mat-mdc-icon-button:disabled { opacity: 0.3; }
+}
+
 /* ── Status bar ─────────────────────────────────────────────────────────── */
 .status-bar { display: flex; gap: 6px; flex-wrap: wrap; }
 .status-pill {
