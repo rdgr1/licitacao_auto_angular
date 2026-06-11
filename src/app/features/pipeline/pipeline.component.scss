@@ -116,14 +116,17 @@
   padding: 10px 11px 9px;
   cursor: grab;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.04);
-  transition: box-shadow 150ms, transform 150ms;
+  transition: transform var(--transition), box-shadow var(--transition);
   display: flex; flex-direction: column; gap: 6px;
   user-select: none;
+  position: relative;
 
   &:hover {
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.10), 0 3px 8px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--card-shadow-hover);
     transform: translateY(-2px);
   }
+
+  &:active { transform: translateY(0); }
 
   &:focus-visible {
     outline: 2px solid var(--brand-primary);
@@ -272,3 +275,28 @@
 .pipeline-header {
   position: relative; z-index: 1;
 }
+
+// ── CDK drag enhanced ─────────────────────────────────────────────────────
+.cdk-drag-preview {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  transform: rotate(1.5deg);
+  opacity: 0.96;
+  border-radius: var(--radius-lg);
+}
+.cdk-drag-placeholder {
+  opacity: 0;
+  border: 2px dashed var(--brand-primary);
+  border-radius: var(--radius-lg);
+  background: var(--brand-primary-light);
+  min-height: 60px;
+}
+
+// ── kcard keyboard-move button ────────────────────────────────────────────
+.kcard-move-btn {
+  position: absolute; top: 4px; right: 4px;
+  opacity: 0; transition: opacity var(--transition);
+  width: 24px; height: 24px;
+  mat-icon { font-size: 16px; }
+}
+.kcard:hover .kcard-move-btn,
+.kcard:focus-within .kcard-move-btn { opacity: 1; }
