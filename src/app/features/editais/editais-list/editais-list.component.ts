@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
@@ -33,6 +35,8 @@ import { ItensDialogComponent } from '../itens-dialog/itens-dialog.component';
     MatDividerModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
     CurrencyBrPipe,
     DateBrPipe,
     TruncatePipe,
@@ -124,6 +128,17 @@ export class EditaisListComponent implements OnInit {
     this.searchText.set((event.target as HTMLInputElement).value.trim().toLowerCase());
     this.currentPage.set(0);
     this.dataSource.filter = this.searchText();
+  }
+
+  onSearchInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.searchText.set(value);
+    this.dataSource.filter = value;
+  }
+
+  clearSearch(): void {
+    this.searchText.set('');
+    this.dataSource.filter = '';
   }
 
   onStatusFilter(status: string): void {

@@ -13,12 +13,18 @@
       </p>
     </div>
     <div class="header-actions">
-      <div class="search-box" role="search">
-        <mat-icon aria-hidden="true">search</mat-icon>
-        <input placeholder="Número, objeto, órgão..."
-               aria-label="Pesquisar editais"
-               (input)="applyFilter($event)" />
-      </div>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar editais</mat-label>
+        <input matInput [value]="searchText()"
+               (input)="onSearchInput($event)"
+               placeholder="Número, objeto ou órgão...">
+        <mat-icon matPrefix>search</mat-icon>
+        @if (searchText()) {
+          <button mat-icon-button matSuffix (click)="clearSearch()" aria-label="Limpar">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
       <button class="reload-btn"
               (click)="refresh()"
               aria-label="Recarregar editais"
