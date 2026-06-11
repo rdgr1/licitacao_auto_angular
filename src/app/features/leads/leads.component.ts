@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PaginatorComponent } from '../../shared/components/paginator/paginator.component';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { LeadService } from '../../core/services/lead.service';
 import { ColetaService } from '../../core/services/coleta.service';
 import { ColetaAndamentoService } from '../../core/services/coleta-andamento.service';
@@ -52,7 +52,7 @@ const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7',
   imports: [
     CommonModule, FormsModule, MatButtonModule, MatIconModule, MatTooltipModule,
     MatProgressSpinnerModule, MatDatepickerModule, MatFormFieldModule,
-    MatInputModule, MatNativeDateModule, TruncatePipe, PaginatorComponent,
+    MatInputModule, MatNativeDateModule, TruncatePipe, MatPaginatorModule,
   ],
   templateUrl: './leads.component.html',
   styleUrl: './leads.component.scss',
@@ -230,8 +230,9 @@ export class LeadsComponent implements OnInit {
     this.carregarLeads();
   }
 
-  onPageChange(p: number): void {
-    this.currentPage.set(p);
+  onPageChange(event: PageEvent): void {
+    this.currentPage.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
     this.carregarLeads();
   }
 

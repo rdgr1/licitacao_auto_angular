@@ -401,14 +401,15 @@
     </div>
 
     <!-- Paginação -->
-    @if (totalElements() > 0) {
-      <app-paginator
-        [page]="currentPage()"
-        [totalPages]="totalPages()"
-        [totalElements]="totalElements()"
-        [pageSize]="pageSize()"
-        (pageChange)="onPageChange($event)" />
-    }
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="currentPage()"
+      [pageSizeOptions]="[12, 24, 48]"
+      [showFirstLastButtons]="true"
+      (page)="onPageChange($event)"
+      [style.display]="totalElements() <= pageSize() ? 'none' : ''">
+    </mat-paginator>
   }
 
 </div>

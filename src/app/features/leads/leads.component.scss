@@ -518,3 +518,13 @@
     strong { color: #DC2626; }
   }
 }
+
+::ng-deep .mat-mdc-paginator {
+  background: transparent;
+  color: #64748B;
+  font-size: 13px;
+
+  .mat-mdc-paginator-range-label { color: #64748B; }
+  .mat-mdc-icon-button { color: #64748B; }
+  .mat-mdc-icon-button:disabled { opacity: 0.3; }
+}
