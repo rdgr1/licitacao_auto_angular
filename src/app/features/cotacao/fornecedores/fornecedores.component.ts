@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CotacaoService } from '../../../core/services/cotacao.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { OperationTrackerService } from '../../../core/services/operation-tracker.service';
 import { Fornecedor, CATEGORIAS_SERVICO } from '../../../core/models/cotacao.model';
 import { FornecedorFormDialogComponent } from './fornecedor-form-dialog/fornecedor-form-dialog.component';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -239,6 +240,7 @@ export class FornecedoresComponent implements OnInit {
   private svc    = inject(CotacaoService);
   private toast  = inject(ToastService);
   private dialog = inject(MatDialog);
+  private tracker = inject(OperationTrackerService);
 
   categorias = CATEGORIAS_SERVICO;
   cols = ['nome', 'cnpj', 'whatsapp', 'categorias', 'ativo', 'acoes'];
@@ -281,9 +283,10 @@ export class FornecedoresComponent implements OnInit {
       const call = fornecedor?.id
         ? this.svc.atualizarFornecedor(fornecedor.id, result)
         : this.svc.criarFornecedor(result);
-      call.subscribe({
-        next: () => { this.toast.success(fornecedor ? 'Fornecedor atualizado' : 'Fornecedor criado'); this.load(); },
-        error: () => this.toast.error('Erro ao salvar fornecedor'),
+      this.tracker.run(`save-fornecedor-${fornecedor?.id ?? 'novo'}`, call, {
+        successMessage: fornecedor ? 'Fornecedor atualizado' : 'Fornecedor criado',
+        errorMessage: 'Erro ao salvar fornecedor',
+        onSuccess: () => this.load(),
       });
     });
   }
@@ -294,9 +297,10 @@ export class FornecedoresComponent implements OnInit {
     });
     ref.afterClosed().subscribe(ok => {
       if (ok && f.id) {
-        this.svc.deletarFornecedor(f.id).subscribe({
-          next: () => { this.toast.success('Fornecedor excluído'); this.load(); },
-          error: () => this.toast.error('Erro ao excluir'),
+        this.tracker.run(`delete-fornecedor-${f.id}`, this.svc.deletarFornecedor(f.id), {
+          successMessage: 'Fornecedor excluído',
+          errorMessage: 'Erro ao excluir',
+          onSuccess: () => this.load(),
         });
       }
     });
