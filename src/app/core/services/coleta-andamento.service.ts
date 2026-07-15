@@ -5,6 +5,7 @@ export interface FonteAndamento {
   status: 'pending' | 'running' | 'done' | 'error';
   stepAtual: number;
   totalSteps: number;
+  dataDisplay: string;
   salvos: number;
   materias: number;
   duracaoMs: number;
@@ -27,70 +28,79 @@ export interface ColetaAndamento {
 
 @Injectable({ providedIn: 'root' })
 export class ColetaAndamentoService {
-
-  // ── Legacy state (kept for topbar pill compatibility) ──
-  readonly andamento = signal<ColetaAndamento>({
-    ativa: false, etapaAtual: null, step: 0, total: 0,
-    acumulado: { materias: 0, salvos: 0, duplicados: 0 }, iniciadoEm: null,
-  });
-
-  // ── Per-source state (new) ──
   private _fontes = signal<FonteAndamento[]>([]);
   readonly fontes = this._fontes.asReadonly();
-  readonly ativa = computed(() => this._fontes().some(f => f.status === 'pending' || f.status === 'running'));
+  readonly ativa = computed(() =>
+    this._fontes().some((f) => f.status === 'pending' || f.status === 'running'),
+  );
   readonly totalSalvos = computed(() => this._fontes().reduce((n, f) => n + f.salvos, 0));
+
+  // Única fonte de verdade é `_fontes`; `andamento` é derivado dela — mantido só
+  // pela forma que o pill do topbar (main-layout) e leads.component já consomem.
+  readonly andamento = computed<ColetaAndamento>(() => {
+    const fontes = this._fontes();
+    const emAndamento =
+      fontes.find((f) => f.status === 'running') ?? fontes.find((f) => f.status === 'pending');
+    const iniciadoEm = fontes.length ? Math.min(...fontes.map((f) => f.iniciadoEm)) : null;
+
+    return {
+      ativa: this.ativa(),
+      etapaAtual: emAndamento
+        ? { fonte: emAndamento.fonte, dataDisplay: emAndamento.dataDisplay }
+        : null,
+      step: emAndamento?.stepAtual ?? 0,
+      total: emAndamento?.totalSteps ?? 0,
+      acumulado: {
+        materias: fontes.reduce((n, f) => n + f.materias, 0),
+        salvos: this.totalSalvos(),
+        duplicados: 0,
+      },
+      iniciadoEm: iniciadoEm ? new Date(iniciadoEm).toISOString() : null,
+    };
+  });
 
   iniciarColeta(fontesList: string[]): void {
     const agora = Date.now();
-    this._fontes.set(fontesList.map(fonte => ({
-      fonte, status: 'pending', stepAtual: 0, totalSteps: 1,
-      salvos: 0, materias: 0, duracaoMs: 0, iniciadoEm: agora,
-    })));
-    this.andamento.update(a => ({ ...a, ativa: true, iniciadoEm: new Date().toISOString() }));
+    this._fontes.set(
+      fontesList.map((fonte) => ({
+        fonte,
+        status: 'pending' as const,
+        stepAtual: 0,
+        totalSteps: 1,
+        dataDisplay: '',
+        salvos: 0,
+        materias: 0,
+        duracaoMs: 0,
+        iniciadoEm: agora,
+      })),
+    );
   }
 
   avancarEtapa(fonte: string, step: number, total: number, dataDisplay: string): void {
-    this._fontes.update(fs => fs.map(f =>
-      f.fonte === fonte ? { ...f, status: 'running', stepAtual: step, totalSteps: total } : f
-    ));
-    this.andamento.update(a => ({ ...a, etapaAtual: { fonte, dataDisplay }, step, total }));
+    this._fontes.update((fs) =>
+      fs.map((f) =>
+        f.fonte === fonte
+          ? { ...f, status: 'running' as const, stepAtual: step, totalSteps: total, dataDisplay }
+          : f,
+      ),
+    );
   }
 
   concluirFonte(fonte: string, salvos: number, materias: number, duracaoMs: number): void {
-    this._fontes.update(fs => fs.map(f =>
-      f.fonte === fonte ? { ...f, status: 'done', salvos, materias, duracaoMs } : f
-    ));
-    const todasConcluidas = this._fontes().every(f => f.status === 'done' || f.status === 'error');
-    if (todasConcluidas) {
-      this.andamento.update(a => ({ ...a, ativa: false }));
-    }
+    this._fontes.update((fs) =>
+      fs.map((f) =>
+        f.fonte === fonte ? { ...f, status: 'done' as const, salvos, materias, duracaoMs } : f,
+      ),
+    );
   }
 
   erroFonte(fonte: string): void {
-    this._fontes.update(fs => fs.map(f =>
-      f.fonte === fonte ? { ...f, status: 'error' } : f
-    ));
-    const todasConcluidas = this._fontes().every(f => f.status === 'done' || f.status === 'error');
-    if (todasConcluidas) {
-      this.andamento.update(a => ({ ...a, ativa: false }));
-    }
+    this._fontes.update((fs) =>
+      fs.map((f) => (f.fonte === fonte ? { ...f, status: 'error' as const } : f)),
+    );
   }
 
   limpar(): void {
     this._fontes.set([]);
-    this.andamento.update(a => ({ ...a, ativa: false, etapaAtual: null }));
-  }
-
-  // Legacy methods kept for compatibility with topbar pill
-  iniciar(total: number): void {
-    this.andamento.set({ ativa: true, etapaAtual: null, step: 0, total, acumulado: { materias: 0, salvos: 0, duplicados: 0 }, iniciadoEm: new Date().toISOString() });
-  }
-
-  acumular(materias: number, salvos: number, duplicados: number): void {
-    this.andamento.update(a => ({ ...a, acumulado: { materias: a.acumulado.materias + materias, salvos: a.acumulado.salvos + salvos, duplicados: a.acumulado.duplicados + duplicados } }));
-  }
-
-  encerrar(): void {
-    this.andamento.update(a => ({ ...a, ativa: false, etapaAtual: null }));
   }
 }
