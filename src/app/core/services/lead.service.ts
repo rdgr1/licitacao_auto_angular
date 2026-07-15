@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Lead, LeadStatus, AtualizarStatusRequest } from '../models/lead.model';
-import { Page, EditalResponse } from '../models/edital.model';
+import { Page } from '../models/edital.model';
+import { BuscaEdital } from '../models/busca-edital.model';
 
 const toPage = <T>(res: Page<T> | T[]): Page<T> =>
   Array.isArray(res)
@@ -33,8 +34,12 @@ export class LeadService {
     return this.http.patch<Lead>(`${this.base}/${uuid}/status`, req);
   }
 
-  // Vincula o lead ao melhor edital encontrado no PNCP (idempotente)
-  buscarEdital(uuid: string): Observable<EditalResponse> {
-    return this.http.post<EditalResponse>(`${this.base}/${uuid}/buscar-edital`, {});
+  // Dispara a busca assíncrona do edital no PNCP (202 Accepted — conclui via statusBuscaEdital)
+  buscarEdital(uuid: string): Observable<BuscaEdital> {
+    return this.http.post<BuscaEdital>(`${this.base}/${uuid}/buscar-edital`, {});
+  }
+
+  statusBuscaEdital(uuid: string): Observable<BuscaEdital> {
+    return this.http.get<BuscaEdital>(`${this.base}/${uuid}/buscar-edital/status`);
   }
 }
