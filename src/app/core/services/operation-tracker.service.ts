@@ -14,7 +14,9 @@ const GENERIC_ERROR = 'Ocorreu um erro. Tente novamente.';
 @Injectable({ providedIn: 'root' })
 export class OperationTrackerService {
   private toast = inject(ToastService);
-  private active = signal<Set<string>>(new Set());
+  // Ref-counted por key: chamadas concorrentes com a mesma key (ex: duplo clique
+  // antes do botão desabilitar) só zeram o loading quando a última delas concluir.
+  private active = signal<Map<string, number>>(new Map());
 
   private readonly _hasAnyActive: Signal<boolean> = computed(() => this.active().size > 0);
 
@@ -23,7 +25,7 @@ export class OperationTrackerService {
   }
 
   isLoading(key: string): Signal<boolean> {
-    return computed(() => this.active().has(key));
+    return computed(() => (this.active().get(key) ?? 0) > 0);
   }
 
   run<T>(key: string, source$: Observable<T>, opts: RunOptions<T> = {}): void {
@@ -52,9 +54,11 @@ export class OperationTrackerService {
   }
 
   private setActive(key: string, isActive: boolean): void {
-    this.active.update((set) => {
-      const next = new Set(set);
-      isActive ? next.add(key) : next.delete(key);
+    this.active.update((map) => {
+      const next = new Map(map);
+      const count = next.get(key) ?? 0;
+      const nextCount = isActive ? count + 1 : count - 1;
+      nextCount > 0 ? next.set(key, nextCount) : next.delete(key);
       return next;
     });
   }

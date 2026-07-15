@@ -97,4 +97,21 @@ describe('OperationTrackerService', () => {
     expect(() => svc.run('x', of(1))).not.toThrow();
     expect(() => svc.run('y', throwError(() => new Error('boom')))).not.toThrow();
   });
+
+  it('deve manter loading true enquanto houver uma chamada concorrente com a mesma key em voo', () => {
+    const first = new Subject<void>();
+    const second = new Subject<void>();
+
+    svc.run('save-x', first.asObservable());
+    svc.run('save-x', second.asObservable());
+    expect(svc.isLoading('save-x')()).toBe(true);
+
+    first.next();
+    first.complete();
+    expect(svc.isLoading('save-x')()).toBe(true); // a segunda ainda está em voo
+
+    second.next();
+    second.complete();
+    expect(svc.isLoading('save-x')()).toBe(false);
+  });
 });
