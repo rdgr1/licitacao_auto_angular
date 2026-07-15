@@ -121,4 +121,25 @@ describe('LeadDetalheDialogComponent — busca de edital assíncrona', () => {
     expect(component.editalError()).toBe('Nenhum edital encontrado no PNCP para este lead.');
     expect(editaisService.getById).not.toHaveBeenCalled();
   });
+
+  it('deve parar de pollar e liberar a key após o limite de tentativas se o backend nunca sair de EM_ANDAMENTO', () => {
+    const registroEmAndamento: BuscaEdital = {
+      uuid: 'busca-1',
+      leadId: 'lead-1',
+      status: 'EM_ANDAMENTO',
+      mensagem: '',
+      createdAt: '',
+      lastModified: '',
+      createdBy: '',
+    };
+    leadService.buscarEdital.mockReturnValue(of(registroEmAndamento));
+    leadService.statusBuscaEdital.mockReturnValue(of(registroEmAndamento));
+
+    component.buscarEdital();
+    expect(component.operationTracker.isLoading(`busca-edital-${leadMock.uuid}`)()).toBe(true);
+
+    vi.advanceTimersByTime(2000 * 60); // esgota o limite de 60 polls
+
+    expect(component.operationTracker.isLoading(`busca-edital-${leadMock.uuid}`)()).toBe(false);
+  });
 });

@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
-import { interval, switchMap, first, of } from 'rxjs';
+import { interval, switchMap, first, of, take } from 'rxjs';
 import { Lead, LeadStatus } from '../../../core/models/lead.model';
 import { EditalResponse } from '../../../core/models/edital.model';
 import { BuscaEdital } from '../../../core/models/busca-edital.model';
@@ -817,10 +817,15 @@ export class LeadDetalheDialogComponent implements OnInit {
     const key = `busca-edital-${this.data.uuid}`;
     this.editalError.set(null);
 
+    // Máximo de 60 polls (2min) — evita que um backend travado em EM_ANDAMENTO
+    // deixe a key ativa (e a barra global acesa) para sempre.
+    const MAX_POLLS = 60;
+
     const inicia$ = this.leadService.buscarEdital(this.data.uuid).pipe(
       switchMap((registro) =>
         registro.status === 'EM_ANDAMENTO'
           ? interval(2000).pipe(
+              take(MAX_POLLS),
               switchMap(() => this.leadService.statusBuscaEdital(this.data.uuid)),
               first((r) => r.status !== 'EM_ANDAMENTO'),
             )
@@ -832,7 +837,11 @@ export class LeadDetalheDialogComponent implements OnInit {
       errorMessage: 'Erro ao buscar edital. Tente novamente.',
       onSuccess: (registro) => {
         if (registro.status === 'CONCLUIDA' && registro.editalId) {
-          this.editaisService.getById(registro.editalId).subscribe((e) => this.edital.set(e));
+          this.editaisService.getById(registro.editalId).subscribe({
+            next: (e) => this.edital.set(e),
+            error: () =>
+              this.editalError.set('Edital encontrado, mas houve erro ao carregar os detalhes.'),
+          });
         } else if (registro.status === 'NAO_ENCONTRADO') {
           this.editalError.set('Nenhum edital encontrado no PNCP para este lead.');
         } else {
