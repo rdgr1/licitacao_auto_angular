@@ -11,6 +11,7 @@ import localePt from '@angular/common/locales/pt';
 import { routes } from './app.routes';
 import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { pageNormalizeInterceptor } from './core/interceptors/page-normalize.interceptor';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -18,12 +19,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(
-      withInterceptors([
-        authInterceptor,
-        httpErrorInterceptor,
-      ])
-    ),
+    provideHttpClient(withInterceptors([authInterceptor, pageNormalizeInterceptor, httpErrorInterceptor])),
     provideAnimations(),
 
     // Brazilian locale
