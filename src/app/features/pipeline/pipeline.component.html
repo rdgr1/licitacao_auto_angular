@@ -175,6 +175,17 @@
           </div>
         }
       </div>
+
+      <!-- Paginação global — uma página por vez, distribuída entre todas as colunas -->
+      <mat-paginator
+        class="qual-paginator"
+        [length]="totalElements()"
+        [pageSize]="pageSize()"
+        [pageIndex]="currentPage()"
+        [pageSizeOptions]="[24, 48, 96]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)">
+      </mat-paginator>
     }
   }
 

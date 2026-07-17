@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import {
   CdkDragDrop,
@@ -66,6 +67,7 @@ const ORG_COLORS = [
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatPaginatorModule,
     DragDropModule,
     TruncatePipe,
     ScoreBadgePipe,
@@ -86,6 +88,9 @@ export class PipelineComponent implements OnInit {
   loadingProc = signal(true);
   gridFonte = signal<string | null>(null);
   searchTerm = signal('');
+  totalElements = signal(0);
+  currentPage = signal(0);
+  pageSize = signal(48);
   fontes = [
     { key: 'DODF', label: 'DODF' },
     { key: 'DOU', label: 'DOU' },
@@ -241,10 +246,15 @@ export class PipelineComponent implements OnInit {
   loadLeads(): void {
     this.loadingQual.set(true);
     this.leadService
-      .listar({ fonte: this.gridFonte() ?? undefined, page: 0, size: 500 })
+      .listar({
+        fonte: this.gridFonte() ?? undefined,
+        page: this.currentPage(),
+        size: this.pageSize(),
+      })
       .subscribe({
         next: (page) => {
           this.allLeadsRaw = page.content ?? [];
+          this.totalElements.set(page.totalElements ?? 0);
           this.redistribuirQualColumns();
           this.loadingQual.set(false);
         },
@@ -257,6 +267,7 @@ export class PipelineComponent implements OnInit {
 
   setGridFonte(fonte: string | null): void {
     this.gridFonte.set(fonte);
+    this.currentPage.set(0);
     this.loadLeads();
   }
 
@@ -265,13 +276,19 @@ export class PipelineComponent implements OnInit {
     this.redistribuirQualColumns();
   }
 
+  /** Paginação global — uma única página, cujos leads são distribuídos entre todas as colunas por status. */
+  onPageChange(event: PageEvent): void {
+    this.currentPage.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
+    this.loadLeads();
+  }
+
   /** Reaplica busca (client-side, sobre o lote já carregado) e redistribui nas colunas por status. */
   private redistribuirQualColumns(): void {
     const termo = this.searchTerm().trim().toLowerCase();
     const filtrados = termo
       ? this.allLeadsRaw.filter(
-          (l) =>
-            l.titulo?.toLowerCase().includes(termo) || l.orgao?.toLowerCase().includes(termo),
+          (l) => l.titulo?.toLowerCase().includes(termo) || l.orgao?.toLowerCase().includes(termo),
         )
       : this.allLeadsRaw;
 

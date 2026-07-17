@@ -328,6 +328,11 @@
   &:hover { border-color: var(--text-muted, #CBD5E1); color: var(--text-primary); }
   &.active { border-color: var(--brand-primary); background: var(--brand-primary); color: #fff; font-weight: 600; }
 }
+.qual-paginator {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  background: transparent;
+}
 .qual-search {
   display: flex; align-items: center; gap: 0.5rem;
   border: 1.5px solid var(--border); border-radius: 1.25rem; padding: 0.375rem 0.875rem;
