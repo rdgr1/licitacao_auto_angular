@@ -7,12 +7,35 @@
       <h1 class="leads-title">Leads</h1>
       <p class="leads-sub">Matérias coletadas das fontes oficiais classificadas para análise</p>
     </div>
-    <button class="btn-historico" [class.active]="historicoAtivo()" (click)="toggleHistorico()"
-            matTooltip="Rastreabilidade de coletas">
-      <mat-icon aria-hidden="true">{{ historicoAtivo() ? 'query_stats' : 'history' }}</mat-icon>
-      Rastreabilidade
-    </button>
+    <div class="header-actions">
+      <button class="btn-legenda" [class.active]="legendaAtiva()" (click)="legendaAtiva.set(!legendaAtiva())"
+              matTooltip="O que significam as bolinhas dos cards">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        Legenda
+      </button>
+      <button class="btn-historico" [class.active]="historicoAtivo()" (click)="toggleHistorico()"
+              matTooltip="Rastreabilidade de coletas">
+        <mat-icon aria-hidden="true">{{ historicoAtivo() ? 'query_stats' : 'history' }}</mat-icon>
+        Rastreabilidade
+      </button>
+    </div>
   </div>
+
+  <!-- ── Legenda dos indicadores ─────────────────────────────────────── -->
+  @if (legendaAtiva()) {
+    <div class="legenda-panel animate-in">
+      <span class="legenda-title">Indicadores dos cards</span>
+      <div class="legenda-item">
+        <span class="edital-link-dot linked" aria-hidden="true"></span>
+        <span>Edital vinculado com sucesso a este lead</span>
+      </div>
+      <div class="legenda-item">
+        <span class="edital-link-dot" aria-hidden="true"></span>
+        <span>Edital ainda não vinculado</span>
+      </div>
+      <span class="legenda-note">Mais indicadores serão adicionados aqui conforme o ecossistema evoluir.</span>
+    </div>
+  }
 
   <!-- ── Painel de Coleta ─────────────────────────────────────────── -->
   <div class="coleta-panel">
@@ -122,7 +145,6 @@
               @if (rangeInfo()) { <span class="range-info">{{ rangeInfo() }}</span> }
             }
           </div>
-
           <div class="coleta-actions">
             @if (hasCollectableFonte()) {
               <button class="btn-coletar" (click)="coletar()" [disabled]="coletaAndamento.ativa() || !canSubmit()">
@@ -133,17 +155,8 @@
               </button>
             }
           </div>
-        </div>
 
-        @if (coletaResultado(); as r) {
-          <div class="coleta-resultado">
-            <span class="res-chip"><span class="res-val">{{ r.totalMaterias }}</span> matérias</span>
-            <span class="res-chip relevantes"><span class="res-val">{{ r.salvos }}</span> salvos</span>
-            <span class="res-chip"><span class="res-val">{{ r.duplicados }}</span> duplicados</span>
-          </div>
-        }
-
-        <!-- Painel de progresso por fonte -->
+          <!-- Painel de progresso por fonte -->
         @if (coletaAndamento.fontes().length > 0) {
           <div class="coleta-progress-panel">
             <div class="cpp-header">
@@ -181,6 +194,15 @@
                 }
               </div>
             }
+          </div>
+        }
+        </div>
+
+        @if (coletaResultado(); as r) {
+          <div class="coleta-resultado">
+            <span class="res-chip"><span class="res-val">{{ r.totalMaterias }}</span> matérias</span>
+            <span class="res-chip relevantes"><span class="res-val">{{ r.salvos }}</span> salvos</span>
+            <span class="res-chip"><span class="res-val">{{ r.duplicados }}</span> duplicados</span>
           </div>
         }
       </div>
@@ -346,17 +368,15 @@
           <strong>Rejeitadas:</strong> salvas, mas descartadas manualmente pelo analista — use para afinar seus filtros.
         </p>
 
-        @if (historicoTotal() > historicoPageSize()) {
-          <mat-paginator
-            [length]="historicoTotal()"
-            [pageSize]="historicoPageSize()"
-            [pageIndex]="historicoPage()"
-            [pageSizeOptions]="[10, 20, 50]"
-            [showFirstLastButtons]="true"
-            (page)="onHistoricoPageChange($event)"
-            class="historico-paginator">
-          </mat-paginator>
-        }
+        <mat-paginator
+          [length]="historicoTotal()"
+          [pageSize]="historicoPageSize()"
+          [pageIndex]="historicoPage()"
+          [pageSizeOptions]="[5,10, 20, 50]"
+          [showFirstLastButtons]="true"
+          (page)="onHistoricoPageChange($event)"
+          class="historico-paginator">
+        </mat-paginator>
       }
 
     </div>
@@ -431,17 +451,13 @@
       @for (lead of filteredLeads(); track lead.uuid) {
         <div class="lead-card status-border-{{ lead.status }}" role="listitem" (click)="verDetalhe(lead)" [@fadeSlideIn]>
 
-          @if (lead.status === 'NOVO') {
-            <span class="lead-novo-pulse" aria-hidden="true"></span>
-          }
-
           <!-- Meta row -->
           <div class="lc-meta">
+            <span class="edital-link-dot" [class.linked]="lead.editalId"
+                  [matTooltip]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"
+                  [attr.aria-label]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"></span>
             <span class="lc-fonte fonte-{{ lead.fonte?.toLowerCase() }}">{{ lead.fonte }}</span>
             <span class="lc-tipo">{{ lead.tipo }}</span>
-            <span class="lc-status status-{{ lead.status }}">
-              <span class="status-dot"></span>{{ statusLabel(lead.status) }}
-            </span>
           </div>
 
           <!-- Title -->
