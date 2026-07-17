@@ -46,7 +46,7 @@ export interface JustificativaDialogData {
       max-width: 460px;
     }
     .jd-title { margin: 0; font-size: 16px; font-weight: 700; color: #0F172A; }
-    .jd-sub   { margin: 0; font-size: 13px; color: #64748B; }
+    .jd-sub   { margin: 0; font-size: 13px; color: var(--text-muted, #64748B); }
     .jd-field { width: 100%; }
     .jd-actions {
       display: flex;

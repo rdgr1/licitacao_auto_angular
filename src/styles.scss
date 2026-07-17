@@ -453,6 +453,20 @@ html {
   --mat-option-selected-state-layer-color:        rgba(17,191,127,0.10);
 }
 
+// Dark mode — os mesmos containers MDC forçados acima (dialogs, menus,
+// select/autocomplete panels, tabelas, paginator) recebem superfícies escuras.
+html[data-theme='dark'] {
+  --mdc-filled-text-field-container-color:        #1D2740;
+  --mdc-filled-text-field-hover-container-color:  #263248;
+  --mat-select-panel-background-color:            #151B2B;
+  --mat-autocomplete-background-color:            #151B2B;
+  --mat-menu-container-color:                     #151B2B;
+  --mat-dialog-container-color:                   #151B2B;
+  --mat-table-background-color:                   #151B2B;
+  --mat-table-row-item-container-color:           #151B2B;
+  --mat-paginator-container-background-color:     #151B2B;
+}
+
 // Forçar cor verde em todos os estados do slide-toggle
 mat-slide-toggle.mat-primary {
   --mdc-switch-selected-track-color: #11BF7F !important;
@@ -478,16 +492,16 @@ html {
 // Fonte única: mudança aqui reflete em ambos os componentes automaticamente.
 // clamp(min, preferred, max) — ligeiramente maior em telas grandes.
 .cfg-table {
-  --mat-table-background-color:           #ffffff !important;
-  --mat-table-row-item-container-color:   #ffffff !important;
-  --mat-table-row-item-label-text-color:  #334155;
+  --mat-table-background-color:           var(--card-bg, #ffffff) !important;
+  --mat-table-row-item-container-color:   var(--card-bg, #ffffff) !important;
+  --mat-table-row-item-label-text-color:  var(--text-secondary, #334155);
   --mat-table-header-container-height:    40px;
   --mat-table-row-item-container-height:  clamp(38px, 3.2vw, 46px);
 
   .mat-mdc-row,
-  .mat-mdc-header-row { background: #ffffff !important; }
+  .mat-mdc-header-row { background: var(--card-bg, #ffffff) !important; }
 
-  .mat-mdc-row:hover .mat-mdc-cell { background: #F8FAFC !important; }
+  .mat-mdc-row:hover .mat-mdc-cell { background: var(--content-bg, #F8FAFC) !important; }
 
   // Toggle compacto — clamp: ligeiramente maior em telas maiores
   .mdc-switch {

@@ -202,7 +202,11 @@ const ORG_COLORS = [
         <button mat-button mat-dialog-close class="act-close">Fechar</button>
         <div class="act-right">
           @if (data.status === 'DESCARTADO') {
-            <button class="act-btn act-next" (click)="moverPara('NOVO')" [disabled]="operationTracker.isLoading('mover-lead-' + data.uuid)()">
+            <button
+              class="act-btn act-next"
+              (click)="moverPara('NOVO')"
+              [disabled]="operationTracker.isLoading('mover-lead-' + data.uuid)()"
+            >
               <mat-icon>inbox</mat-icon>Mover para Novos Leads
             </button>
           }
@@ -290,7 +294,7 @@ const ORG_COLORS = [
         display: flex;
         flex-direction: column;
         width: 100%;
-        background: #fff;
+        background: var(--card-bg, #fff);
         border-radius: 1rem;
         overflow: hidden;
       }
@@ -338,8 +342,8 @@ const ORG_COLORS = [
       }
       .tipo-badge {
         font-size: 10px;
-        color: #94a3b8;
-        background: #f8fafc;
+        color: var(--text-muted, #94a3b8);
+        background: var(--content-bg, #f8fafc);
         border: 1px solid #e8edf5;
         border-radius: 4px;
         padding: 1px 7px;
@@ -384,7 +388,7 @@ const ORG_COLORS = [
           width: 18px;
           height: 18px;
           line-height: 18px;
-          color: #94a3b8;
+          color: var(--text-muted, #94a3b8);
         }
         &:hover {
           background: rgba(0, 0, 0, 0.06);
@@ -402,7 +406,7 @@ const ORG_COLORS = [
       .ld-infobar {
         display: flex;
         align-items: stretch;
-        background: #f8fafc;
+        background: var(--content-bg, #f8fafc);
         border-bottom: 1px solid #f1f5f9;
         flex-wrap: wrap;
       }
@@ -434,14 +438,14 @@ const ORG_COLORS = [
         font-size: 18px;
         width: 18px;
         height: 18px;
-        color: #94a3b8;
+        color: var(--text-muted, #94a3b8);
         flex-shrink: 0;
       }
       .info-k {
         display: block;
         font-size: 9.5px;
         font-weight: 700;
-        color: #94a3b8;
+        color: var(--text-muted, #94a3b8);
         text-transform: uppercase;
         letter-spacing: 0.06em;
         margin-bottom: 1px;
@@ -470,7 +474,7 @@ const ORG_COLORS = [
       .ld-texto {
         font-size: 13.5px;
         line-height: 1.75;
-        color: #334155;
+        color: var(--text-secondary, #334155);
         margin: 0;
         white-space: pre-wrap;
       }
@@ -507,7 +511,7 @@ const ORG_COLORS = [
         gap: 0.3125rem;
         font-size: 11px;
         font-weight: 700;
-        color: #475569;
+        color: var(--text-secondary, #475569);
         text-transform: uppercase;
         letter-spacing: 0.06em;
         mat-icon {
@@ -522,10 +526,10 @@ const ORG_COLORS = [
         align-items: center;
         gap: 0.5rem;
         font-size: 13px;
-        color: #64748b;
+        color: var(--text-muted, #64748b);
       }
       .edital-card {
-        background: #f8fafc;
+        background: var(--content-bg, #f8fafc);
         border: 1px solid #e2e8f0;
         border-left: 3px solid #11bf7f;
         border-radius: 0.625rem;
@@ -547,7 +551,7 @@ const ORG_COLORS = [
       .ek {
         font-size: 9.5px;
         font-weight: 700;
-        color: #94a3b8;
+        color: var(--text-muted, #94a3b8);
         text-transform: uppercase;
         letter-spacing: 0.06em;
         font-family: var(--font-secondary);
@@ -579,8 +583,8 @@ const ORG_COLORS = [
         font-size: 12px;
         font-weight: 600;
         transition: all 130ms;
-        background: #f1f5f9;
-        color: #475569;
+        background: var(--content-bg, #f1f5f9);
+        color: var(--text-secondary, #475569);
         mat-icon {
           font-size: 14px;
           width: 14px;
@@ -602,11 +606,11 @@ const ORG_COLORS = [
         align-items: center;
         gap: 0.75rem;
         padding: 0.75rem 1rem;
-        background: #f8fafc;
+        background: var(--content-bg, #f8fafc);
         border: 1px dashed #cbd5e1;
         border-radius: 0.625rem;
         font-size: 13px;
-        color: #64748b;
+        color: var(--text-muted, #64748b);
         mat-icon {
           font-size: 20px;
           width: 20px;
@@ -621,7 +625,7 @@ const ORG_COLORS = [
           }
           small {
             font-size: 11px;
-            color: #94a3b8;
+            color: var(--text-muted, #94a3b8);
             font-family: var(--font-secondary);
           }
         }
@@ -667,10 +671,10 @@ const ORG_COLORS = [
         gap: 0.625rem;
         padding: 0.875rem 1.125rem;
         border-top: 1px solid #f1f5f9;
-        background: #fafbfc;
+        background: var(--content-bg, #fafbfc);
       }
       .act-close {
-        color: #64748b;
+        color: var(--text-muted, #64748b);
         font-size: 13px;
       }
       .act-right {
@@ -711,7 +715,7 @@ const ORG_COLORS = [
         &.act-discard {
           background: transparent;
           border-color: #e2e8f0;
-          color: #94a3b8;
+          color: var(--text-muted, #94a3b8);
           padding: 0.4375rem 0.625rem;
           &:hover:not(:disabled) {
             background: #fee2e2;
