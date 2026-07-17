@@ -59,7 +59,7 @@
       </div>
     } @else {
       <div class="board cols-5" cdkDropListGroup>
-        @for (col of qualColumns; track col.id) {
+        @for (col of qualColumns(); track col.id) {
           <div class="col" [style.--cc]="col.color" [style.--ca]="col.accent">
 
             <!-- Column header -->
@@ -89,8 +89,11 @@
                      (keydown.space)="openLeadDetalhe(lead)">
                   <div class="kcard-placeholder" *cdkDragPlaceholder></div>
 
-                  <!-- Source + date + drag -->
+                  <!-- Edital link + source + date + drag -->
                   <div class="kcard-meta">
+                    <span class="edital-link-dot" [class.linked]="lead.editalId"
+                          [matTooltip]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"
+                          [attr.aria-label]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"></span>
                     <span class="src src-{{ lead.fonte?.toLowerCase() }}"
                           aria-hidden="true">{{ lead.fonte }}</span>
                     <span class="kcard-date" aria-hidden="true">{{ formatDate(lead.dataPublicacao) }}</span>
@@ -122,7 +125,7 @@
                     <mat-icon aria-hidden="true">more_vert</mat-icon>
                   </button>
                   <mat-menu #moveMenu="matMenu">
-                    @for (destCol of qualColumns; track destCol.id) {
+                    @for (destCol of qualColumns(); track destCol.id) {
                       @if (destCol.id !== col.id) {
                         <button mat-menu-item (click)="moveLeadToColumn(lead, destCol.id)">
                           Mover para {{ destCol.label }}
@@ -168,7 +171,7 @@
       </div>
     } @else {
       <div class="board cols-7" cdkDropListGroup>
-        @for (col of procColumns; track col.id) {
+        @for (col of procColumns(); track col.id) {
           <div class="col" [style.--cc]="col.color" [style.--ca]="col.accent"
                [class.col-final]="col.key === 'GANHO' || col.key === 'PERDIDO'">
 
