@@ -26,3 +26,22 @@ Nenhuma pendência de backend — é 100% frontend.
 
 Nenhuma pendência de backend — `GET /leads` já aceita `fonte` como query param
 (`LeadController`, `LeadServiceImpl.listarPorFonte`); o frontend só não estava usando.
+
+## PENDENTE — Paginator de editais trava/buga com 500+ registros
+
+Reportado pelo usuário: ao abrir a lista de Editais (`editais-list.component`), com o
+banco tendo mais de ~500 editais, o paginator "buga e trava". Investigação parada por
+custo de sessão antes de confirmar a causa — próxima sessão deve:
+
+1. Checar `EditalController.java:129` (`GET /editais/stats`, chamado junto com
+   `GET /editais` toda vez que a lista abre, em `editais-list.component.ts:110-120`) —
+   ver se essa query de estatísticas faz agregação/scan sem índice adequado sobre a
+   tabela `editais`, ficando lenta o suficiente pra parecer "travado" com volume alto.
+2. Confirmar se o problema é ainda perceptível mesmo depois do fix do
+   `pageNormalizeInterceptor` (commit `f0baef8`, licitacao_auto_angular) — esse fix já
+   resolveu o "0 de 0" genérico, mas o usuário relatou isso *depois* desse commit, então
+   pode ser um problema diferente (performance, não formato de resposta).
+3. `dataSource.filter` (busca client-side, `editais-list.component.ts:148-163`) só filtra
+   a página atual (~25-100 itens) — não é a causa do travamento com 500+, mas é uma
+   inconsistência relacionada (paginator mostra total do servidor, tabela mostra menos
+   linhas se a busca estiver ativa) que também vale revisar na mesma passada.
