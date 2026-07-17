@@ -23,6 +23,8 @@ import { ColetaLog, ColetaResumo } from '../../core/models/coleta-log.model';
 import { ColetaResultado } from '../../core/models/dodf.model';
 import { LeadDetalheDialogComponent } from './lead-detalhe-dialog/lead-detalhe-dialog.component';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { ScoreBadgePipe } from '../../shared/pipes/score-badge.pipe';
+import { LeadCategoriaPipe } from '../../shared/pipes/lead-categoria.pipe';
 import { BackgroundLayerComponent } from '../../shared/components/background-layer/background-layer.component';
 
 interface StatusTab {
@@ -104,6 +106,8 @@ const ORG_COLORS = [
     MatInputModule,
     MatNativeDateModule,
     TruncatePipe,
+    ScoreBadgePipe,
+    LeadCategoriaPipe,
     MatPaginatorModule,
     BackgroundLayerComponent,
   ],
@@ -135,6 +139,7 @@ export class LeadsComponent implements OnInit {
     (sessionStorage.getItem('leads_filter_status') as LeadStatus | null) ?? null,
   );
   selectedFontes = signal<string[]>([]);
+  gridFonte = signal<string | null>(null);
   allLeads = signal<Lead[]>([]);
   totalElements = signal(0);
   currentPage = signal(0);
@@ -161,13 +166,6 @@ export class LeadsComponent implements OnInit {
   historicoTotal = signal(0);
 
   // ── Computeds ──────────────────────────────────────────────────
-
-  filteredLeads = computed(() => {
-    const fontes = this.selectedFontes();
-    const leads = this.allLeads();
-    if (!fontes.length) return leads;
-    return leads.filter((l) => fontes.includes(l.fonte));
-  });
 
   countByStatus = (status: LeadStatus | null) =>
     this.allLeads().filter((l) => status === null || l.status === status).length;
@@ -263,6 +261,12 @@ export class LeadsComponent implements OnInit {
     this.carregarLeads();
   }
 
+  setGridFonte(fonte: string | null): void {
+    this.gridFonte.set(fonte);
+    this.currentPage.set(0);
+    this.carregarLeads();
+  }
+
   setDateMode(mode: 'single' | 'range'): void {
     this.dateMode.set(mode);
     if (mode === 'single') {
@@ -279,6 +283,7 @@ export class LeadsComponent implements OnInit {
     this.leadService
       .listar({
         status: this.selectedStatus() ?? undefined,
+        fonte: this.gridFonte() ?? undefined,
         page: this.currentPage(),
         size: this.pageSize(),
       })

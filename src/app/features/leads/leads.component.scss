@@ -400,6 +400,7 @@
 
 /* ── Status bar ─────────────────────────────────────────────────────────── */
 .status-bar { display: flex; gap: 0.375rem; flex-wrap: wrap; }
+.fonte-filter-bar { display: flex; gap: 0.375rem; flex-wrap: wrap; }
 .status-pill {
   display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.875rem; border-radius: 1.25rem;
   border: 1.5px solid var(--border); background: #fff; color: var(--text-secondary);
@@ -436,11 +437,12 @@
   }
 
   /* Left accent by status */
-  &.status-border-NOVA           { border-left: 3px solid #3B82F6; }
-  &.status-border-EM_TRIAGEM     { border-left: 3px solid #8B5CF6; }
-  &.status-border-VERIFICANDO_REQ{ border-left: 3px solid var(--status-pendente); }
-  &.status-border-QUALIFICADO    { border-left: 3px solid var(--brand-primary); }
-  &.status-border-DESCARTADO     { border-left: 3px solid #CBD5E1; opacity: 0.7; }
+  &.status-border-NOVO                          { border-left: 3px solid #3B82F6; }
+  &.status-border-APROVACAO_PRESIDENCIA         { border-left: 3px solid #8B5CF6; }
+  &.status-border-ESTUDO_VIABILIDADE            { border-left: 3px solid var(--status-pendente); }
+  &.status-border-SEGUNDA_APROVACAO_PRESIDENCIA { border-left: 3px solid #F97316; }
+  &.status-border-QUALIFICADO                   { border-left: 3px solid var(--brand-primary); }
+  &.status-border-DESCARTADO                    { border-left: 3px solid #CBD5E1; opacity: 0.7; }
 }
 
 /* ── Card meta ── */
@@ -459,6 +461,11 @@
 .lc-tipo {
   font-size: 10px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   flex: 1; font-family: var(--font-secondary); font-weight: 600;
+}
+
+.lc-categoria {
+  font-size: 9px; font-weight: 800; border-radius: 4px; padding: 1px 6px;
+  text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap;
 }
 
 /* ── Card title ── */
