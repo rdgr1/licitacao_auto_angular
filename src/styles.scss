@@ -99,6 +99,27 @@ html {
   --lead-desc-bg:      #F1F5F9;
   --lead-desc-color:   #64748B;
 
+  // Tints semânticos (badges/status) — reaproveitados em várias telas (ex: editais)
+  --tint-green-bg:         #F0FDF4;
+  --tint-green-text:       #166534;
+  --tint-green-text-strong:#059669;
+  --tint-amber-bg:         #FFFBEB;
+  --tint-amber-text:       #92400E;
+  --tint-purple-bg:        #F5F3FF;
+  --tint-purple-text:      #5B21B6;
+  --tint-purple-icon:      #8B5CF6;
+  --tint-red-bg:           #FFF1F2;
+  --tint-red-text:         #9F1239;
+  --tint-red-text-strong:  #DC2626;
+  --tint-blue-bg:          #EFF6FF;
+  --tint-blue-text:        #1E40AF;
+  --tint-indigo-bg:        #EEF2FF;
+  --tint-indigo-text:      #3730A3;
+  --tint-indigo-icon:      #6366F1;
+  --tint-teal-bg:          #F0FDFA;
+  --tint-teal-text:        #0F766E;
+  --tint-teal-icon:        #14B8A6;
+
   // Skeleton
   --skeleton-base:  #E2E8F0;
   --skeleton-shine: #F8FAFC;
@@ -158,6 +179,26 @@ html {
 
   --lead-desc-bg:      #1D2740;
   --lead-desc-color:   #8A99B3;
+
+  --tint-green-bg:          rgba(22,163,74,0.16);
+  --tint-green-text:        #4ADE80;
+  --tint-green-text-strong: #34D399;
+  --tint-amber-bg:          rgba(217,119,6,0.16);
+  --tint-amber-text:        #FBBF24;
+  --tint-purple-bg:         rgba(139,92,246,0.16);
+  --tint-purple-text:       #C4B5FD;
+  --tint-purple-icon:       #A78BFA;
+  --tint-red-bg:            rgba(225,29,72,0.16);
+  --tint-red-text:          #FDA4AF;
+  --tint-red-text-strong:   #FB7185;
+  --tint-blue-bg:           rgba(59,130,246,0.16);
+  --tint-blue-text:         #93C5FD;
+  --tint-indigo-bg:         rgba(99,102,241,0.16);
+  --tint-indigo-text:       #A5B4FC;
+  --tint-indigo-icon:       #818CF8;
+  --tint-teal-bg:           rgba(20,184,166,0.16);
+  --tint-teal-text:         #5EEAD4;
+  --tint-teal-icon:         #2DD4BF;
 }
 
 // ── Override Material tonal palette ──────────────────────────────────────────
