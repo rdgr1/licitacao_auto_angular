@@ -12,7 +12,7 @@ const MAP: Record<string, { label: string; color: string }> = {
   COPEIRAGEM: { label: 'Copeiragem', color: '#F59E0B' },
   MÃO_DE_OBRA: { label: 'Mão de Obra', color: '#14B8A6' },
   BRIGADA: { label: 'Brigada', color: '#EF4444' },
-  DESCARTADO: { label: 'Sugestão: descartar', color: '#94A3B8' },
+  DESCARTADO: { label: 'Descartado (IA)', color: '#94A3B8' },
 };
 
 @Pipe({

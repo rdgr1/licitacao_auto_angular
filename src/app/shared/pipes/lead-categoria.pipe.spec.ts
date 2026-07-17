@@ -9,9 +9,9 @@ describe('LeadCategoriaPipe', () => {
     expect(result.hidden).toBe(false);
   });
 
-  it('mapeia DESCARTADO como sugestão neutra', () => {
+  it('mapeia DESCARTADO com label neutro', () => {
     const result = pipe.transform('DESCARTADO');
-    expect(result.label).toBe('Sugestão: descartar');
+    expect(result.label).toBe('Descartado (IA)');
     expect(result.hidden).toBe(false);
   });
 
