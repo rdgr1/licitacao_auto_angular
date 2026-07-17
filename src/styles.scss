@@ -134,6 +134,32 @@ html {
   --transition-md: 250ms ease;
 }
 
+// ── Dark mode — overrides das variáveis semânticas ────────────────────────────
+// Sidebar (--sidebar-*) fica de fora de propósito: já é escura nos dois temas.
+:root[data-theme='dark'] {
+  --header-bg:     #151B2B;
+  --header-border: #263248;
+  --content-bg:    #0C1322;
+
+  --card-bg:           #151B2B;
+  --card-border:       #263248;
+  --card-shadow:       0 1px 3px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.25);
+  --card-shadow-hover: 0 8px 24px rgba(0,0,0,0.45);
+
+  --text-primary:   #E8EEF7;
+  --text-secondary: #A9B7CC;
+  --text-muted:     #6B7A93;
+
+  --border:       #263248;
+  --border-focus: #3B82F6;
+
+  --skeleton-base:  #1D2740;
+  --skeleton-shine: #26314C;
+
+  --lead-desc-bg:      #1D2740;
+  --lead-desc-color:   #8A99B3;
+}
+
 // ── Override Material tonal palette ──────────────────────────────────────────
 // mat.$spring-green-palette tone-90 = amarelo-esverdeado → forçamos o verde real
 html {
@@ -185,6 +211,25 @@ html {
 
   // MDC ripple / state overlay
   --mat-sys-state-layers-primary-opacity: 0.08;
+}
+
+// ── Dark mode — overrides dos tokens M3 do Material ───────────────────────────
+// Cores de marca (primary/tertiary/switch/button) ficam iguais nos dois temas —
+// só as superfícies neutras (fundo/texto/outline) mudam.
+html[data-theme='dark'] {
+  --mat-sys-surface:                   #151B2B;
+  --mat-sys-on-surface:                #E8EEF7;
+  --mat-sys-surface-variant:           #1D2740;
+  --mat-sys-on-surface-variant:        #A9B7CC;
+  --mat-sys-surface-container-lowest:  #0C1322;
+  --mat-sys-surface-container-low:     #151B2B;
+  --mat-sys-surface-container:         #1D2740;
+  --mat-sys-surface-container-high:    #263248;
+  --mat-sys-surface-container-highest: #324063;
+  --mat-sys-background:                #0C1322;
+  --mat-sys-on-background:             #E8EEF7;
+  --mat-sys-outline:                   #263248;
+  --mat-sys-outline-variant:           #324063;
 }
 
 // ── Font variables ────────────────────────────────────────────────────────────
@@ -373,27 +418,6 @@ h1, h2, h3, h4, h5, h6 {
   &.cold { background: var(--score-cold); }
 }
 
-// ── Snackbars ─────────────────────────────────────────────────────────────────
-.snackbar-success {
-  --mdc-snackbar-container-color: var(--color-success);
-  --mat-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
-}
-.snackbar-error {
-  --mdc-snackbar-container-color: var(--color-error);
-  --mat-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
-}
-.snackbar-info {
-  --mdc-snackbar-container-color: var(--color-info);
-  --mat-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
-}
-.snackbar-warning {
-  --mdc-snackbar-container-color: var(--color-warning);
-  --mat-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
-}
 
 // ── Responsive Utilities ──────────────────────────────────────────────────────
 .hide-mobile { display: block; }
@@ -510,9 +534,13 @@ html {
 }
 
 // ── Toast styles ──────────────────────────────────────────────────────────────
+// Single source of truth for all snackbar/toast variants (ToastService + NotificationService).
 .toast-success .mdc-snackbar__surface { background: #10B981 !important; }
 .toast-error .mdc-snackbar__surface { background: #EF4444 !important; }
-.mdc-snackbar__label { color: white !important; font-weight: 500 !important; }
+.toast-info .mdc-snackbar__surface { background: var(--color-info) !important; }
+.toast-warning .mdc-snackbar__surface { background: var(--color-warning) !important; }
+.mdc-snackbar__surface { padding-inline: 0.25rem; }
+.mdc-snackbar__label { color: white !important; font-weight: 500 !important; padding: 0.875rem 1rem !important; }
 .mdc-snackbar__actions button { color: rgba(255,255,255,0.8) !important; }
 
 // ── Text Utilities ────────────────────────────────────────────────────────────
