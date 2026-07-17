@@ -83,7 +83,7 @@
                      role="button" tabindex="0"
                      [attr.aria-label]="'Ver detalhes do lead: ' + lead.titulo"
                      [class.just-dropped]="justDroppedId() === lead.uuid"
-                     [style.--score-color]="(lead.leadScore ?? 0) >= 70 ? 'var(--score-hot)' : (lead.leadScore ?? 0) >= 40 ? 'var(--status-pendente)' : 'var(--color-info)'"
+                     [style.--score-color]="lead.leadScore != null ? (lead.leadScore | scoreBadge).color : null"
                      (click)="openLeadDetalhe(lead)"
                      (keydown.enter)="openLeadDetalhe(lead)"
                      (keydown.space)="openLeadDetalhe(lead)">
@@ -96,6 +96,13 @@
                           [attr.aria-label]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"></span>
                     <span class="src src-{{ lead.fonte?.toLowerCase() }}"
                           aria-hidden="true">{{ lead.fonte }}</span>
+                    @if (!(lead.leadCategoriaPrincipal | leadCategoria).hidden) {
+                      <span class="kcard-categoria"
+                            [style.background]="(lead.leadCategoriaPrincipal | leadCategoria).color + '1A'"
+                            [style.color]="(lead.leadCategoriaPrincipal | leadCategoria).color">
+                        {{ (lead.leadCategoriaPrincipal | leadCategoria).label }}
+                      </span>
+                    }
                     <span class="kcard-date" aria-hidden="true">{{ formatDate(lead.dataPublicacao) }}</span>
                     <mat-icon class="kcard-drag" aria-hidden="true" aria-label="">drag_indicator</mat-icon>
                   </div>

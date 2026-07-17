@@ -21,6 +21,8 @@ import { ProcessoDetalheDialogComponent } from '../processos/processo-detalhe-di
 import { LeadDetalheDialogComponent } from '../leads/lead-detalhe-dialog/lead-detalhe-dialog.component';
 import { JustificativaDialogComponent } from '../../shared/components/justificativa-dialog/justificativa-dialog.component';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { ScoreBadgePipe } from '../../shared/pipes/score-badge.pipe';
+import { LeadCategoriaPipe } from '../../shared/pipes/lead-categoria.pipe';
 import { BackgroundLayerComponent } from '../../shared/components/background-layer/background-layer.component';
 
 interface LeadCol {
@@ -67,6 +69,8 @@ const ORG_COLORS = [
     MatMenuModule,
     DragDropModule,
     TruncatePipe,
+    ScoreBadgePipe,
+    LeadCategoriaPipe,
     LeadDetalheDialogComponent,
     BackgroundLayerComponent,
   ],

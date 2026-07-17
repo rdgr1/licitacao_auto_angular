@@ -175,6 +175,12 @@
   &.src-dou  { background: #F0FDFA; color: #0F766E; border: 1px solid #99F6E4; }
 }
 
+.kcard-categoria {
+  font-size: 9px; font-weight: 800; border-radius: 4px;
+  padding: 1px 6px; text-transform: uppercase; letter-spacing: 0.07em;
+  white-space: nowrap;
+}
+
 .kcard-date {
   font-size: 10px; color: var(--text-muted); flex: 1; text-align: right; white-space: nowrap;
   font-family: var(--font-secondary); font-weight: 600;
