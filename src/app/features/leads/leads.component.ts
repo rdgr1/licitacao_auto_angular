@@ -138,6 +138,7 @@ export class LeadsComponent implements OnInit {
   );
   selectedFontes = signal<string[]>([]);
   gridFonte = signal<string | null>(null);
+  scoreMin = signal<number | null>(null);
   allLeads = signal<Lead[]>([]);
   totalElements = signal(0);
   currentPage = signal(0);
@@ -265,6 +266,12 @@ export class LeadsComponent implements OnInit {
     this.carregarLeads();
   }
 
+  setScoreMin(scoreMin: number | null): void {
+    this.scoreMin.set(scoreMin);
+    this.currentPage.set(0);
+    this.carregarLeads();
+  }
+
   setDateMode(mode: 'single' | 'range'): void {
     this.dateMode.set(mode);
     if (mode === 'single') {
@@ -282,6 +289,7 @@ export class LeadsComponent implements OnInit {
       .listar({
         status: this.selectedStatus() ?? undefined,
         fonte: this.gridFonte() ?? undefined,
+        scoreMin: this.scoreMin() ?? undefined,
         page: this.currentPage(),
         size: this.pageSize(),
       })

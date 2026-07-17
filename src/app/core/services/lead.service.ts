@@ -9,7 +9,16 @@ import { BuscaEdital } from '../models/busca-edital.model';
 
 const toPage = <T>(res: Page<T> | T[]): Page<T> =>
   Array.isArray(res)
-    ? { content: res, totalElements: res.length, totalPages: 1, size: res.length, number: 0, first: true, last: true, empty: res.length === 0 }
+    ? {
+        content: res,
+        totalElements: res.length,
+        totalPages: 1,
+        size: res.length,
+        number: 0,
+        first: true,
+        last: true,
+        empty: res.length === 0,
+      }
     : res;
 
 @Injectable({ providedIn: 'root' })
@@ -17,12 +26,19 @@ export class LeadService {
   private http = inject(HttpClient);
   private base = `${environment.apiUrl}/leads`;
 
-  listar(filtros: { status?: LeadStatus; fonte?: string; page?: number; size?: number } = {}): Observable<Page<Lead>> {
-    let params = new HttpParams()
-      .set('page', filtros.page ?? 0)
-      .set('size', filtros.size ?? 20);
+  listar(
+    filtros: {
+      status?: LeadStatus;
+      fonte?: string;
+      scoreMin?: number;
+      page?: number;
+      size?: number;
+    } = {},
+  ): Observable<Page<Lead>> {
+    let params = new HttpParams().set('page', filtros.page ?? 0).set('size', filtros.size ?? 20);
     if (filtros.status) params = params.set('status', filtros.status);
     if (filtros.fonte) params = params.set('fonte', filtros.fonte);
+    if (filtros.scoreMin != null) params = params.set('scoreMin', filtros.scoreMin);
     return this.http.get<Page<Lead> | Lead[]>(this.base, { params }).pipe(map(toPage));
   }
 

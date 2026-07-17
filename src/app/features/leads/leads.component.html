@@ -404,6 +404,19 @@
     }
   </div>
 
+  <!-- ── Filtro por score (grade) ─────────────────────────────────── -->
+  <div class="fonte-filter-bar" role="group" aria-label="Filtro por score mínimo">
+    <button class="status-pill" [class.active]="scoreMin() === null" (click)="setScoreMin(null)">
+      Todos os scores
+    </button>
+    <button class="status-pill" [class.active]="scoreMin() === 40" (click)="setScoreMin(40)">
+      Morno (40+)
+    </button>
+    <button class="status-pill" [class.active]="scoreMin() === 70" (click)="setScoreMin(70)">
+      Quente (70+)
+    </button>
+  </div>
+
   <!-- ── Card Grid ─────────────────────────────────────────────────── -->
 
   <!-- Estado: carregando -->
