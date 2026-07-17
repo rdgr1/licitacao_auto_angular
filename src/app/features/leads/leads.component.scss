@@ -30,7 +30,7 @@
 
 /* ── Coleta panel ───────────────────────────────────────────────────────── */
 .coleta-panel {
-  background: #fff; border: 1px solid var(--border); border-radius: 0.875rem;
+  background: var(--card-bg, #fff); border: 1px solid var(--border); border-radius: 0.875rem;
   padding: clamp(0.875rem, 0.75rem + 0.6vw, 1.375rem) clamp(1rem, 0.85rem + 0.8vw, 1.625rem);
   display: flex; flex-direction: column; gap: 0;
 }
@@ -134,7 +134,7 @@
   display: flex; align-items: center; gap: 4px; padding: 6px 11px; border-radius: 6px; border: none;
   background: transparent; color: var(--text-secondary); font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 150ms;
   mat-icon { font-size: 14px; width: 14px; height: 14px; }
-  &.active { background: #fff; color: var(--text-primary); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.10); }
+  &.active { background: var(--card-bg, #fff); color: var(--text-primary); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.10); }
 }
 .date-inputs { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .date-field  { width: 9.6875rem; }
@@ -167,7 +167,7 @@
 
 /* ── Legenda dos indicadores ──────────────────────────────────────────────── */
 .legenda-panel {
-  background: #fff; border: 1px solid var(--border); border-radius: 0.75rem;
+  background: var(--card-bg, #fff); border: 1px solid var(--border); border-radius: 0.75rem;
   padding: 0.875rem 1.125rem; display: flex; flex-direction: column; gap: 0.5rem;
 }
 .legenda-title { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
@@ -209,7 +209,7 @@
 
 /* ── Rastreabilidade section ─────────────────────────────────────────────── */
 .historico-section {
-  background: #fff; border: 1px solid var(--border); border-radius: 0.875rem;
+  background: var(--card-bg, #fff); border: 1px solid var(--border); border-radius: 0.875rem;
   padding: clamp(1rem, 0.85rem + 0.6vw, 1.5rem) clamp(1.125rem, 0.95rem + 0.8vw, 1.75rem);
   display: flex; flex-direction: column; gap: 1rem;
 }
@@ -403,7 +403,7 @@
 .fonte-filter-bar { display: flex; gap: 0.375rem; flex-wrap: wrap; }
 .status-pill {
   display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.875rem; border-radius: 1.25rem;
-  border: 1.5px solid var(--border); background: #fff; color: var(--text-secondary);
+  border: 1.5px solid var(--border); background: var(--card-bg, #fff); color: var(--text-secondary);
   font-size: 12.5px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 150ms;
   &:hover { border-color: #CBD5E1; color: var(--text-primary); }
   &.active { border-color: var(--text-primary); background: var(--text-primary); color: #fff; font-weight: 600;
@@ -425,7 +425,7 @@
 
 /* ── Lead card ──────────────────────────────────────────────────────────── */
 .lead-card {
-  background: #fff; border-radius: 0.8125rem; border: 1px solid var(--border);
+  background: var(--card-bg, #fff); border-radius: 0.8125rem; border: 1px solid var(--border);
   padding: clamp(0.875rem, 0.75rem + 0.5vw, 1.25rem); display: flex; flex-direction: column; gap: 0.625rem;
   cursor: pointer; transition: box-shadow 150ms, transform 150ms;
   box-shadow: 0 1px 3px rgba(15,23,42,0.05);
@@ -571,7 +571,7 @@
 
 /* ── Coleta progress panel ───────────────────────────────────────────────── */
 .coleta-progress-panel {
-  background: #fff; border: 1px solid var(--border); border-radius: 0.625rem;
+  background: var(--card-bg, #fff); border: 1px solid var(--border); border-radius: 0.625rem;
   padding: 0.875rem 1rem; margin-top: 0.625rem; display: flex; flex-direction: column; gap: 0.625rem; margin-left: 1.5625rem;
 }
 .cpp-header {
@@ -657,13 +657,4 @@
   flex-shrink: 0;
   margin-left: auto;
   circle { transition: stroke-dasharray 300ms ease; }
-}
-
-// ── Pulse em leads novos ──────────────────────────────────────────────────
-@keyframes lf-novo-ring {
-  0%   { transform: scale(.6); opacity: .8; }
-  100% { transform: scale(2.2); opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .lead-novo-pulse::after { animation: none; }
 }

@@ -251,6 +251,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+html[data-theme='dark'] body {
+  color-scheme: dark;
+}
 
 // ── Typography ────────────────────────────────────────────────────────────────
 h1, h2, h3, h4, h5, h6 {

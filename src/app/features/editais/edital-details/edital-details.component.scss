@@ -85,7 +85,7 @@
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .det-hero {
   display: grid; grid-template-columns: auto auto 1fr 1fr;
-  background: #fff;
+  background: var(--card-bg, #fff);
   border: 1px solid var(--border);
   border-top: 2px solid var(--brand-primary);
   border-radius: 14px;
@@ -131,6 +131,9 @@
 }
 .hero-orgao-name {
   font-size: 12.5px; font-weight: 500; color: var(--text-primary); line-height: 1.4; margin-top: 2px;
+}
+.hero-orgao-municipio {
+  display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 1px;
 }
 
 /* ── Layout ──────────────────────────────────────────────────────────────── */
@@ -190,7 +193,7 @@
   @media (max-width: 640px) { grid-template-columns: repeat(2, 1fr); }
 }
 .mg-item {
-  background: #fff; padding: 13px 16px;
+  background: var(--card-bg, #fff); padding: 13px 16px;
   display: flex; flex-direction: column; gap: 4px;
   dt {
     font-size: 9.5px; font-weight: 700; color: var(--text-muted);
@@ -214,7 +217,7 @@
 .sec-hdr {
   display: flex; align-items: center; gap: 12px;
   padding: 13px 16px; width: 100%;
-  border: none; background: #fff; cursor: pointer;
+  border: none; background: var(--card-bg, #fff); cursor: pointer;
   font-family: inherit; text-align: left;
   border-bottom: 1px solid var(--content-bg);
   transition: background 0.18s cubic-bezier(0.16, 1, 0.3, 1);
@@ -356,7 +359,7 @@
 /* ── Contrato / ATA cards ─────────────────────────────────────────────────── */
 .sec-cards    { display: flex; flex-direction: column; gap: 8px; }
 .contrato-card {
-  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--card-bg, #fff); border: 1px solid var(--border); border-radius: 10px;
   padding: 14px 16px; display: flex; flex-direction: column; gap: 8px;
 }
 .cc-header { display: flex; align-items: center; gap: 8px; }
@@ -400,7 +403,7 @@
 
 /* ── Aside ───────────────────────────────────────────────────────────────── */
 .det-aside {
-  background: #fff; border: 1px solid var(--border); border-radius: 14px;
+  background: var(--card-bg, #fff); border: 1px solid var(--border); border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   overflow: hidden; position: sticky; top: 20px;
   max-height: calc(100vh - 60px); overflow-y: auto;

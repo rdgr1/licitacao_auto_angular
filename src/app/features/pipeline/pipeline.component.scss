@@ -43,7 +43,7 @@
   font-family: inherit; cursor: pointer; transition: all 150ms;
   mat-icon { font-size: 15px; width: 15px; height: 15px; }
   &:hover { color: var(--text-primary); }
-  &.active { background: #fff; color: var(--text-primary); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,0.10); }
+  &.active { background: var(--card-bg, #fff); color: var(--text-primary); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,0.10); }
 }
 .toggle-count {
   background: var(--border); color: var(--text-secondary); border-radius: 10px;
@@ -88,7 +88,7 @@
 .col-header {
   display: flex; align-items: center; gap: 0.3125rem;
   padding: 0.625rem 0.75rem 0.5625rem; border-bottom: 1px solid var(--border);
-  background: #fff; flex-shrink: 0;
+  background: var(--card-bg, #fff); flex-shrink: 0;
 }
 .col-icon  { font-size: 14px; width: 14px; height: 14px; color: var(--cc); flex-shrink: 0; }
 .col-label { font-size: 11.5px; font-weight: 700; color: #334155; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -111,7 +111,7 @@
 
 /* ── Card ───────────────────────────────────────────────────────────────── */
 .kcard {
-  background: #FFFFFF;
+  background: var(--card-bg, #fff);
   border-radius: 0.625rem;
   border: 1px solid var(--border);
   border-left: 3px solid var(--score-color, var(--cc));
