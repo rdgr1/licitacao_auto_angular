@@ -23,7 +23,6 @@ import { JustificativaDialogComponent } from '../../shared/components/justificat
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { ScoreBadgePipe } from '../../shared/pipes/score-badge.pipe';
 import { LeadCategoriaPipe } from '../../shared/pipes/lead-categoria.pipe';
-import { BackgroundLayerComponent } from '../../shared/components/background-layer/background-layer.component';
 
 interface LeadCol {
   id: string;
@@ -72,7 +71,6 @@ const ORG_COLORS = [
     ScoreBadgePipe,
     LeadCategoriaPipe,
     LeadDetalheDialogComponent,
-    BackgroundLayerComponent,
   ],
   templateUrl: './pipeline.component.html',
   styleUrl: './pipeline.component.scss',

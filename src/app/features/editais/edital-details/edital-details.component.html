@@ -1,7 +1,5 @@
 <main class="det-shell">
 
-  <app-bg-layer variant="aurora" [opacity]="0.35"></app-bg-layer>
-
   <!-- ── Skeleton loading ──────────────────────────────────────────── -->
   @if (loading()) {
     <div class="det-skeleton" role="status" aria-label="Carregando edital" aria-busy="true">
@@ -93,6 +91,9 @@
       <div class="hero-block hero-orgao">
         <span class="hero-label">Órgão</span>
         <span class="hero-orgao-name">{{ edital()!.orgaoOrigem }}</span>
+        @if (edital()!.municipio) {
+          <span class="hero-orgao-municipio">{{ edital()!.municipio }}</span>
+        }
       </div>
     </header>
 
@@ -140,6 +141,18 @@
               <dt>Número</dt>
               <dd class="mono">{{ edital()!.numero }}</dd>
             </div>
+            @if (edital()!.cnpjOrgao) {
+              <div class="mg-item">
+                <dt>CNPJ do órgão</dt>
+                <dd class="mono">{{ edital()!.cnpjOrgao }}</dd>
+              </div>
+            }
+            @if (edital()!.numeroCompra) {
+              <div class="mg-item">
+                <dt>Número da compra</dt>
+                <dd>{{ edital()!.numeroCompra }}{{ edital()!.anoCompra ? '/' + edital()!.anoCompra : '' }}</dd>
+              </div>
+            }
             <div class="mg-item">
               <dt>Exigências</dt>
               <dd>{{ edital()!.quantidadeExigencias ?? 0 }}</dd>

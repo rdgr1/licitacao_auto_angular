@@ -25,7 +25,6 @@ import { LeadDetalheDialogComponent } from './lead-detalhe-dialog/lead-detalhe-d
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { ScoreBadgePipe } from '../../shared/pipes/score-badge.pipe';
 import { LeadCategoriaPipe } from '../../shared/pipes/lead-categoria.pipe';
-import { BackgroundLayerComponent } from '../../shared/components/background-layer/background-layer.component';
 
 interface StatusTab {
   label: string;
@@ -109,7 +108,6 @@ const ORG_COLORS = [
     ScoreBadgePipe,
     LeadCategoriaPipe,
     MatPaginatorModule,
-    BackgroundLayerComponent,
   ],
   templateUrl: './leads.component.html',
   styleUrl: './leads.component.scss',

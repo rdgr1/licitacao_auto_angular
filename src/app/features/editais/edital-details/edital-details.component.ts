@@ -17,7 +17,6 @@ import {
 import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { DateBrPipe } from '../../../shared/pipes/date-br.pipe';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { BackgroundLayerComponent } from '../../../shared/components/background-layer/background-layer.component';
 
 type SectionState = 'idle' | 'loading' | 'loaded' | 'error' | 'empty';
 interface Section<T> { open: boolean; state: SectionState; data: T[]; }
@@ -28,7 +27,7 @@ const mkSection = <T>(): Section<T> => ({ open: false, state: 'idle', data: [] }
   standalone: true,
   imports: [
     CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule,
-    CurrencyBrPipe, DateBrPipe, BackgroundLayerComponent,
+    CurrencyBrPipe, DateBrPipe,
   ],
   templateUrl: './edital-details.component.html',
   styleUrl:    './edital-details.component.scss',
