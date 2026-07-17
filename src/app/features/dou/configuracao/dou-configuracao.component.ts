@@ -369,8 +369,8 @@ type Tab = 'keywords' | 'tipos' | 'regioes';
       code.termo {
         font-family: 'JetBrains Mono', 'Courier New', monospace;
         font-size: 12px;
-        background: #eef2f7;
-        border: 1px solid #cbd5e1;
+        background: var(--content-bg, #eef2f7);
+        border: 1px solid var(--card-border, #cbd5e1);
         border-radius: 0.25rem;
         padding: 0.125rem 0.5rem;
         color: var(--text-primary, #0f172a);

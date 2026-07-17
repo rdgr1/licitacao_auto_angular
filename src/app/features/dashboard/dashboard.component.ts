@@ -7,18 +7,34 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BaseChartDirective } from 'ng2-charts';
 import {
-  Chart as ChartJS, ChartData, ChartOptions,
-  ArcElement, Tooltip, Legend,
+  Chart as ChartJS,
+  ChartData,
+  ChartOptions,
+  ArcElement,
+  Tooltip,
+  Legend,
   DoughnutController,
-  BarController, BarElement, CategoryScale, LinearScale,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
 } from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend, DoughnutController, BarController, BarElement, CategoryScale, LinearScale);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  DoughnutController,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+);
 
 import { EditaisService } from '../../core/services/editais.service';
 import { NotificacoesService } from '../../core/services/notificacoes.service';
 import { ToastService } from '../../core/services/toast.service';
-import { EstatisticasDTO, LeadResponse, NotificacaoEvent } from '../../core/models/edital.model';
+import { EstatisticasDTO, LeadResponse, Notificacao } from '../../core/models/edital.model';
 
 interface UpcomingEdital {
   numero: string;
@@ -32,7 +48,15 @@ interface UpcomingEdital {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatCardModule, MatIconModule, MatTooltipModule, BaseChartDirective],
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatTooltipModule,
+    BaseChartDirective,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
@@ -43,17 +67,19 @@ export class DashboardComponent implements OnInit {
 
   loading = signal(true);
   stats = signal<EstatisticasDTO | null>(null);
-  notifications = signal<NotificacaoEvent[]>([]);
+  notifications = signal<Notificacao[]>([]);
   upcoming = signal<UpcomingEdital[]>([]);
 
   donutData = signal<ChartData<'doughnut'>>({
     labels: ['Processados', 'Pendentes', 'Erros'],
-    datasets: [{
-      data: [89, 24, 14],
-      backgroundColor: ['#11BF7F', '#F59E0B', '#EF4444'],
-      borderWidth: 0,
-      hoverOffset: 8,
-    }],
+    datasets: [
+      {
+        data: [89, 24, 14],
+        backgroundColor: ['#11BF7F', '#F59E0B', '#EF4444'],
+        borderWidth: 0,
+        hoverOffset: 8,
+      },
+    ],
   });
 
   donutOptions: ChartOptions<'doughnut'> = {
@@ -133,15 +159,19 @@ export class DashboardComponent implements OnInit {
         this.loading.set(false);
         this.donutData.set({
           labels: ['Processados', 'Pendentes', 'Erros'],
-          datasets: [{
-            data: [s.processados, s.pendentes, s.erros],
-            backgroundColor: ['#11BF7F', '#F59E0B', '#EF4444'],
-            borderWidth: 0,
-            hoverOffset: 8,
-          }],
+          datasets: [
+            {
+              data: [s.processados, s.pendentes, s.erros],
+              backgroundColor: ['#11BF7F', '#F59E0B', '#EF4444'],
+              borderWidth: 0,
+              hoverOffset: 8,
+            },
+          ],
         });
       },
-      error: () => { this.loading.set(false); },
+      error: () => {
+        this.loading.set(false);
+      },
     });
 
     this.editaisService.getLeads({ scoreMinimo: 0 }).subscribe({
@@ -150,13 +180,20 @@ export class DashboardComponent implements OnInit {
         if (!leads?.length) return;
         const today = Date.now();
         const items = leads
-          .filter(l => l.dataAbertura)
-          .map(l => {
+          .filter((l) => l.dataAbertura)
+          .map((l) => {
             const msLeft = new Date(l.dataAbertura).getTime() - today;
             const daysLeft = Math.max(0, Math.ceil(msLeft / 86_400_000));
-            return { numero: l.numero, objeto: l.objeto, orgao: l.orgaoOrigem, daysLeft, valor: l.valorEstimado, urgent: daysLeft <= 2 };
+            return {
+              numero: l.numero,
+              objeto: l.objeto,
+              orgao: l.orgaoOrigem,
+              daysLeft,
+              valor: l.valorEstimado,
+              urgent: daysLeft <= 2,
+            };
           })
-          .filter(i => i.daysLeft >= 0)
+          .filter((i) => i.daysLeft >= 0)
           .sort((a, b) => a.daysLeft - b.daysLeft)
           .slice(0, 5);
         this.upcoming.set(items);
@@ -164,7 +201,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.notificacoesService.getHistorico().subscribe({
-      next: (notifs) => this.notifications.set((notifs ?? []).slice(0, 6)),
+      next: (page) => this.notifications.set((page.content ?? []).slice(0, 6)),
     });
   }
 

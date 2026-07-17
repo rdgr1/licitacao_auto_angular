@@ -20,7 +20,16 @@ export interface DouItemDialogData {
 @Component({
   selector: 'app-dou-item-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatIconModule,
+  ],
   template: `
     <h2 mat-dialog-title>
       <mat-icon>{{ data.editando ? 'edit' : 'add' }}</mat-icon>
@@ -42,9 +51,17 @@ export interface DouItemDialogData {
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    h2 mat-icon { font-size: 20px; width: 20px; height: 20px; vertical-align: middle; margin-right: 6px; }
-  `]
+  styles: [
+    `
+      h2 mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin-right: 0.375rem;
+      }
+    `,
+  ],
 })
 export class DouItemDialogComponent {
   valor: string;
@@ -52,7 +69,7 @@ export class DouItemDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DouItemDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DouItemDialogData
+    @Inject(MAT_DIALOG_DATA) public data: DouItemDialogData,
   ) {
     this.valor = data.valorAtual ?? '';
     this.ativo = data.ativoAtual ?? true;

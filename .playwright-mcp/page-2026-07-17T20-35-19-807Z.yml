@@ -1,0 +1,202 @@
+- generic [ref=f3e4]:
+  - complementary [ref=f3e5]:
+    - generic [ref=f3e6]:
+      - img [ref=f3e8]: gavel
+      - generic [ref=f3e9]: LicitaFlow
+      - button [ref=f3e10] [cursor=pointer]:
+        - img [ref=f3e11]: chevron_left
+    - navigation [ref=f3e12]:
+      - generic [ref=f3e13]:
+        - generic [ref=f3e14]: Licitações
+        - link "Leads" [ref=f3e15] [cursor=pointer]:
+          - /url: /leads
+          - img [ref=f3e16]: list_alt
+        - link "Pipeline" [ref=f3e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=f3e19]: view_kanban
+        - link "Editais" [ref=f3e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=f3e22]: description
+    - generic [ref=f3e26] [cursor=pointer]:
+      - generic [ref=f3e27]: A
+      - generic [ref=f3e28]:
+        - generic [ref=f3e29]: adminmaster
+        - generic [ref=f3e30]: ADMIN
+      - img [ref=f3e31]: unfold_more
+  - generic [ref=f3e32]:
+    - banner [ref=f3e33]:
+      - generic [ref=f3e34]:
+        - button [ref=f3e35] [cursor=pointer]:
+          - img [ref=f3e36]: light_mode
+        - button [ref=f3e37] [cursor=pointer]:
+          - img [ref=f3e38]: help_outline
+        - button [ref=f3e39] [cursor=pointer]:
+          - img [ref=f3e40]:
+            - text: notifications_none
+            - generic: "100"
+        - button [ref=f3e42] [cursor=pointer]:
+          - img [ref=f3e43]: logout
+    - main [ref=f3e44]:
+      - generic [ref=f3e46]:
+        - heading "Configurações" [level=1] [ref=f3e48]
+        - generic [ref=f3e49]:
+          - tablist [ref=f3e52]:
+            - generic [ref=f3e53]:
+              - tab "Perfil" [ref=f3e54] [cursor=pointer]
+              - tab "Notificações" [ref=f3e57] [cursor=pointer]
+              - tab "Busca" [ref=f3e60] [cursor=pointer]
+              - tab "Sessões" [ref=f3e63] [cursor=pointer]
+              - tab "DODF" [ref=f3e66] [cursor=pointer]
+              - tab "DOU" [active] [selected] [ref=f3e69] [cursor=pointer]
+              - tab "PNCP" [ref=f3e72] [cursor=pointer]
+          - generic [ref=f3e75]:
+            - tabpanel [ref=f3e155]
+            - tabpanel [ref=f3e148]
+            - tabpanel [ref=f3e149]
+            - tabpanel [ref=f3e150]
+            - tabpanel [ref=f3e491]
+            - tabpanel "DOU" [ref=f3e492]:
+              - generic [ref=f3e495]:
+                - generic [ref=f3e496]:
+                  - generic [ref=f3e497]: Configuração DOU
+                  - generic [ref=f3e498]: Keywords e tipos do Diário Oficial da União
+                - generic [ref=f3e500]:
+                  - generic [ref=f3e501]:
+                    - button "Keywords 82" [ref=f3e502] [cursor=pointer]:
+                      - text: Keywords
+                      - generic [ref=f3e503]: "82"
+                    - button "Tipos de Artigo 18" [ref=f3e504] [cursor=pointer]:
+                      - text: Tipos de Artigo
+                      - generic [ref=f3e505]: "18"
+                    - button "Regiões 24" [ref=f3e506] [cursor=pointer]:
+                      - text: Regiões
+                      - generic [ref=f3e507]: "24"
+                    - button "Desativar todas as keywords" [ref=f3e508] [cursor=pointer]:
+                      - img [ref=f3e509]: toggle_off
+                      - text: Desativar todas
+                    - button "Ativar todas as keywords" [ref=f3e510] [cursor=pointer]:
+                      - img [ref=f3e511]: toggle_on
+                      - text: Ativar todas
+                    - button "Nova Keyword" [ref=f3e512]:
+                      - img [ref=f3e513]: add
+                  - generic [ref=f3e517]:
+                    - table [ref=f3e518]:
+                      - rowgroup [ref=f3e519]:
+                        - row [ref=f3e520]:
+                          - columnheader "Termo" [ref=f3e521]
+                          - columnheader "Ativo" [ref=f3e522]
+                          - columnheader [ref=f3e523]
+                      - rowgroup [ref=f3e524]:
+                        - row "agente administrativo" [ref=f3e525]:
+                          - cell [ref=f3e526]:
+                            - code [ref=f3e527]: agente administrativo
+                          - cell [ref=f3e528]:
+                            - switch [checked] [ref=f3e531] [cursor=pointer]
+                          - cell [ref=f3e542]:
+                            - button [ref=f3e543] [cursor=pointer]:
+                              - img [ref=f3e544]: edit
+                            - button [ref=f3e547] [cursor=pointer]:
+                              - img [ref=f3e548]: delete_outline
+                        - row "alarme de intrusao" [ref=f3e551]:
+                          - cell [ref=f3e552]:
+                            - code [ref=f3e553]: alarme de intrusao
+                          - cell [ref=f3e554]:
+                            - switch [checked] [ref=f3e557] [cursor=pointer]
+                          - cell [ref=f3e568]:
+                            - button [ref=f3e569] [cursor=pointer]:
+                              - img [ref=f3e570]: edit
+                            - button [ref=f3e573] [cursor=pointer]:
+                              - img [ref=f3e574]: delete_outline
+                        - row "apoio tecnico administrativo" [ref=f3e577]:
+                          - cell [ref=f3e578]:
+                            - code [ref=f3e579]: apoio tecnico administrativo
+                          - cell [ref=f3e580]:
+                            - switch [checked] [ref=f3e583] [cursor=pointer]
+                          - cell [ref=f3e594]:
+                            - button [ref=f3e595] [cursor=pointer]:
+                              - img [ref=f3e596]: edit
+                            - button [ref=f3e599] [cursor=pointer]:
+                              - img [ref=f3e600]: delete_outline
+                        - row "ascensorista" [ref=f3e603]:
+                          - cell [ref=f3e604]:
+                            - code [ref=f3e605]: ascensorista
+                          - cell [ref=f3e606]:
+                            - switch [checked] [ref=f3e609] [cursor=pointer]
+                          - cell [ref=f3e620]:
+                            - button [ref=f3e621] [cursor=pointer]:
+                              - img [ref=f3e622]: edit
+                            - button [ref=f3e625] [cursor=pointer]:
+                              - img [ref=f3e626]: delete_outline
+                        - row "aspp" [ref=f3e629]:
+                          - cell [ref=f3e630]:
+                            - code [ref=f3e631]: aspp
+                          - cell [ref=f3e632]:
+                            - switch [checked] [ref=f3e635] [cursor=pointer]
+                          - cell [ref=f3e646]:
+                            - button [ref=f3e647] [cursor=pointer]:
+                              - img [ref=f3e648]: edit
+                            - button [ref=f3e651] [cursor=pointer]:
+                              - img [ref=f3e652]: delete_outline
+                        - row "auxiliar de lavanderia" [ref=f3e655]:
+                          - cell [ref=f3e656]:
+                            - code [ref=f3e657]: auxiliar de lavanderia
+                          - cell [ref=f3e658]:
+                            - switch [checked] [ref=f3e661] [cursor=pointer]
+                          - cell [ref=f3e672]:
+                            - button [ref=f3e673] [cursor=pointer]:
+                              - img [ref=f3e674]: edit
+                            - button [ref=f3e677] [cursor=pointer]:
+                              - img [ref=f3e678]: delete_outline
+                        - row "auxiliar de servicos gerais" [ref=f3e681]:
+                          - cell [ref=f3e682]:
+                            - code [ref=f3e683]: auxiliar de servicos gerais
+                          - cell [ref=f3e684]:
+                            - switch [checked] [ref=f3e687] [cursor=pointer]
+                          - cell [ref=f3e698]:
+                            - button [ref=f3e699] [cursor=pointer]:
+                              - img [ref=f3e700]: edit
+                            - button [ref=f3e703] [cursor=pointer]:
+                              - img [ref=f3e704]: delete_outline
+                        - row "bombeiro civil" [ref=f3e707]:
+                          - cell [ref=f3e708]:
+                            - code [ref=f3e709]: bombeiro civil
+                          - cell [ref=f3e710]:
+                            - switch [checked] [ref=f3e713] [cursor=pointer]
+                          - cell [ref=f3e724]:
+                            - button [ref=f3e725] [cursor=pointer]:
+                              - img [ref=f3e726]: edit
+                            - button [ref=f3e729] [cursor=pointer]:
+                              - img [ref=f3e730]: delete_outline
+                        - row "brigada de incendio" [ref=f3e733]:
+                          - cell [ref=f3e734]:
+                            - code [ref=f3e735]: brigada de incendio
+                          - cell [ref=f3e736]:
+                            - switch [checked] [ref=f3e739] [cursor=pointer]
+                          - cell [ref=f3e750]:
+                            - button [ref=f3e751] [cursor=pointer]:
+                              - img [ref=f3e752]: edit
+                            - button [ref=f3e755] [cursor=pointer]:
+                              - img [ref=f3e756]: delete_outline
+                        - row "brigadista" [ref=f3e759]:
+                          - cell [ref=f3e760]:
+                            - code [ref=f3e761]: brigadista
+                          - cell [ref=f3e762]:
+                            - switch [checked] [ref=f3e765] [cursor=pointer]
+                          - cell [ref=f3e776]:
+                            - button [ref=f3e777] [cursor=pointer]:
+                              - img [ref=f3e778]: edit
+                            - button [ref=f3e781] [cursor=pointer]:
+                              - img [ref=f3e782]: delete_outline
+                    - group [ref=f3e785]:
+                      - generic [ref=f3e787]:
+                        - generic [ref=f3e788]:
+                          - generic [ref=f3e789]: "Items per page:"
+                          - combobox "Items per page:" [ref=f3e794] [cursor=pointer]:
+                            - generic [ref=f3e795]: "10"
+                        - generic [ref=f3e803]:
+                          - status [ref=f3e804]: 1 – 10 of 82
+                          - button "First page" [disabled] [ref=f3e805]
+                          - button "Previous page" [disabled] [ref=f3e810]
+                          - button "Next page" [ref=f3e815] [cursor=pointer]
+                          - button "Last page" [ref=f3e820] [cursor=pointer]
+            - tabpanel [ref=f3e153]

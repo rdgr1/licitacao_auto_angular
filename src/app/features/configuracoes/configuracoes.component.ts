@@ -283,7 +283,7 @@ import { UserPreferences } from '../../core/models/user-preferences.model';
     </div>
   `,
   styles: [`
-    .cfg-shell { padding: 24px; max-width: 860px; }
+    .cfg-shell { padding: 30px; width: 100%; display: flex; flex-direction: column; justify-content: center; align-content: center;  max-width: 1000px;}
     .cfg-header { margin-bottom: 4px; }
     .cfg-header h1 { font-size: 22px; font-weight: 700; color: var(--text-primary, #0D1526); margin: 0 0 16px; }
 

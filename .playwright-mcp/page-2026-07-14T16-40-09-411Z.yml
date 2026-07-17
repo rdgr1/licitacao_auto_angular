@@ -1,0 +1,78 @@
+- generic [ref=f4e4]:
+  - complementary [ref=f4e5]:
+    - generic [ref=f4e6]:
+      - img [ref=f4e8]: gavel
+      - generic [ref=f4e9]: LicitaFlow
+      - button [ref=f4e10] [cursor=pointer]:
+        - img [ref=f4e11]: chevron_left
+    - navigation [ref=f4e12]:
+      - generic [ref=f4e13]:
+        - generic [ref=f4e14]: Licitações
+        - link "Leads" [ref=f4e15] [cursor=pointer]:
+          - /url: /leads
+          - img [ref=f4e16]: list_alt
+        - link "Pipeline" [ref=f4e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=f4e19]: view_kanban
+        - link "Editais" [ref=f4e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=f4e22]: description
+    - generic [ref=f4e26] [cursor=pointer]:
+      - generic [ref=f4e27]: A
+      - generic [ref=f4e28]:
+        - generic [ref=f4e29]: adminmaster
+        - generic [ref=f4e30]: ADMIN
+      - img [ref=f4e31]: unfold_more
+  - generic [ref=f4e32]:
+    - banner [ref=f4e33]:
+      - generic [ref=f4e34]:
+        - button [ref=f4e35] [cursor=pointer]:
+          - img [ref=f4e36]: help_outline
+        - button [ref=f4e37] [cursor=pointer]:
+          - img [ref=f4e38]: notifications_none
+        - button [ref=f4e40] [cursor=pointer]:
+          - img [ref=f4e41]: logout
+    - main [ref=f4e42]:
+      - generic [ref=f4e44]:
+        - heading "Configurações" [level=1] [ref=f4e46]
+        - generic [ref=f4e47]:
+          - tablist [ref=f4e50]:
+            - generic [ref=f4e51]:
+              - tab "Perfil" [ref=f4e52] [cursor=pointer]
+              - tab "Notificações" [ref=f4e55] [cursor=pointer]
+              - tab "Busca" [ref=f4e58] [cursor=pointer]
+              - tab "Sessões" [ref=f4e61] [cursor=pointer]
+              - tab "DODF" [active] [selected] [ref=f4e64] [cursor=pointer]
+              - tab "DOU" [ref=f4e67] [cursor=pointer]
+              - tab "PNCP" [ref=f4e70] [cursor=pointer]
+          - generic [ref=f4e73]:
+            - tabpanel [ref=f4e166]
+            - tabpanel [ref=f4e146]
+            - tabpanel [ref=f4e147]
+            - tabpanel [ref=f4e148]
+            - tabpanel "DODF" [ref=f4e167]:
+              - generic [ref=f4e170]:
+                - generic [ref=f4e171]:
+                  - generic [ref=f4e172]: Configuração DODF
+                  - generic [ref=f4e173]: Keywords e tipos de abertura do Diário Oficial do DF
+                - generic [ref=f4e175]:
+                  - generic [ref=f4e176]:
+                    - button "Keywords 0" [ref=f4e177] [cursor=pointer]:
+                      - text: Keywords
+                      - generic [ref=f4e178]: "0"
+                    - button "Tipos de Abertura 0" [ref=f4e179] [cursor=pointer]:
+                      - text: Tipos de Abertura
+                      - generic [ref=f4e180]: "0"
+                    - button "Desativar todas as keywords" [ref=f4e181] [cursor=pointer]:
+                      - img [ref=f4e182]: toggle_off
+                      - text: Desativar todas
+                    - button "Ativar todas as keywords" [ref=f4e183] [cursor=pointer]:
+                      - img [ref=f4e184]: toggle_on
+                      - text: Ativar todas
+                    - button "Nova Keyword" [ref=f4e185]:
+                      - img [ref=f4e186]: add
+                  - generic [ref=f4e191]:
+                    - img [ref=f4e192]: search_off
+                    - generic [ref=f4e193]: Nenhuma keyword cadastrada
+            - tabpanel [ref=f4e150]
+            - tabpanel [ref=f4e151]

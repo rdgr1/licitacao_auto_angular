@@ -45,3 +45,26 @@ custo de sessão antes de confirmar a causa — próxima sessão deve:
    a página atual (~25-100 itens) — não é a causa do travamento com 500+, mas é uma
    inconsistência relacionada (paginator mostra total do servidor, tabela mostra menos
    linhas se a busca estiver ativa) que também vale revisar na mesma passada.
+
+## PENDENTE — Endpoint `/users/me/preferences` não existe no backend
+
+Reportado pelo usuário: log do backend mostrando
+`NoResourceFoundException: No static resource users/me/preferences`. Confirmado no código:
+não existe nenhum `@RequestMapping` sob `/users` em `licitacao.automate` (levantei todos os
+controllers — auth, leads, editais, dodf, dou, pncp, cotacao, fornecedores, processos — nenhum
+cobre `/users`).
+
+O frontend (`user-preferences.service.ts:24,32`) chama `GET`/`PATCH /users/me/preferences`
+toda vez que `configuracoes.component.ts` carrega (linha 422) ou salva (linha 467)
+preferências. Como o `catchError` de ambos os métodos cai silenciosamente pro
+`localStorage` (chave `lf_user_prefs`), não há erro visível pro usuário — mas:
+
+- Preferências nunca são persistidas no servidor, só no navegador local (perdidas ao trocar
+  de máquina/navegador ou limpar storage).
+- Todo acesso à tela de Configurações gera um `NoResourceFoundException` no log do backend.
+
+Precisa: criar `UserController` (ou equivalente) com `GET /users/me/preferences` e
+`PATCH /users/me/preferences`, persistindo o shape de `UserPreferences`
+(`user-preferences.model.ts`): `notifNovoLead: boolean`, `notifBuscaConcluida: boolean`,
+`notifScoreMinimo: number`, `buscaFontesDefault: string[]`,
+`buscaModoDataDefault: 'single' | 'range'`, `buscaPeriodoDias: number`.

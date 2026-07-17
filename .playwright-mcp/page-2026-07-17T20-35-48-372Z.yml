@@ -1,0 +1,120 @@
+- generic [ref=f4e4]:
+  - complementary [ref=f4e5]:
+    - generic [ref=f4e6]:
+      - img [ref=f4e8]: gavel
+      - generic [ref=f4e9]: LicitaFlow
+      - button [ref=f4e10] [cursor=pointer]:
+        - img [ref=f4e11]: chevron_left
+    - navigation [ref=f4e12]:
+      - generic [ref=f4e13]:
+        - generic [ref=f4e14]: Licitações
+        - link "Leads" [ref=f4e15] [cursor=pointer]:
+          - /url: /leads
+          - img [ref=f4e16]: list_alt
+        - link "Pipeline" [ref=f4e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=f4e19]: view_kanban
+        - link "Editais" [ref=f4e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=f4e22]: description
+    - generic [ref=f4e26] [cursor=pointer]:
+      - generic [ref=f4e27]: A
+      - generic [ref=f4e28]:
+        - generic [ref=f4e29]: adminmaster
+        - generic [ref=f4e30]: ADMIN
+      - img [ref=f4e31]: unfold_more
+  - generic [ref=f4e32]:
+    - banner [ref=f4e33]:
+      - generic [ref=f4e34]:
+        - button [ref=f4e35] [cursor=pointer]:
+          - img [ref=f4e36]: light_mode
+        - button [ref=f4e37] [cursor=pointer]:
+          - img [ref=f4e38]: help_outline
+        - button [ref=f4e39] [cursor=pointer]:
+          - img [ref=f4e40]:
+            - text: notifications_none
+            - generic: "100"
+        - button [ref=f4e42] [cursor=pointer]:
+          - img [ref=f4e43]: logout
+    - main [ref=f4e44]:
+      - generic [ref=f4e46]:
+        - heading "Configurações" [level=1] [ref=f4e48]
+        - generic [ref=f4e49]:
+          - tablist [ref=f4e52]:
+            - generic [ref=f4e53]:
+              - tab "Perfil" [ref=f4e54] [cursor=pointer]
+              - tab "Notificações" [ref=f4e57] [cursor=pointer]
+              - tab "Busca" [ref=f4e60] [cursor=pointer]
+              - tab "Sessões" [ref=f4e63] [cursor=pointer]
+              - tab "DODF" [ref=f4e66] [cursor=pointer]
+              - tab "DOU" [ref=f4e69] [cursor=pointer]
+              - tab "PNCP" [active] [selected] [ref=f4e72] [cursor=pointer]
+          - generic [ref=f4e75]:
+            - tabpanel [ref=f4e168]
+            - tabpanel [ref=f4e148]
+            - tabpanel [ref=f4e149]
+            - tabpanel [ref=f4e150]
+            - tabpanel [ref=f4e151]
+            - tabpanel [ref=f4e152]
+            - tabpanel "PNCP" [ref=f4e169]:
+              - generic [ref=f4e172]:
+                - generic [ref=f4e173]:
+                  - generic [ref=f4e174]: Configuração PNCP
+                  - generic [ref=f4e175]: Modalidades e UFs do Portal Nacional de Contratações
+                - generic [ref=f4e177]:
+                  - generic [ref=f4e178]:
+                    - button "Modalidades 3" [ref=f4e179] [cursor=pointer]:
+                      - text: Modalidades
+                      - generic [ref=f4e180]: "3"
+                    - button "UFs monitoradas 2" [ref=f4e181] [cursor=pointer]:
+                      - text: UFs monitoradas
+                      - generic [ref=f4e182]: "2"
+                    - button "Desativar todas as modalidades" [ref=f4e183] [cursor=pointer]:
+                      - img [ref=f4e184]: toggle_off
+                      - text: Desativar todas
+                    - button "Ativar todas as modalidades" [ref=f4e185] [cursor=pointer]:
+                      - img [ref=f4e186]: toggle_on
+                      - text: Ativar todas
+                    - button "Nova Modalidade" [ref=f4e187]:
+                      - img [ref=f4e188]: add
+                  - table [ref=f4e193]:
+                    - rowgroup [ref=f4e194]:
+                      - row [ref=f4e195]:
+                        - columnheader "Código" [ref=f4e196]
+                        - columnheader "Descrição" [ref=f4e197]
+                        - columnheader "Ativo" [ref=f4e198]
+                        - columnheader [ref=f4e199]
+                    - rowgroup [ref=f4e200]:
+                      - row "4 Concorrência Eletrônica" [ref=f4e201]:
+                        - cell [ref=f4e202]:
+                          - code [ref=f4e203]: "4"
+                        - cell "Concorrência Eletrônica" [ref=f4e204]
+                        - cell [ref=f4e205]:
+                          - switch [checked] [ref=f4e208] [cursor=pointer]
+                        - cell [ref=f4e219]:
+                          - button [ref=f4e220] [cursor=pointer]:
+                            - img [ref=f4e221]: edit
+                          - button [ref=f4e224] [cursor=pointer]:
+                            - img [ref=f4e225]: delete_outline
+                      - row "6 Pregão Eletrônico" [ref=f4e228]:
+                        - cell [ref=f4e229]:
+                          - code [ref=f4e230]: "6"
+                        - cell "Pregão Eletrônico" [ref=f4e231]
+                        - cell [ref=f4e232]:
+                          - switch [checked] [ref=f4e235] [cursor=pointer]
+                        - cell [ref=f4e246]:
+                          - button [ref=f4e247] [cursor=pointer]:
+                            - img [ref=f4e248]: edit
+                          - button [ref=f4e251] [cursor=pointer]:
+                            - img [ref=f4e252]: delete_outline
+                      - row "8 Dispensa de Licitação" [ref=f4e255]:
+                        - cell [ref=f4e256]:
+                          - code [ref=f4e257]: "8"
+                        - cell "Dispensa de Licitação" [ref=f4e258]
+                        - cell [ref=f4e259]:
+                          - switch [checked] [ref=f4e262] [cursor=pointer]
+                        - cell [ref=f4e273]:
+                          - button [ref=f4e274] [cursor=pointer]:
+                            - img [ref=f4e275]: edit
+                          - button [ref=f4e278] [cursor=pointer]:
+                            - img [ref=f4e279]: delete_outline

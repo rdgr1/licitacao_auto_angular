@@ -121,6 +121,9 @@
   overflow: hidden; display: flex; flex-direction: column;
   flex: 1; min-height: 0;
 }
+.table-scroll {
+  flex: 1; min-height: 0; overflow: auto;
+}
 
 /* ── Table ───────────────────────────────────────────────────────────────── */
 .editais-table {
@@ -230,7 +233,7 @@
 /* ── Paginator override ──────────────────────────────────────────────────── */
 ::ng-deep .editais-shell .mat-mdc-paginator {
   border-top: 1px solid var(--content-bg); background: var(--content-bg, #FAFBFC);
-  color: var(--text-secondary); font-size: 12px;
+  color: var(--text-secondary); font-size: 12px; flex-shrink: 0;
 }
 
 /* ── Motion safety ───────────────────────────────────────────────────────── */

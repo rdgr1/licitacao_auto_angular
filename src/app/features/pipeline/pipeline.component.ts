@@ -98,6 +98,14 @@ export class PipelineComponent implements OnInit {
   ];
   private allLeadsRaw: Lead[] = [];
 
+  /** Coluna Descarte: busca dedicada e independente da paginação global mista (leads descartados
+   *  não competem com as outras colunas pelo mesmo lote de 48 itens — ver loadDescartados()). */
+  private allDescartadosRaw: Lead[] = [];
+  loadingDescartados = signal(false);
+  descartadosPage = signal(0);
+  descartadosPageSize = signal(48);
+  descartadosTotal = signal(0);
+
   qualColumns = signal<LeadCol[]>([
     {
       id: 'q-descartado',
@@ -240,6 +248,7 @@ export class PipelineComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadLeads();
+    this.loadDescartados();
     this.loadProcessos();
   }
 
@@ -265,15 +274,59 @@ export class PipelineComponent implements OnInit {
       });
   }
 
+  /** Busca dedicada de leads DESCARTADO — independente da página global mista das outras
+   *  colunas, pra coluna Descarte sempre listar todos os descartados (não só os que caem
+   *  por acaso no lote de 48 itens compartilhado pelas demais colunas). */
+  loadDescartados(reset = true): void {
+    if (reset) {
+      this.descartadosPage.set(0);
+      this.allDescartadosRaw = [];
+    }
+    this.loadingDescartados.set(true);
+    this.leadService
+      .listar({
+        status: 'DESCARTADO',
+        fonte: this.gridFonte() ?? undefined,
+        page: this.descartadosPage(),
+        size: this.descartadosPageSize(),
+      })
+      .subscribe({
+        next: (page) => {
+          this.allDescartadosRaw = reset
+            ? (page.content ?? [])
+            : [...this.allDescartadosRaw, ...(page.content ?? [])];
+          this.descartadosTotal.set(page.totalElements ?? 0);
+          this.redistribuirDescartados();
+          this.loadingDescartados.set(false);
+        },
+        error: () => {
+          this.toast.error('Erro ao carregar leads descartados');
+          this.loadingDescartados.set(false);
+        },
+      });
+  }
+
+  loadMoreDescartados(): void {
+    this.descartadosPage.update((p) => p + 1);
+    this.loadDescartados(false);
+  }
+
+  refreshQual(): void {
+    this.loadLeads();
+    this.loadDescartados();
+  }
+
   setGridFonte(fonte: string | null): void {
     this.gridFonte.set(fonte);
     this.currentPage.set(0);
     this.loadLeads();
+    this.loadDescartados();
   }
 
   onSearchChange(term: string): void {
     this.searchTerm.set(term);
     this.redistribuirQualColumns();
+    this.redistribuirDescartados();
   }
 
   /** Paginação global — uma única página, cujos leads são distribuídos entre todas as colunas por status. */
@@ -283,7 +336,9 @@ export class PipelineComponent implements OnInit {
     this.loadLeads();
   }
 
-  /** Reaplica busca (client-side, sobre o lote já carregado) e redistribui nas colunas por status. */
+  /** Reaplica busca (client-side, sobre o lote já carregado) e redistribui nas colunas por status.
+   *  DESCARTADO fica de fora dessa distribuição — é gerenciado por loadDescartados()/
+   *  redistribuirDescartados(), que buscam todos os descartados, não só os do lote misto. */
   private redistribuirQualColumns(): void {
     const termo = this.searchTerm().trim().toLowerCase();
     const filtrados = termo
@@ -294,12 +349,27 @@ export class PipelineComponent implements OnInit {
 
     const byStatus = new Map<LeadStatus, Lead[]>();
     for (const lead of filtrados) {
+      if (lead.status === 'DESCARTADO') continue;
       const list = byStatus.get(lead.status) ?? [];
       list.push(lead);
       byStatus.set(lead.status, list);
     }
     this.qualColumns.update((cols) =>
-      cols.map((c) => ({ ...c, leads: byStatus.get(c.key) ?? [] })),
+      cols.map((c) => (c.key === 'DESCARTADO' ? c : { ...c, leads: byStatus.get(c.key) ?? [] })),
+    );
+    this.refreshQualTotal();
+  }
+
+  /** Reaplica busca (client-side) sobre o lote de descartados já carregado. */
+  private redistribuirDescartados(): void {
+    const termo = this.searchTerm().trim().toLowerCase();
+    const filtrados = termo
+      ? this.allDescartadosRaw.filter(
+          (l) => l.titulo?.toLowerCase().includes(termo) || l.orgao?.toLowerCase().includes(termo),
+        )
+      : this.allDescartadosRaw;
+    this.qualColumns.update((cols) =>
+      cols.map((c) => (c.key === 'DESCARTADO' ? { ...c, leads: filtrados } : c)),
     );
     this.refreshQualTotal();
   }
@@ -450,7 +520,10 @@ export class PipelineComponent implements OnInit {
       maxWidth: '95vw',
     });
     ref.afterClosed().subscribe((result) => {
-      if (result) this.loadLeads();
+      if (result) {
+        this.loadLeads();
+        this.loadDescartados();
+      }
       if (result === 'aprovado') setTimeout(() => this.loadProcessos(), 2000);
     });
   }

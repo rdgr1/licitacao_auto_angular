@@ -115,6 +115,7 @@
   <!-- ── Tabela + Paginação ─────────────────────────────────────────── -->
   @if (!loading() && !apiError()) {
     <div class="table-wrap">
+      <div class="table-scroll">
       <table mat-table [dataSource]="dataSource" matSort
              class="editais-table"
              aria-label="Lista de editais">
@@ -234,6 +235,7 @@
           </td>
         </tr>
       </table>
+      </div>
 
       <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
                      [pageSize]="pageSize()"

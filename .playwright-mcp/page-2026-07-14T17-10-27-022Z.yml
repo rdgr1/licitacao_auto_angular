@@ -1,0 +1,49 @@
+- generic [ref=f10e4]:
+  - complementary [ref=f10e5]:
+    - generic [ref=f10e6]:
+      - img [ref=f10e8]: gavel
+      - generic [ref=f10e9]: LicitaFlow
+      - button [ref=f10e10] [cursor=pointer]:
+        - img [ref=f10e11]: chevron_left
+    - navigation [ref=f10e12]:
+      - generic [ref=f10e13]:
+        - generic [ref=f10e14]: Licitações
+        - link "Leads" [ref=f10e15] [cursor=pointer]:
+          - /url: /leads
+          - img [ref=f10e16]: list_alt
+        - link "Pipeline" [ref=f10e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=f10e19]: view_kanban
+        - link "Editais" [ref=f10e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=f10e22]: description
+    - generic [ref=f10e26] [cursor=pointer]:
+      - generic [ref=f10e27]: A
+      - generic [ref=f10e28]:
+        - generic [ref=f10e29]: adminmaster
+        - generic [ref=f10e30]: ADMIN
+      - img [ref=f10e31]: unfold_more
+  - generic [ref=f10e32]:
+    - banner [ref=f10e33]:
+      - generic [ref=f10e34]:
+        - button [ref=f10e35] [cursor=pointer]:
+          - img [ref=f10e36]: help_outline
+        - button [ref=f10e37] [cursor=pointer]:
+          - img [ref=f10e38]: notifications_none
+        - button [ref=f10e40] [cursor=pointer]:
+          - img [ref=f10e41]: logout
+    - main [ref=f10e42]:
+      - generic [ref=f10e44]:
+        - generic [ref=f10e45]:
+          - generic [ref=f10e46]:
+            - heading "Notificações" [level=1] [ref=f10e47]
+            - paragraph [ref=f10e48]: 0 notificação(ões)
+          - button "Marcar como lidas" [ref=f10e49]:
+            - img [ref=f10e50]: done_all
+        - listbox "Filtro" [ref=f10e54]:
+          - option [selected] [ref=f10e56] [cursor=pointer]
+          - option [ref=f10e59] [cursor=pointer]
+          - option [ref=f10e62] [cursor=pointer]
+        - generic [ref=f10e64]:
+          - img [ref=f10e65]: notifications_none
+          - generic [ref=f10e66]: Nenhuma notificação encontrada

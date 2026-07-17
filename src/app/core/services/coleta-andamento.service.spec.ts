@@ -25,7 +25,7 @@ describe('ColetaAndamentoService', () => {
   it('deve marcar fonte como running ao avançar etapa', () => {
     svc.iniciarColeta(['DODF']);
     svc.avancarEtapa('DODF', 1, 3, '06/06/26');
-    const f = svc.fontes().find(f => f.fonte === 'DODF')!;
+    const f = svc.fontes().find((f) => f.fonte === 'DODF')!;
     expect(f.status).toBe('running');
     expect(f.stepAtual).toBe(1);
     expect(f.totalSteps).toBe(3);
@@ -34,7 +34,7 @@ describe('ColetaAndamentoService', () => {
   it('deve marcar fonte como done ao concluir', () => {
     svc.iniciarColeta(['DODF']);
     svc.concluirFonte('DODF', 12, 47, 150);
-    const f = svc.fontes().find(f => f.fonte === 'DODF')!;
+    const f = svc.fontes().find((f) => f.fonte === 'DODF')!;
     expect(f.status).toBe('done');
     expect(f.salvos).toBe(12);
   });

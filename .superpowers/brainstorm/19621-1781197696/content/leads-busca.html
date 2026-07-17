@@ -1,0 +1,154 @@
+<h2>Tela de Leads — Painel de Busca Melhorado</h2>
+<p class="subtitle">Comparação: estado atual vs proposta MVP. Clique para selecionar.</p>
+
+<div class="split" style="gap:24px;align-items:flex-start;">
+
+  <!-- ATUAL -->
+  <div class="mockup" data-choice="current" onclick="toggleSelect(this)" style="cursor:pointer;border:2px solid transparent;border-radius:12px;transition:border-color 0.2s;">
+    <div class="mockup-header" style="background:#64748b;">Atual — pill simples no topbar</div>
+    <div class="mockup-body" style="padding:16px;background:#F8FAFC;">
+
+      <!-- Topbar pill -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#11BF7F;flex-shrink:0;"></span>
+        <span style="color:#0DA66E;font-weight:600;">Coletando DODF</span>
+        <span style="color:#475569;margin-left:auto;font-size:11px;">1/2</span>
+        <span style="color:#94a3b8;font-size:10px;">— pill no topbar, longe do contexto</span>
+      </div>
+
+      <!-- Leads page header -->
+      <div style="font-weight:700;font-size:15px;color:#0d1526;margin-bottom:8px;">Leads</div>
+
+      <!-- Search form básico -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:8px;">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Fontes</div>
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+          <span style="padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;background:#f1f5f9;color:#475569;">DODF</span>
+          <span style="padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;background:#f1f5f9;color:#475569;">DOU</span>
+          <span style="padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;background:#f1f5f9;color:#94a3b8;">PNCP</span>
+        </div>
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Data</div>
+        <div style="border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:12px;color:#64748b;background:#fff;">06/06/2026</div>
+        <div style="margin-top:10px;">
+          <span style="background:#11BF7F;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:5px;">
+            ● Coletando…
+          </span>
+        </div>
+        <div style="margin-top:8px;padding:6px 8px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;font-size:11px;color:#dc2626;">
+          ⚠ Sem feedback de progresso em tempo real — usuário não sabe o que está acontecendo
+        </div>
+      </div>
+
+      <!-- Leads list placeholder -->
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div style="height:36px;background:#f1f5f9;border-radius:6px;"></div>
+        <div style="height:36px;background:#f1f5f9;border-radius:6px;"></div>
+        <div style="height:36px;background:#f1f5f9;border-radius:6px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSTA -->
+  <div class="mockup" data-choice="proposal" onclick="toggleSelect(this)" style="cursor:pointer;border:2px solid transparent;border-radius:12px;transition:border-color 0.2s;">
+    <div class="mockup-header" style="background:#11BF7F;color:#fff;">Proposta MVP — Progress inline + paralelo</div>
+    <div class="mockup-body" style="padding:16px;background:#F8FAFC;">
+
+      <!-- Leads page header -->
+      <div style="font-weight:700;font-size:15px;color:#0d1526;margin-bottom:8px;">Leads</div>
+
+      <!-- Search form melhorado -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="font-size:13px;font-weight:700;color:#0d1526;">Nova Busca</div>
+          <div style="display:flex;gap:6px;">
+            <span style="padding:3px 8px;border:1px solid #cbd5e1;border-radius:5px;font-size:11px;cursor:pointer;color:#64748b;">Dia único</span>
+            <span style="padding:3px 8px;background:#0d1526;border-radius:5px;font-size:11px;cursor:pointer;color:#fff;">Período</span>
+          </div>
+        </div>
+
+        <!-- Fontes como toggle chips melhorados -->
+        <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid #11BF7F;border-radius:7px;background:rgba(17,191,127,0.08);cursor:pointer;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#11BF7F;"></span>
+            <span style="font-size:12px;font-weight:600;color:#0DA66E;">DODF</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid #3B82F6;border-radius:7px;background:rgba(59,130,246,0.08);cursor:pointer;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#3B82F6;"></span>
+            <span style="font-size:12px;font-weight:600;color:#2563EB;">DOU</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid #e2e8f0;border-radius:7px;background:#f8fafc;cursor:not-allowed;opacity:0.5;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#94a3b8;"></span>
+            <span style="font-size:12px;font-weight:500;color:#94a3b8;">PNCP</span>
+            <span style="font-size:9px;color:#94a3b8;background:#e2e8f0;border-radius:4px;padding:1px 4px;">em breve</span>
+          </div>
+        </div>
+
+        <!-- Date range -->
+        <div style="display:flex;gap:8px;margin-bottom:10px;">
+          <div style="flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:12px;color:#475569;">De: 01/06/2026</div>
+          <div style="flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:12px;color:#475569;">Até: 06/06/2026</div>
+        </div>
+
+        <!-- CTA -->
+        <button style="background:#0d1526;color:#fff;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;justify-content:center;">
+          <span style="font-size:16px;">⚡</span> Disparar Busca (2 fontes · 6 dias)
+        </button>
+      </div>
+
+      <!-- PROGRESS CARDS em andamento (paralelo) -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:8px;">
+        <div style="font-size:12px;font-weight:700;color:#0d1526;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#11BF7F;animation:pulse 1.5s infinite;"></span>
+          Buscando em 2 fontes simultaneamente…
+        </div>
+
+        <!-- DODF card — concluído -->
+        <div style="border:1px solid #d1fae5;border-radius:7px;padding:8px 10px;background:#f0fdf4;margin-bottom:6px;display:flex;align-items:center;gap:8px;">
+          <span style="width:20px;height:20px;border-radius:50%;background:#10b981;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">✓</span>
+          <div style="flex:1;">
+            <div style="font-size:12px;font-weight:600;color:#065f46;">DODF — Diário Oficial do DF</div>
+            <div style="font-size:11px;color:#6ee7b7;">47 matérias · <strong>12 leads salvos</strong> · 3 duplicados</div>
+          </div>
+          <div style="background:#d1fae5;color:#065f46;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;">CONCLUÍDO</div>
+        </div>
+
+        <!-- DOU card — em andamento -->
+        <div style="border:1px solid #bfdbfe;border-radius:7px;padding:8px 10px;background:#eff6ff;margin-bottom:6px;display:flex;align-items:center;gap:8px;">
+          <div style="width:20px;height:20px;border-radius:50%;border:2.5px solid #3b82f6;border-top-color:transparent;animation:spin 0.8s linear infinite;flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div style="font-size:12px;font-weight:600;color:#1e40af;">DOU — Diário Oficial da União</div>
+            <div style="font-size:11px;color:#93c5fd;">Coletando 04/06/2026… <span style="color:#3b82f6;font-weight:600;">4/6</span></div>
+          </div>
+          <div style="background:#bfdbfe;color:#1e40af;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;">EM ANDAMENTO</div>
+        </div>
+
+        <!-- Summary row -->
+        <div style="display:flex;gap:12px;padding:6px 2px;border-top:1px solid #f1f5f9;margin-top:4px;">
+          <span style="font-size:11px;color:#64748b;">⏱ 4.2s decorridos</span>
+          <span style="font-size:11px;color:#10b981;font-weight:600;">12 leads</span>
+          <span style="font-size:11px;color:#94a3b8;">+ resultado DOU em breve</span>
+        </div>
+      </div>
+
+      <!-- Leads list placeholder -->
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div style="height:36px;background:#f1f5f9;border-radius:6px;"></div>
+        <div style="height:36px;background:#f1f5f9;border-radius:6px;"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+@keyframes pulse {
+  0%,100% { opacity:1; } 50% { opacity:0.4; }
+}
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}
+.mockup[data-choice].selected {
+  border-color: #11BF7F !important;
+  box-shadow: 0 0 0 3px rgba(17,191,127,0.2);
+}
+</style>

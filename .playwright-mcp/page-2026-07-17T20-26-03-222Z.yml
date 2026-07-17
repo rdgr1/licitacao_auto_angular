@@ -1,0 +1,506 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e4]:
+    - complementary [ref=f2e5]:
+      - generic [ref=f2e6]:
+        - img [ref=f2e8]: gavel
+        - generic [ref=f2e9]: LicitaFlow
+        - button [ref=f2e10] [cursor=pointer]:
+          - img [ref=f2e11]: chevron_left
+      - navigation [ref=f2e12]:
+        - generic [ref=f2e13]:
+          - generic [ref=f2e14]: Licitações
+          - link "Leads" [ref=f2e15] [cursor=pointer]:
+            - /url: /leads
+            - img [ref=f2e16]: list_alt
+          - link "Pipeline" [ref=f2e18] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=f2e19]: view_kanban
+          - link "Editais" [ref=f2e21] [cursor=pointer]:
+            - /url: /editais
+            - img [ref=f2e22]: description
+      - generic [ref=f2e26] [cursor=pointer]:
+        - generic [ref=f2e27]: A
+        - generic [ref=f2e28]:
+          - generic [ref=f2e29]: adminmaster
+          - generic [ref=f2e30]: ADMIN
+        - img [ref=f2e31]: unfold_more
+    - generic [ref=f2e32]:
+      - banner [ref=f2e33]:
+        - generic [ref=f2e34]:
+          - button [ref=f2e35] [cursor=pointer]:
+            - img [ref=f2e36]: dark_mode
+          - button [ref=f2e37] [cursor=pointer]:
+            - img [ref=f2e38]: help_outline
+          - button [ref=f2e39] [cursor=pointer]:
+            - img [ref=f2e40]:
+              - text: notifications_none
+              - generic: "3058"
+          - button [ref=f2e42] [cursor=pointer]:
+            - img [ref=f2e43]: logout
+      - main [ref=f2e44]:
+        - generic [ref=f2e46]:
+          - generic [ref=f2e47]:
+            - generic [ref=f2e48]:
+              - heading "Editais" [level=1] [ref=f2e49]
+              - paragraph [ref=f2e50]: 7.959 registro(s)
+            - generic [ref=f2e51]:
+              - generic [ref=f2e54]:
+                - generic: Buscar editais
+                - img [ref=f2e57]: search
+                - textbox "Buscar editais" [ref=f2e59]:
+                  - /placeholder: Número, objeto ou órgão...
+              - button "Recarregar editais" [ref=f2e60] [cursor=pointer]:
+                - img [ref=f2e61]: refresh
+          - list "Resumo dos editais" [ref=f2e62]:
+            - listitem [ref=f2e63]:
+              - img [ref=f2e64]: inventory_2
+              - generic [ref=f2e65]: "7959"
+              - generic [ref=f2e66]: Total
+            - listitem "0 processados" [ref=f2e67]:
+              - img [ref=f2e68]: task_alt
+              - generic [ref=f2e69]: "0"
+              - generic [ref=f2e70]: Processados
+            - listitem "7959 pendentes" [ref=f2e71]:
+              - img [ref=f2e72]: pending
+              - generic [ref=f2e73]: "7959"
+              - generic [ref=f2e74]: Pendentes
+            - listitem "0 erros" [ref=f2e75]:
+              - img [ref=f2e76]: error_outline
+              - generic [ref=f2e77]: "0"
+              - generic [ref=f2e78]: Erros
+            - listitem "Valor estimado total" [ref=f2e79]:
+              - img [ref=f2e80]: payments
+              - generic [ref=f2e81]: R$ 0,00
+              - generic [ref=f2e82]: Valor estimado
+          - navigation "Filtros por status" [ref=f2e83]:
+            - button "Todos, 7959 editais" [pressed] [ref=f2e84] [cursor=pointer]:
+              - text: Todos
+              - generic [ref=f2e85]: "7959"
+            - button "Processado, 0 editais" [ref=f2e86] [cursor=pointer]:
+              - text: Processado
+              - generic [ref=f2e88]: "0"
+            - button "Pendente, 7959 editais" [ref=f2e89] [cursor=pointer]:
+              - text: Pendente
+              - generic [ref=f2e91]: "7959"
+            - button "Processando, undefined editais" [ref=f2e92] [cursor=pointer]: Processando
+            - button "Erro, 0 editais" [ref=f2e94] [cursor=pointer]:
+              - text: Erro
+              - generic [ref=f2e96]: "0"
+            - button "Antecipado, undefined editais" [ref=f2e97] [cursor=pointer]: Antecipado
+            - button "Arquivado, undefined editais" [ref=f2e99] [cursor=pointer]: Arquivado
+          - generic [ref=f2e712]:
+            - table "Lista de editais" [ref=f2e714]:
+              - rowgroup [ref=f2e715]:
+                - row [ref=f2e716]:
+                  - columnheader [ref=f2e717] [cursor=pointer]:
+                    - button "Número / Órgão" [ref=f2e718]
+                  - columnheader [ref=f2e723] [cursor=pointer]:
+                    - button "Objeto" [ref=f2e724]
+                  - columnheader [ref=f2e729] [cursor=pointer]:
+                    - button "Modalidade" [ref=f2e730]
+                  - columnheader [ref=f2e735] [cursor=pointer]:
+                    - button "Valor est." [ref=f2e736]
+                  - columnheader [ref=f2e741] [cursor=pointer]:
+                    - button "Abertura" [ref=f2e742]
+                  - columnheader [ref=f2e747] [cursor=pointer]:
+                    - button "Status" [ref=f2e748]
+                  - columnheader "Ações" [ref=f2e753]
+              - rowgroup [ref=f2e754]:
+                - 'row "Ver detalhes: 01065846000172-1-000748/2026" [ref=f2e755] [cursor=pointer]':
+                  - cell "01065846000172-1-000748/2026 MUNICIPIO DE GOIANESIA" [ref=f2e756]:
+                    - generic [ref=f2e757]:
+                      - generic "01065846000172-1-000748/2026" [ref=f2e758]
+                      - generic "MUNICIPIO DE GOIANESIA" [ref=f2e759]
+                  - cell [ref=f2e760]:
+                    - paragraph [ref=f2e761]: "DESPESA COM SERVIÇOS DE MANUTENÇAO DA ROÇADEIRA HIDRAULICA, MARCA: CIMAG, MODELO: ROCCC/70..."
+                  - cell "DISPENSA" [ref=f2e762]
+                  - cell "R$ 6.900,00" [ref=f2e763]
+                  - cell "16/07/2026" [ref=f2e766]
+                  - cell [ref=f2e770]:
+                    - 'generic "Status: Pendente" [ref=f2e771]': Pendente
+                  - cell [ref=f2e773]:
+                    - button "Ações do edital 01065846000172-1-000748/2026" [ref=f2e774]:
+                      - img [ref=f2e775]: more_vert
+                - 'row "Ver detalhes: 10581764000171-1-000147/2026" [ref=f2e776] [cursor=pointer]':
+                  - cell "10581764000171-1-000147/2026 FUNDO MUN.DE SAUDE DE SAO LUIS DE MONTES BELOS" [ref=f2e777]:
+                    - generic [ref=f2e778]:
+                      - generic "10581764000171-1-000147/2026" [ref=f2e779]
+                      - generic "FUNDO MUN.DE SAUDE DE SAO LUIS DE MONTES BELOS" [ref=f2e780]
+                  - cell [ref=f2e781]:
+                    - paragraph [ref=f2e782]: Aquisição de medicamento de uso contínuo em cumprimento ao processo administrativo em favo...
+                  - cell "DISPENSA" [ref=f2e783]
+                  - cell "R$ 1.127,72" [ref=f2e784]
+                  - cell "16/07/2026" [ref=f2e787]
+                  - cell [ref=f2e791]:
+                    - 'generic "Status: Pendente" [ref=f2e792]': Pendente
+                  - cell [ref=f2e794]:
+                    - button "Ações do edital 10581764000171-1-000147/2026" [ref=f2e795]:
+                      - img [ref=f2e796]: more_vert
+                - 'row "Ver detalhes: 19500817000157-1-000075/2026" [ref=f2e797] [cursor=pointer]':
+                  - cell "19500817000157-1-000075/2026 FUNDO MUNICIPAL DE EDUCACAO" [ref=f2e798]:
+                    - generic [ref=f2e799]:
+                      - generic "19500817000157-1-000075/2026" [ref=f2e800]
+                      - generic "FUNDO MUNICIPAL DE EDUCACAO" [ref=f2e801]
+                  - cell [ref=f2e802]:
+                    - paragraph [ref=f2e803]: REF. AQUISIÇÃO DE TINTAS PARA REFORMAS NA ESCOLA MUNICIPAL REVERENDO EUDÓXIO.
+                  - cell "DISPENSA" [ref=f2e804]
+                  - cell "R$ 9.294,10" [ref=f2e805]
+                  - cell "16/07/2026" [ref=f2e808]
+                  - cell [ref=f2e812]:
+                    - 'generic "Status: Pendente" [ref=f2e813]': Pendente
+                  - cell [ref=f2e815]:
+                    - button "Ações do edital 19500817000157-1-000075/2026" [ref=f2e816]:
+                      - img [ref=f2e817]: more_vert
+                - 'row "Ver detalhes: 02321909000177-1-000069/2026" [ref=f2e818] [cursor=pointer]':
+                  - cell "02321909000177-1-000069/2026 MUNICIPIO DE MOIPORA" [ref=f2e819]:
+                    - generic [ref=f2e820]:
+                      - generic "02321909000177-1-000069/2026" [ref=f2e821]
+                      - generic "MUNICIPIO DE MOIPORA" [ref=f2e822]
+                  - cell [ref=f2e823]:
+                    - paragraph [ref=f2e824]: SOLICITAÇÃO DA SECRETARIA MUNICIPAL DE TRANSPORTES, NA CONTRATAÇÃO DE PESSOA JURÍDICA ESPE...
+                  - cell "DISPENSA" [ref=f2e825]
+                  - cell "R$ 3.600,00" [ref=f2e826]
+                  - cell "17/07/2026" [ref=f2e829]
+                  - cell [ref=f2e833]:
+                    - 'generic "Status: Pendente" [ref=f2e834]': Pendente
+                  - cell [ref=f2e836]:
+                    - button "Ações do edital 02321909000177-1-000069/2026" [ref=f2e837]:
+                      - img [ref=f2e838]: more_vert
+                - 'row "Ver detalhes: 02542538000153-1-000100/2026" [ref=f2e839] [cursor=pointer]':
+                  - cell "02542538000153-1-000100/2026 MUNICIPIO DE CARMO DO RIO VERDE" [ref=f2e840]:
+                    - generic [ref=f2e841]:
+                      - generic "02542538000153-1-000100/2026" [ref=f2e842]
+                      - generic "MUNICIPIO DE CARMO DO RIO VERDE" [ref=f2e843]
+                  - cell [ref=f2e844]:
+                    - paragraph [ref=f2e845]: AQUISIÇÃO DE EXTINTORES DE INCÊNDIO TIPO ABC, COM 2A 20BC, CONFORME NORMATIVA VIGENTE E ES...
+                  - cell "DISPENSA" [ref=f2e846]
+                  - cell "R$ 669,99" [ref=f2e847]
+                  - cell "-" [ref=f2e850]
+                  - cell [ref=f2e854]:
+                    - 'generic "Status: Pendente" [ref=f2e855]': Pendente
+                  - cell [ref=f2e857]:
+                    - button "Ações do edital 02542538000153-1-000100/2026" [ref=f2e858]:
+                      - img [ref=f2e859]: more_vert
+                - 'row "Ver detalhes: 25004771000188-1-000066/2026" [ref=f2e860] [cursor=pointer]':
+                  - cell "25004771000188-1-000066/2026 MUNICIPIO DE TROMBAS" [ref=f2e861]:
+                    - generic [ref=f2e862]:
+                      - generic "25004771000188-1-000066/2026" [ref=f2e863]
+                      - generic "MUNICIPIO DE TROMBAS" [ref=f2e864]
+                  - cell [ref=f2e865]:
+                    - paragraph [ref=f2e866]: SIRVO - ME DO PRESENTE PARA SOLICITAR CONTRAÇÃO DE EMPRESA PARA PRESTAÇÃO DE SERVIÇOS DE ...
+                  - cell "DISPENSA" [ref=f2e867]
+                  - cell "R$ 18.887,50" [ref=f2e868]
+                  - cell "13/07/2026" [ref=f2e871]
+                  - cell [ref=f2e875]:
+                    - 'generic "Status: Pendente" [ref=f2e876]': Pendente
+                  - cell [ref=f2e878]:
+                    - button "Ações do edital 25004771000188-1-000066/2026" [ref=f2e879]:
+                      - img [ref=f2e880]: more_vert
+                - 'row "Ver detalhes: 02056729000105-1-000486/2026" [ref=f2e881] [cursor=pointer]':
+                  - cell "02056729000105-1-000486/2026 MUNICIPIO DE RIO VERDE" [ref=f2e882]:
+                    - generic [ref=f2e883]:
+                      - generic "02056729000105-1-000486/2026" [ref=f2e884]
+                      - generic "MUNICIPIO DE RIO VERDE" [ref=f2e885]
+                  - cell [ref=f2e886]:
+                    - paragraph [ref=f2e887]: AQUISIÇÃO DE TABLETS E CELULAR PARA ATENDER DEPARTAMENTO PEDAGÓGICO E EQUIPE DE COMUNICAÇÃ...
+                  - cell "DISPENSA" [ref=f2e888]
+                  - cell "R$ 28.313,08" [ref=f2e889]
+                  - cell "20/07/2026 Em breve" [ref=f2e892]:
+                    - generic [ref=f2e893]:
+                      - img [ref=f2e894]: warning_amber
+                      - generic [ref=f2e895]:
+                        - generic [ref=f2e896]: 20/07/2026
+                        - generic [ref=f2e897]: Em breve
+                  - cell [ref=f2e898]:
+                    - 'generic "Status: Pendente" [ref=f2e899]': Pendente
+                  - cell [ref=f2e901]:
+                    - button "Ações do edital 02056729000105-1-000486/2026" [ref=f2e902]:
+                      - img [ref=f2e903]: more_vert
+                - 'row "Ver detalhes: 04755973000191-1-000053/2026" [ref=f2e904] [cursor=pointer]':
+                  - cell "04755973000191-1-000053/2026 FUNDO MUNICIPAL DE SAUDE DE URUACU" [ref=f2e905]:
+                    - generic [ref=f2e906]:
+                      - generic "04755973000191-1-000053/2026" [ref=f2e907]
+                      - generic "FUNDO MUNICIPAL DE SAUDE DE URUACU" [ref=f2e908]
+                  - cell [ref=f2e909]:
+                    - paragraph [ref=f2e910]: CONTRATAÇÃO DE UMA EMPRESA ESPECIALIZADA PARA AQUISIÇÃO DE MATERIAIS HOSPITALARES PARA ACO...
+                  - cell "DISPENSA" [ref=f2e911]
+                  - cell "R$ 33.204,45" [ref=f2e912]
+                  - cell "17/07/2026" [ref=f2e915]
+                  - cell [ref=f2e919]:
+                    - 'generic "Status: Pendente" [ref=f2e920]': Pendente
+                  - cell [ref=f2e922]:
+                    - button "Ações do edital 04755973000191-1-000053/2026" [ref=f2e923]:
+                      - img [ref=f2e924]: more_vert
+                - 'row "Ver detalhes: 01740489000109-1-000924/2026" [ref=f2e925] [cursor=pointer]':
+                  - cell "01740489000109-1-000924/2026 MUNICIPIO DE SITIO D'ABADIA" [ref=f2e926]:
+                    - generic [ref=f2e927]:
+                      - generic "01740489000109-1-000924/2026" [ref=f2e928]
+                      - generic "MUNICIPIO DE SITIO D'ABADIA" [ref=f2e929]
+                  - cell [ref=f2e930]:
+                    - paragraph [ref=f2e931]: TRANSPORTADORA
+                  - cell "DISPENSA" [ref=f2e932]
+                  - cell "R$ 219,00" [ref=f2e933]
+                  - cell "-" [ref=f2e936]
+                  - cell [ref=f2e940]:
+                    - 'generic "Status: Pendente" [ref=f2e941]': Pendente
+                  - cell [ref=f2e943]:
+                    - button "Ações do edital 01740489000109-1-000924/2026" [ref=f2e944]:
+                      - img [ref=f2e945]: more_vert
+                - 'row "Ver detalhes: 01740489000109-1-000923/2026" [ref=f2e946] [cursor=pointer]':
+                  - cell "01740489000109-1-000923/2026 MUNICIPIO DE SITIO D'ABADIA" [ref=f2e947]:
+                    - generic [ref=f2e948]:
+                      - generic "01740489000109-1-000923/2026" [ref=f2e949]
+                      - generic "MUNICIPIO DE SITIO D'ABADIA" [ref=f2e950]
+                  - cell [ref=f2e951]:
+                    - paragraph [ref=f2e952]: PRESTAÇÃO DE SERVIÇOS DE LANTERNAGEM DESTINADAS A MANUTENÇÃO DA MOTONIVELADORA DA SECRETAR...
+                  - cell "DISPENSA" [ref=f2e953]
+                  - cell "R$ 390,00" [ref=f2e954]
+                  - cell "-" [ref=f2e957]
+                  - cell [ref=f2e961]:
+                    - 'generic "Status: Pendente" [ref=f2e962]': Pendente
+                  - cell [ref=f2e964]:
+                    - button "Ações do edital 01740489000109-1-000923/2026" [ref=f2e965]:
+                      - img [ref=f2e966]: more_vert
+                - 'row "Ver detalhes: 24850216000104-1-000438/2026" [ref=f2e967] [cursor=pointer]':
+                  - cell "24850216000104-1-000438/2026 MUNICIPIO DE MATRINCHA" [ref=f2e968]:
+                    - generic [ref=f2e969]:
+                      - generic "24850216000104-1-000438/2026" [ref=f2e970]
+                      - generic "MUNICIPIO DE MATRINCHA" [ref=f2e971]
+                  - cell [ref=f2e972]:
+                    - paragraph [ref=f2e973]: CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA PRESTAÇÃO DE SERVIÇOS DE SEGURANÇA DESARMADA DES...
+                  - cell "DISPENSA" [ref=f2e974]
+                  - cell "R$ 3.000,00" [ref=f2e975]
+                  - cell "06/07/2026" [ref=f2e978]
+                  - cell [ref=f2e982]:
+                    - 'generic "Status: Pendente" [ref=f2e983]': Pendente
+                  - cell [ref=f2e985]:
+                    - button "Ações do edital 24850216000104-1-000438/2026" [ref=f2e986]:
+                      - img [ref=f2e987]: more_vert
+                - 'row "Ver detalhes: 14048217000186-1-000003/2026" [ref=f2e988] [cursor=pointer]':
+                  - cell "14048217000186-1-000003/2026 FUNDO MUNICIPAL DE HABITACAO DE INTERESSE SOCIAL - FMHIS" [ref=f2e989]:
+                    - generic [ref=f2e990]:
+                      - generic "14048217000186-1-000003/2026" [ref=f2e991]
+                      - generic "FUNDO MUNICIPAL DE HABITACAO DE INTERESSE SOCIAL - FMHIS" [ref=f2e992]
+                  - cell [ref=f2e993]:
+                    - paragraph [ref=f2e994]: CONTRATAÇÃO DE EMPRESA ESPECIALIZASA DE CONSULTORIA E ASSESSORIA EM ENGENHARIA, DESTINADO ...
+                  - cell "DISPENSA" [ref=f2e995]
+                  - cell "R$ 119.668,02" [ref=f2e996]
+                  - cell "16/07/2026" [ref=f2e999]
+                  - cell [ref=f2e1003]:
+                    - 'generic "Status: Pendente" [ref=f2e1004]': Pendente
+                  - cell [ref=f2e1006]:
+                    - button "Ações do edital 14048217000186-1-000003/2026" [ref=f2e1007]:
+                      - img [ref=f2e1008]: more_vert
+                - 'row "Ver detalhes: 10581764000171-1-000146/2026" [ref=f2e1009] [cursor=pointer]':
+                  - cell "10581764000171-1-000146/2026 FUNDO MUN.DE SAUDE DE SAO LUIS DE MONTES BELOS" [ref=f2e1010]:
+                    - generic [ref=f2e1011]:
+                      - generic "10581764000171-1-000146/2026" [ref=f2e1012]
+                      - generic "FUNDO MUN.DE SAUDE DE SAO LUIS DE MONTES BELOS" [ref=f2e1013]
+                  - cell [ref=f2e1014]:
+                    - paragraph [ref=f2e1015]: Aquisição de medicamento de uso contínuo em cumprimento ao processo administrativo em favo...
+                  - cell "DISPENSA" [ref=f2e1016]
+                  - cell "R$ 184,20" [ref=f2e1017]
+                  - cell "16/07/2026" [ref=f2e1020]
+                  - cell [ref=f2e1024]:
+                    - 'generic "Status: Pendente" [ref=f2e1025]': Pendente
+                  - cell [ref=f2e1027]:
+                    - button "Ações do edital 10581764000171-1-000146/2026" [ref=f2e1028]:
+                      - img [ref=f2e1029]: more_vert
+                - 'row "Ver detalhes: 08948407000157-1-000034/2026" [ref=f2e1030] [cursor=pointer]':
+                  - cell "08948407000157-1-000034/2026 INSTITUTO DE PREVIDENCIA DOS SERVIDORES DO MUNICIPIO DE GOIANIA - GOIANIAPREV" [ref=f2e1031]:
+                    - generic [ref=f2e1032]:
+                      - generic "08948407000157-1-000034/2026" [ref=f2e1033]
+                      - generic "INSTITUTO DE PREVIDENCIA DOS SERVIDORES DO MUNICIPIO DE GOIANIA - GOIANIAPREV" [ref=f2e1034]
+                  - cell [ref=f2e1035]:
+                    - paragraph [ref=f2e1036]: Contratação de empresa visando a aquisição e instalação de bebedouro industrial e cafeteir...
+                  - cell "DISPENSA" [ref=f2e1037]
+                  - cell "R$ 8.267,12" [ref=f2e1038]
+                  - cell "20/07/2026 Em breve" [ref=f2e1041]:
+                    - generic [ref=f2e1042]:
+                      - img [ref=f2e1043]: warning_amber
+                      - generic [ref=f2e1044]:
+                        - generic [ref=f2e1045]: 20/07/2026
+                        - generic [ref=f2e1046]: Em breve
+                  - cell [ref=f2e1047]:
+                    - 'generic "Status: Pendente" [ref=f2e1048]': Pendente
+                  - cell [ref=f2e1050]:
+                    - button "Ações do edital 08948407000157-1-000034/2026" [ref=f2e1051]:
+                      - img [ref=f2e1052]: more_vert
+                - 'row "Ver detalhes: 24859324000148-1-000209/2026" [ref=f2e1053] [cursor=pointer]':
+                  - cell "24859324000148-1-000209/2026 MUNICIPIO DE PEROLANDIA" [ref=f2e1054]:
+                    - generic [ref=f2e1055]:
+                      - generic "24859324000148-1-000209/2026" [ref=f2e1056]
+                      - generic "MUNICIPIO DE PEROLANDIA" [ref=f2e1057]
+                  - cell [ref=f2e1058]:
+                    - paragraph [ref=f2e1059]: PRESTAÇÃO DE SERVIÇO EM GELADEIRA DA SECRETARIA DA EDUCAÇÃO REFERENTE A TROCA DE INTERRUPT...
+                  - cell "DISPENSA" [ref=f2e1060]
+                  - cell "R$ 545,32" [ref=f2e1061]
+                  - cell "-" [ref=f2e1064]
+                  - cell [ref=f2e1068]:
+                    - 'generic "Status: Pendente" [ref=f2e1069]': Pendente
+                  - cell [ref=f2e1071]:
+                    - button "Ações do edital 24859324000148-1-000209/2026" [ref=f2e1072]:
+                      - img [ref=f2e1073]: more_vert
+                - 'row "Ver detalhes: 01065846000172-1-000747/2026" [ref=f2e1074] [cursor=pointer]':
+                  - cell "01065846000172-1-000747/2026 MUNICIPIO DE GOIANESIA" [ref=f2e1075]:
+                    - generic [ref=f2e1076]:
+                      - generic "01065846000172-1-000747/2026" [ref=f2e1077]
+                      - generic "MUNICIPIO DE GOIANESIA" [ref=f2e1078]
+                  - cell [ref=f2e1079]:
+                    - paragraph [ref=f2e1080]: "DESPESA COM SERVIÇOS DE MANUTENÇAO DO SAVEIRO ROBUST CD, MARCA: VOLKSWAGEM, PLACA: PRS8016..."
+                  - cell "DISPENSA" [ref=f2e1081]
+                  - cell "R$ 987,99" [ref=f2e1082]
+                  - cell "16/07/2026" [ref=f2e1085]
+                  - cell [ref=f2e1089]:
+                    - 'generic "Status: Pendente" [ref=f2e1090]': Pendente
+                  - cell [ref=f2e1092]:
+                    - button "Ações do edital 01065846000172-1-000747/2026" [ref=f2e1093]:
+                      - img [ref=f2e1094]: more_vert
+                - 'row "Ver detalhes: 11171868000170-1-000233/2026" [ref=f2e1095] [cursor=pointer]':
+                  - cell "11171868000170-1-000233/2026 FUNDO MUNICIPAL DE SAUDE DE PARAUNA" [ref=f2e1096]:
+                    - generic [ref=f2e1097]:
+                      - generic "11171868000170-1-000233/2026" [ref=f2e1098]
+                      - generic "FUNDO MUNICIPAL DE SAUDE DE PARAUNA" [ref=f2e1099]
+                  - cell [ref=f2e1100]:
+                    - paragraph [ref=f2e1101]: PRESTAÇÃO DE SERVIÇOS SENDO REFERENTE A 4 (QUATRO) DIARIAS PARA EQUIPE TECNICA DO PROJETO ...
+                  - cell "DISPENSA" [ref=f2e1102]
+                  - cell "R$ 672,00" [ref=f2e1103]
+                  - cell "-" [ref=f2e1106]
+                  - cell [ref=f2e1110]:
+                    - 'generic "Status: Pendente" [ref=f2e1111]': Pendente
+                  - cell [ref=f2e1113]:
+                    - button "Ações do edital 11171868000170-1-000233/2026" [ref=f2e1114]:
+                      - img [ref=f2e1115]: more_vert
+                - 'row "Ver detalhes: 10581764000171-1-000145/2026" [ref=f2e1116] [cursor=pointer]':
+                  - cell "10581764000171-1-000145/2026 FUNDO MUN.DE SAUDE DE SAO LUIS DE MONTES BELOS" [ref=f2e1117]:
+                    - generic [ref=f2e1118]:
+                      - generic "10581764000171-1-000145/2026" [ref=f2e1119]
+                      - generic "FUNDO MUN.DE SAUDE DE SAO LUIS DE MONTES BELOS" [ref=f2e1120]
+                  - cell [ref=f2e1121]:
+                    - paragraph [ref=f2e1122]: Aquisição de medicamento de uso contínuo em cumprimento ao processo administrativo em favo...
+                  - cell "DISPENSA" [ref=f2e1123]
+                  - cell "R$ 219,60" [ref=f2e1124]
+                  - cell "16/07/2026" [ref=f2e1127]
+                  - cell [ref=f2e1131]:
+                    - 'generic "Status: Pendente" [ref=f2e1132]': Pendente
+                  - cell [ref=f2e1134]:
+                    - button "Ações do edital 10581764000171-1-000145/2026" [ref=f2e1135]:
+                      - img [ref=f2e1136]: more_vert
+                - 'row "Ver detalhes: 01181585000156-1-000159/2026" [ref=f2e1137] [cursor=pointer]':
+                  - cell "01181585000156-1-000159/2026 MUNICIPIO DE PIRES DO RIO" [ref=f2e1138]:
+                    - generic [ref=f2e1139]:
+                      - generic "01181585000156-1-000159/2026" [ref=f2e1140]
+                      - generic "MUNICIPIO DE PIRES DO RIO" [ref=f2e1141]
+                  - cell [ref=f2e1142]:
+                    - paragraph [ref=f2e1143]: CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA PRESTAÇÃO DE SERVIÇOS DE CONSULTORIA E ASSESSORI...
+                  - cell "DISPENSA" [ref=f2e1144]
+                  - cell "R$ 65.000,04" [ref=f2e1145]
+                  - cell "30/06/2026" [ref=f2e1148]
+                  - cell [ref=f2e1152]:
+                    - 'generic "Status: Pendente" [ref=f2e1153]': Pendente
+                  - cell [ref=f2e1155]:
+                    - button "Ações do edital 01181585000156-1-000159/2026" [ref=f2e1156]:
+                      - img [ref=f2e1157]: more_vert
+                - 'row "Ver detalhes: 11457539000190-1-000057/2026" [ref=f2e1158] [cursor=pointer]':
+                  - cell "11457539000190-1-000057/2026 FUNDO MUNICIPAL DE SAUDE" [ref=f2e1159]:
+                    - generic [ref=f2e1160]:
+                      - generic "11457539000190-1-000057/2026" [ref=f2e1161]
+                      - generic "FUNDO MUNICIPAL DE SAUDE" [ref=f2e1162]
+                  - cell [ref=f2e1163]:
+                    - paragraph [ref=f2e1164]: Contratação de empresa especializada para a realização de procedimento cirúrgico de hister...
+                  - cell "DISPENSA" [ref=f2e1165]
+                  - cell "R$ 4.740,64" [ref=f2e1166]
+                  - cell "-" [ref=f2e1169]
+                  - cell [ref=f2e1173]:
+                    - 'generic "Status: Pendente" [ref=f2e1174]': Pendente
+                  - cell [ref=f2e1176]:
+                    - button "Ações do edital 11457539000190-1-000057/2026" [ref=f2e1177]:
+                      - img [ref=f2e1178]: more_vert
+                - 'row "Ver detalhes: 24850216000104-1-000437/2026" [ref=f2e1179] [cursor=pointer]':
+                  - cell "24850216000104-1-000437/2026 MUNICIPIO DE MATRINCHA" [ref=f2e1180]:
+                    - generic [ref=f2e1181]:
+                      - generic "24850216000104-1-000437/2026" [ref=f2e1182]
+                      - generic "MUNICIPIO DE MATRINCHA" [ref=f2e1183]
+                  - cell [ref=f2e1184]:
+                    - paragraph [ref=f2e1185]: CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA A PRESTAÇÃO DE SERVIÇOS DE MANUTENÇÃO PREVENTIVA...
+                  - cell "DISPENSA" [ref=f2e1186]
+                  - cell "R$ 2.230,00" [ref=f2e1187]
+                  - cell "29/06/2026" [ref=f2e1190]
+                  - cell [ref=f2e1194]:
+                    - 'generic "Status: Pendente" [ref=f2e1195]': Pendente
+                  - cell [ref=f2e1197]:
+                    - button "Ações do edital 24850216000104-1-000437/2026" [ref=f2e1198]:
+                      - img [ref=f2e1199]: more_vert
+                - 'row "Ver detalhes: 24850216000104-1-000436/2026" [ref=f2e1200] [cursor=pointer]':
+                  - cell "24850216000104-1-000436/2026 MUNICIPIO DE MATRINCHA" [ref=f2e1201]:
+                    - generic [ref=f2e1202]:
+                      - generic "24850216000104-1-000436/2026" [ref=f2e1203]
+                      - generic "MUNICIPIO DE MATRINCHA" [ref=f2e1204]
+                  - cell [ref=f2e1205]:
+                    - paragraph [ref=f2e1206]: AQUISIÇÃO DE PNEUS DESTINADOS À MOTONIVELADORA E AO CAMINHÃO VOLVO (PLACA OOB-8083), LOTAD...
+                  - cell "DISPENSA" [ref=f2e1207]
+                  - cell "R$ 10.600,00" [ref=f2e1208]
+                  - cell "29/06/2026" [ref=f2e1211]
+                  - cell [ref=f2e1215]:
+                    - 'generic "Status: Pendente" [ref=f2e1216]': Pendente
+                  - cell [ref=f2e1218]:
+                    - button "Ações do edital 24850216000104-1-000436/2026" [ref=f2e1219]:
+                      - img [ref=f2e1220]: more_vert
+                - 'row "Ver detalhes: 01740489000109-1-000922/2026" [ref=f2e1221] [cursor=pointer]':
+                  - cell "01740489000109-1-000922/2026 MUNICIPIO DE SITIO D'ABADIA" [ref=f2e1222]:
+                    - generic [ref=f2e1223]:
+                      - generic "01740489000109-1-000922/2026" [ref=f2e1224]
+                      - generic "MUNICIPIO DE SITIO D'ABADIA" [ref=f2e1225]
+                  - cell [ref=f2e1226]:
+                    - paragraph [ref=f2e1227]: PRESTAÇÃO DE SERVIÇO PARA A FABRICAÇÃO DE BANNER E FAIXA E ADESVOS PARA A SECRETARIA DE TR...
+                  - cell "DISPENSA" [ref=f2e1228]
+                  - cell "R$ 1.787,43" [ref=f2e1229]
+                  - cell "-" [ref=f2e1232]
+                  - cell [ref=f2e1236]:
+                    - 'generic "Status: Pendente" [ref=f2e1237]': Pendente
+                  - cell [ref=f2e1239]:
+                    - button "Ações do edital 01740489000109-1-000922/2026" [ref=f2e1240]:
+                      - img [ref=f2e1241]: more_vert
+                - 'row "Ver detalhes: 00394452000103-1-013647/2026" [ref=f2e1242] [cursor=pointer]':
+                  - cell "00394452000103-1-013647/2026 COMANDO DO EXERCITO" [ref=f2e1243]:
+                    - generic [ref=f2e1244]:
+                      - generic "00394452000103-1-013647/2026" [ref=f2e1245]
+                      - generic "COMANDO DO EXERCITO" [ref=f2e1246]
+                  - cell [ref=f2e1247]:
+                    - paragraph [ref=f2e1248]: Agricultura Familiar
+                  - cell "DISPENSA" [ref=f2e1249]
+                  - cell "R$ 245.776,28" [ref=f2e1250]
+                  - cell "-" [ref=f2e1253]
+                  - cell [ref=f2e1257]:
+                    - 'generic "Status: Pendente" [ref=f2e1258]': Pendente
+                  - cell [ref=f2e1260]:
+                    - button "Ações do edital 00394452000103-1-013647/2026" [ref=f2e1261]:
+                      - img [ref=f2e1262]: more_vert
+                - 'row "Ver detalhes: 01740489000109-1-000921/2026" [ref=f2e1263] [cursor=pointer]':
+                  - cell "01740489000109-1-000921/2026 MUNICIPIO DE SITIO D'ABADIA" [ref=f2e1264]:
+                    - generic [ref=f2e1265]:
+                      - generic "01740489000109-1-000921/2026" [ref=f2e1266]
+                      - generic "MUNICIPIO DE SITIO D'ABADIA" [ref=f2e1267]
+                  - cell [ref=f2e1268]:
+                    - paragraph [ref=f2e1269]: PRESTAÇÃO DE SERVIÇOS DE LANTERNAGEM DESTINADAS A MANUTENÇÃO DA RETROESCAVADEIRA CASE DA S...
+                  - cell "DISPENSA" [ref=f2e1270]
+                  - cell "R$ 390,00" [ref=f2e1271]
+                  - cell "-" [ref=f2e1274]
+                  - cell [ref=f2e1278]:
+                    - 'generic "Status: Pendente" [ref=f2e1279]': Pendente
+                  - cell [ref=f2e1281]:
+                    - button "Ações do edital 01740489000109-1-000921/2026" [ref=f2e1282]:
+                      - img [ref=f2e1283]: more_vert
+            - group "Navegação de páginas" [ref=f2e1284]:
+              - generic [ref=f2e1286]:
+                - generic [ref=f2e1287]:
+                  - generic [ref=f2e1288]: "Items per page:"
+                  - combobox "Items per page:" [ref=f2e1293] [cursor=pointer]:
+                    - generic [ref=f2e1294]: "25"
+                - generic [ref=f2e1302]:
+                  - status [ref=f2e1303]: 26 – 50 of 7959
+                  - button "First page" [ref=f2e1304] [cursor=pointer]
+                  - button "Previous page" [ref=f2e1309] [cursor=pointer]
+                  - button "Next page" [ref=f2e1314] [cursor=pointer]
+                  - button "Last page" [ref=f2e1319] [cursor=pointer]
+  - generic: Next page

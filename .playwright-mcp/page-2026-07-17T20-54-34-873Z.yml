@@ -1,0 +1,106 @@
+- generic [active] [ref=f40e1]:
+  - generic [ref=f40e4]:
+    - complementary [ref=f40e5]:
+      - generic [ref=f40e6]:
+        - img [ref=f40e8]: gavel
+        - generic [ref=f40e9]: LicitaFlow
+        - button [ref=f40e10] [cursor=pointer]:
+          - img [ref=f40e11]: chevron_left
+      - navigation [ref=f40e12]:
+        - generic [ref=f40e13]:
+          - generic [ref=f40e14]: Licitações
+          - link "Leads" [ref=f40e15] [cursor=pointer]:
+            - /url: /leads
+            - img [ref=f40e16]: list_alt
+          - link "Pipeline" [ref=f40e18] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=f40e19]: view_kanban
+          - link "Editais" [ref=f40e21] [cursor=pointer]:
+            - /url: /editais
+            - img [ref=f40e22]: description
+      - generic [ref=f40e26] [cursor=pointer]:
+        - generic [ref=f40e27]: A
+        - generic [ref=f40e28]:
+          - generic [ref=f40e29]: adminmaster
+          - generic [ref=f40e30]: ADMIN
+        - img [ref=f40e31]: unfold_more
+    - generic [ref=f40e32]:
+      - banner [ref=f40e33]:
+        - generic [ref=f40e34]:
+          - button [ref=f40e35] [cursor=pointer]:
+            - img [ref=f40e36]: light_mode
+          - button [ref=f40e37] [cursor=pointer]:
+            - img [ref=f40e38]: help_outline
+          - button [ref=f40e39] [cursor=pointer]:
+            - img [ref=f40e40]: notifications_none
+          - button [ref=f40e41] [cursor=pointer]:
+            - img [ref=f40e42]: logout
+      - main [ref=f40e43]:
+        - generic [ref=f40e45]:
+          - generic [ref=f40e46]:
+            - generic [ref=f40e47]:
+              - heading "Leads" [level=1] [ref=f40e48]
+              - paragraph [ref=f40e49]: Matérias coletadas das fontes oficiais classificadas para análise
+            - generic [ref=f40e50]:
+              - button "Legenda" [ref=f40e51] [cursor=pointer]:
+                - img [ref=f40e52]: info
+                - text: Legenda
+              - button "Rastreabilidade" [ref=f40e53] [cursor=pointer]:
+                - img [ref=f40e54]: history
+                - text: Rastreabilidade
+          - generic [ref=f40e56]:
+            - generic [ref=f40e57]:
+              - img [ref=f40e58]: manage_search
+              - generic [ref=f40e59]:
+                - generic [ref=f40e60]: Buscar leads
+                - generic [ref=f40e61]: Colete matérias do DODF, DOU ou filtre por PNCP
+            - button "Buscar leads" [ref=f40e62] [cursor=pointer]:
+              - img [ref=f40e63]: search
+              - text: Buscar leads
+          - group "Filtros por status" [ref=f40e64]:
+            - button "Todos" [pressed] [ref=f40e65] [cursor=pointer]:
+              - text: Todos
+              - generic [ref=f40e66]: "0"
+            - button "Novos Leads" [ref=f40e67] [cursor=pointer]:
+              - text: Novos Leads
+              - generic [ref=f40e68]: "0"
+            - button "Aprov. Presidência" [ref=f40e69] [cursor=pointer]:
+              - text: Aprov. Presidência
+              - generic [ref=f40e70]: "0"
+            - button "Estudo e Viab." [ref=f40e71] [cursor=pointer]:
+              - text: Estudo e Viab.
+              - generic [ref=f40e72]: "0"
+            - button "2ª Aprovação" [ref=f40e73] [cursor=pointer]:
+              - text: 2ª Aprovação
+              - generic [ref=f40e74]: "0"
+            - button "Descartado" [ref=f40e75] [cursor=pointer]:
+              - text: Descartado
+              - generic [ref=f40e76]: "0"
+          - group "Filtro por fonte" [ref=f40e77]:
+            - button "Todas as fontes" [ref=f40e78] [cursor=pointer]
+            - button "DODF" [ref=f40e79] [cursor=pointer]
+            - button "DOU" [ref=f40e80] [cursor=pointer]
+            - button "PNCP" [ref=f40e81] [cursor=pointer]
+          - group "Filtro por score mínimo" [ref=f40e82]:
+            - button "Todos os scores" [ref=f40e83] [cursor=pointer]
+            - button "Morno (40+)" [ref=f40e84] [cursor=pointer]
+            - button "Quente (70+)" [ref=f40e85] [cursor=pointer]
+          - alert [ref=f40e86]:
+            - img [ref=f40e87]: cloud_off
+            - heading "Não foi possível carregar os leads" [level=2] [ref=f40e88]
+            - paragraph [ref=f40e89]: Verifique a conexão com o servidor e tente novamente.
+            - button "Tentar novamente" [ref=f40e90]:
+              - img [ref=f40e91]: refresh
+  - generic:
+    - generic [ref=f40e101]:
+      - generic [ref=f40e102]: Acesso negado.
+      - button [ref=f40e104]:
+        - generic [ref=f40e105]: OK
+    - generic [ref=f40e113]:
+      - generic [ref=f40e114]: Acesso negado.
+      - button [ref=f40e116]:
+        - generic [ref=f40e117]: OK
+    - generic [ref=f40e125]:
+      - generic [ref=f40e126]: Erro ao carregar leads
+      - button [ref=f40e128]:
+        - generic [ref=f40e129]: ✕

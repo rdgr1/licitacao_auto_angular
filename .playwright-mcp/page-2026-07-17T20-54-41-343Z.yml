@@ -1,0 +1,139 @@
+- generic [active] [ref=f41e1]:
+  - generic [ref=f41e4]:
+    - complementary [ref=f41e5]:
+      - generic [ref=f41e6]:
+        - img [ref=f41e8]: gavel
+        - generic [ref=f41e9]: LicitaFlow
+        - button [ref=f41e10] [cursor=pointer]:
+          - img [ref=f41e11]: chevron_left
+      - navigation [ref=f41e12]:
+        - generic [ref=f41e13]:
+          - generic [ref=f41e14]: Licitações
+          - link "Leads" [ref=f41e15] [cursor=pointer]:
+            - /url: /leads
+            - img [ref=f41e16]: list_alt
+          - link "Pipeline" [ref=f41e18] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=f41e19]: view_kanban
+          - link "Editais" [ref=f41e21] [cursor=pointer]:
+            - /url: /editais
+            - img [ref=f41e22]: description
+      - generic [ref=f41e26] [cursor=pointer]:
+        - generic [ref=f41e27]: A
+        - generic [ref=f41e28]:
+          - generic [ref=f41e29]: adminmaster
+          - generic [ref=f41e30]: ADMIN
+        - img [ref=f41e31]: unfold_more
+    - generic [ref=f41e32]:
+      - banner [ref=f41e33]:
+        - generic [ref=f41e34]:
+          - button [ref=f41e35] [cursor=pointer]:
+            - img [ref=f41e36]: light_mode
+          - button [ref=f41e37] [cursor=pointer]:
+            - img [ref=f41e38]: help_outline
+          - button [ref=f41e39] [cursor=pointer]:
+            - img [ref=f41e40]: notifications_none
+          - button [ref=f41e41] [cursor=pointer]:
+            - img [ref=f41e42]: logout
+      - main [ref=f41e43]:
+        - generic [ref=f41e45]:
+          - generic [ref=f41e47]:
+            - generic [ref=f41e48]:
+              - heading "Pipeline" [level=1] [ref=f41e49]
+              - paragraph [ref=f41e50]: 0 oportunidades em qualificação
+            - generic [ref=f41e51]:
+              - generic [ref=f41e52]:
+                - button "Qualificação" [ref=f41e53] [cursor=pointer]:
+                  - img [ref=f41e54]: filter_alt
+                  - text: Qualificação
+                  - generic [ref=f41e55]: "0"
+                - button "Processo Licitatório" [ref=f41e56] [cursor=pointer]:
+                  - img [ref=f41e57]: account_tree
+                  - text: Processo Licitatório
+                  - generic [ref=f41e58]: "0"
+              - button "Recarregar pipeline" [ref=f41e59] [cursor=pointer]:
+                - img [ref=f41e60]: refresh
+          - group "Filtro e busca de leads" [ref=f41e63]:
+            - generic [ref=f41e64]:
+              - button "Todas as fontes" [ref=f41e65] [cursor=pointer]
+              - button "DODF" [ref=f41e66] [cursor=pointer]
+              - button "DOU" [ref=f41e67] [cursor=pointer]
+              - button "PNCP" [ref=f41e68] [cursor=pointer]
+            - generic [ref=f41e69]:
+              - img [ref=f41e70]: search
+              - textbox "Buscar leads por título ou órgão" [ref=f41e71]:
+                - /placeholder: Buscar por título ou órgão...
+          - generic [ref=f41e72]:
+            - generic [ref=f41e73]:
+              - generic [ref=f41e74]:
+                - img [ref=f41e75]: block
+                - generic [ref=f41e76]: Descarte
+                - generic [ref=f41e77]: "0"
+              - generic [ref=f41e79]:
+                - img [ref=f41e80]: block
+                - generic [ref=f41e81]: Vazio
+            - generic [ref=f41e82]:
+              - generic [ref=f41e83]:
+                - img [ref=f41e84]: inbox
+                - generic [ref=f41e85]: Novos Leads
+                - generic [ref=f41e86]: "0"
+              - generic [ref=f41e88]:
+                - img [ref=f41e89]: inbox
+                - generic [ref=f41e90]: Vazio
+            - generic [ref=f41e91]:
+              - generic [ref=f41e92]:
+                - img [ref=f41e93]: how_to_reg
+                - generic [ref=f41e94]: Aprov. Presidência
+                - generic [ref=f41e95]: "0"
+              - generic [ref=f41e97]:
+                - img [ref=f41e98]: how_to_reg
+                - generic [ref=f41e99]: Vazio
+            - generic [ref=f41e100]:
+              - generic [ref=f41e101]:
+                - img [ref=f41e102]: science
+                - generic [ref=f41e103]: Estudo e Viabilidade
+                - generic [ref=f41e104]: "0"
+              - generic [ref=f41e106]:
+                - img [ref=f41e107]: science
+                - generic [ref=f41e108]: Vazio
+            - generic [ref=f41e109]:
+              - generic [ref=f41e110]:
+                - img [ref=f41e111]: verified_user
+                - generic [ref=f41e112]: 2ª Aprov. Presidência
+                - generic [ref=f41e113]: "0"
+              - generic [ref=f41e115]:
+                - img [ref=f41e116]: verified_user
+                - generic [ref=f41e117]: Vazio
+          - group [ref=f41e118]:
+            - generic [ref=f41e120]:
+              - generic [ref=f41e121]:
+                - generic [ref=f41e122]: "Items per page:"
+                - combobox "Items per page:" [ref=f41e127] [cursor=pointer]:
+                  - generic [ref=f41e128]: "48"
+              - generic [ref=f41e136]:
+                - status [ref=f41e137]: 0 of 0
+                - button "First page" [disabled] [ref=f41e138]
+                - button "Previous page" [disabled] [ref=f41e143]
+                - button "Next page" [disabled] [ref=f41e148]
+                - button "Last page" [disabled] [ref=f41e153]
+  - generic:
+    - generic [ref=f41e164]:
+      - generic [ref=f41e165]: Acesso negado.
+      - button [ref=f41e167]:
+        - generic [ref=f41e168]: OK
+    - generic [ref=f41e176]:
+      - generic [ref=f41e177]: Acesso negado.
+      - button [ref=f41e179]:
+        - generic [ref=f41e180]: OK
+    - generic [ref=f41e188]:
+      - generic [ref=f41e189]: Erro ao carregar leads descartados
+      - button [ref=f41e191]:
+        - generic [ref=f41e192]: ✕
+    - generic [ref=f41e200]:
+      - generic [ref=f41e201]: Acesso negado.
+      - button [ref=f41e203]:
+        - generic [ref=f41e204]: OK
+    - generic [ref=f41e212]:
+      - generic [ref=f41e213]: Erro ao carregar leads
+      - button [ref=f41e215]:
+        - generic [ref=f41e216]: ✕

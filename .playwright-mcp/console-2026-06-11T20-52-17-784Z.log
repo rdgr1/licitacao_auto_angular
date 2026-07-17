@@ -1,0 +1,13 @@
+[     144ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-P4QADCRM.js?v=355c17b0:13958
+[     225ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[     227ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/tipos-abertura?page=0&size=10:0
+[     228ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/keywords?page=0&size=10:0
+[     229ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/keywords?page=0&size=10:0
+[     229ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/tipos-artigo?page=0&size=10:0
+[     229ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/modalidades?page=0&size=10:0
+[     229ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/regioes?page=0&size=10:0
+[     229ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/ufs?page=0&size=10:0
+[     234ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/stream?token=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyb2RnZXIuZGlhc0BicmFzZm9ydC5jb20uYnIiLCJyb2xlIjoiQURNSU4iLCJleHAiOjk5OTk5OTk5OTl9.fake:0
+[     307ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[     307ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[     307ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0

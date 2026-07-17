@@ -1,0 +1,64 @@
+- generic [ref=f41e222]:
+  - complementary [ref=f41e223]:
+    - generic [ref=f41e224]:
+      - generic [ref=f41e225]:
+        - img [ref=f41e227]: gavel
+        - generic [ref=f41e228]: LicitaFlow
+      - generic [ref=f41e229]:
+        - heading "Inteligência artificial a serviço das licitações" [level=1] [ref=f41e230]: Inteligência artificiala serviço das licitações
+        - paragraph [ref=f41e231]: Automatize a coleta, classifique editais e impugne irregularidades com IA de ponta.
+      - list [ref=f41e232]:
+        - listitem [ref=f41e233]:
+          - img [ref=f41e235]: auto_awesome
+          - generic [ref=f41e236]:
+            - strong [ref=f41e237]: Classificação automática
+            - text: IA analisa e pontua cada edital por relevância
+        - listitem [ref=f41e238]:
+          - img [ref=f41e240]: view_kanban
+          - generic [ref=f41e241]:
+            - strong [ref=f41e242]: Pipeline estilo CRM
+            - text: Gerencie leads de licitação como oportunidades
+        - listitem [ref=f41e243]:
+          - img [ref=f41e245]: smart_toy
+          - generic [ref=f41e246]:
+            - strong [ref=f41e247]: Assistente RAG
+            - text: Pergunte qualquer coisa sobre os seus editais
+        - listitem [ref=f41e248]:
+          - img [ref=f41e250]: gavel
+          - generic [ref=f41e251]:
+            - strong [ref=f41e252]: Motor de Impugnação
+            - text: Gere petições fundamentadas em segundos
+  - main [ref=f41e253]:
+    - generic [ref=f41e255]:
+      - generic [ref=f41e256]:
+        - heading "Bem-vindo de volta" [level=2] [ref=f41e257]
+        - paragraph [ref=f41e258]: Entre com suas credenciais para acessar o painel
+      - generic [ref=f41e259]:
+        - generic [ref=f41e262]:
+          - generic [ref=f41e263]:
+            - text: E-mail corporativo
+            - generic [ref=f41e264]: "*"
+          - img [ref=f41e266]: mail_outline
+          - textbox "E-mail corporativo" [ref=f41e268]:
+            - /placeholder: voce@empresa.com.br
+        - generic [ref=f41e271]:
+          - generic [ref=f41e272]:
+            - text: Senha
+            - generic [ref=f41e273]: "*"
+          - img [ref=f41e275]: lock_outline
+          - textbox "Senha" [ref=f41e277]:
+            - /placeholder: ••••••••
+          - button "Mostrar senha" [ref=f41e279] [cursor=pointer]:
+            - img [ref=f41e280]: visibility
+        - generic [ref=f41e285]:
+          - checkbox "Lembrar por 30 dias" [ref=f41e288] [cursor=pointer]
+          - generic [ref=f41e289] [cursor=pointer]: Lembrar por 30 dias
+        - button "Entrar na plataforma" [ref=f41e290]:
+          - generic [ref=f41e292]:
+            - generic [ref=f41e293]: Entrar na plataforma
+            - img [ref=f41e294]: arrow_forward
+      - paragraph [ref=f41e297]:
+        - text: Não tem acesso?
+        - link "Solicitar demonstração" [ref=f41e298] [cursor=pointer]:
+          - /url: "#"
+    - paragraph [ref=f41e299]: Monitoramento inteligente de licitações públicas

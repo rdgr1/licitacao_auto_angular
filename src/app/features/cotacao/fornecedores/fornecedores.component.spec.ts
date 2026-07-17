@@ -15,7 +15,11 @@ describe('FornecedoresComponent — save resiliente a fechamento de dialog', () 
     atualizarFornecedor: ReturnType<typeof vi.fn>;
     deletarFornecedor: ReturnType<typeof vi.fn>;
   };
-  let toast: { success: ReturnType<typeof vi.fn>; error: ReturnType<typeof vi.fn>; info: ReturnType<typeof vi.fn> };
+  let toast: {
+    success: ReturnType<typeof vi.fn>;
+    error: ReturnType<typeof vi.fn>;
+    info: ReturnType<typeof vi.fn>;
+  };
   let dialog: { open: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {

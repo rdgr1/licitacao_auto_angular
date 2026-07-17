@@ -1,0 +1,16 @@
+- generic [ref=f2e4]:
+  - complementary [ref=f2e5]:
+    - generic [ref=f2e6]:
+      - img [ref=f2e8]: gavel
+      - button [ref=f2e9] [cursor=pointer]
+    - navigation [ref=f2e11]
+  - generic [ref=f2e16]:
+    - banner [ref=f2e17]:
+      - generic [ref=f2e18]:
+        - button [ref=f2e19] [cursor=pointer]:
+          - img [ref=f2e20]: help_outline
+        - button [ref=f2e21] [cursor=pointer]:
+          - img [ref=f2e22]: notifications_none
+        - button [ref=f2e23] [cursor=pointer]:
+          - img [ref=f2e24]: logout
+    - main [ref=f2e25]

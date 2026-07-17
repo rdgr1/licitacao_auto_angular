@@ -186,12 +186,14 @@
           <button class="link-action btn-reset">Limpar</button>
         </div>
         <div class="activity-list">
-          @for (notif of notifications(); track notif.editalId) {
+          @for (notif of notifications(); track notif.uuid) {
             <div class="activity-item">
               <span class="activity-dot dot-{{ notif.tipo === 'NOVO_LEAD' ? 'lead' : 'processado' }}"></span>
               <div class="activity-body">
-                <span class="activity-title">{{ notif.numero }} — {{ notif.objeto }}</span>
-                <span class="activity-meta">Score {{ notif.leadScore }} · {{ notif.categoria }}</span>
+                <span class="activity-title">{{ notif.titulo }}</span>
+                @if (notif.mensagem) {
+                  <span class="activity-meta">{{ notif.mensagem }}</span>
+                }
               </div>
             </div>
           }

@@ -30,7 +30,7 @@
         </button>
       </div>
       <button mat-icon-button matTooltip="Recarregar" aria-label="Recarregar pipeline"
-              (click)="active() === 'qual' ? loadLeads() : loadProcessos()">
+              (click)="active() === 'qual' ? refreshQual() : loadProcessos()">
         <mat-icon aria-hidden="true">refresh</mat-icon>
       </button>
     </div>
@@ -171,12 +171,23 @@
                   <span>Vazio</span>
                 </div>
               }
+
+              @if (col.key === 'DESCARTADO' && col.leads.length < descartadosTotal()) {
+                <button class="col-load-more" (click)="loadMoreDescartados()" [disabled]="loadingDescartados()">
+                  @if (loadingDescartados()) {
+                    Carregando...
+                  } @else {
+                    Carregar mais ({{ col.leads.length }} de {{ descartadosTotal() }})
+                  }
+                </button>
+              }
             </div>
           </div>
         }
       </div>
 
-      <!-- Paginação global — uma página por vez, distribuída entre todas as colunas -->
+      <!-- Paginação global — uma página por vez, distribuída entre as demais colunas
+           (Descarte não participa: tem busca própria, ver loadDescartados()) -->
       <mat-paginator
         class="qual-paginator"
         [length]="totalElements()"

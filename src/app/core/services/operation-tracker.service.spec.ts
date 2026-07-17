@@ -6,7 +6,11 @@ import { ToastService } from './toast.service';
 
 describe('OperationTrackerService', () => {
   let svc: OperationTrackerService;
-  let toast: { success: ReturnType<typeof vi.fn>; error: ReturnType<typeof vi.fn>; info: ReturnType<typeof vi.fn> };
+  let toast: {
+    success: ReturnType<typeof vi.fn>;
+    error: ReturnType<typeof vi.fn>;
+    info: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
     toast = { success: vi.fn(), error: vi.fn(), info: vi.fn() };
@@ -49,10 +53,14 @@ describe('OperationTrackerService', () => {
 
   it('deve desligar loading e mostrar toast de erro em caso de falha', () => {
     const onError = vi.fn();
-    svc.run('save-x', throwError(() => new Error('boom')), {
-      errorMessage: 'Erro ao salvar',
-      onError,
-    });
+    svc.run(
+      'save-x',
+      throwError(() => new Error('boom')),
+      {
+        errorMessage: 'Erro ao salvar',
+        onError,
+      },
+    );
 
     expect(svc.isLoading('save-x')()).toBe(false);
     expect(toast.error).toHaveBeenCalledWith('Erro ao salvar');
@@ -60,19 +68,30 @@ describe('OperationTrackerService', () => {
   });
 
   it('deve resolver errorMessage como função do erro', () => {
-    svc.run('save-x', throwError(() => ({ status: 404 })), {
-      errorMessage: (err: any) => (err.status === 404 ? 'Não encontrado' : 'Erro genérico'),
-    });
+    svc.run(
+      'save-x',
+      throwError(() => ({ status: 404 })),
+      {
+        errorMessage: (err: any) => (err.status === 404 ? 'Não encontrado' : 'Erro genérico'),
+      },
+    );
     expect(toast.error).toHaveBeenCalledWith('Não encontrado');
   });
 
   it('deve suprimir o toast de erro quando errorMessage for null', () => {
-    svc.run('save-x', throwError(() => new Error('boom')), { errorMessage: null });
+    svc.run(
+      'save-x',
+      throwError(() => new Error('boom')),
+      { errorMessage: null },
+    );
     expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('deve usar uma mensagem de erro genérica quando nenhuma for fornecida', () => {
-    svc.run('save-x', throwError(() => new Error('boom')));
+    svc.run(
+      'save-x',
+      throwError(() => new Error('boom')),
+    );
     expect(toast.error).toHaveBeenCalledWith('Ocorreu um erro. Tente novamente.');
   });
 
@@ -95,7 +114,12 @@ describe('OperationTrackerService', () => {
 
   it('não deve lançar exceção quando onSuccess/onError não forem fornecidos', () => {
     expect(() => svc.run('x', of(1))).not.toThrow();
-    expect(() => svc.run('y', throwError(() => new Error('boom')))).not.toThrow();
+    expect(() =>
+      svc.run(
+        'y',
+        throwError(() => new Error('boom')),
+      ),
+    ).not.toThrow();
   });
 
   it('deve manter loading true enquanto houver uma chamada concorrente com a mesma key em voo', () => {

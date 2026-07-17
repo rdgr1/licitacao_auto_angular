@@ -15,7 +15,14 @@ export interface KeywordDialogData {
 @Component({
   selector: 'app-keyword-dialog',
   standalone: true,
-  imports: [FormsModule, MatDialogModule, MatButtonModule, MatInputModule, MatFormFieldModule, MatSlideToggleModule],
+  imports: [
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSlideToggleModule,
+  ],
   template: `
     <h2 mat-dialog-title>{{ data.keyword ? 'Editar Keyword' : 'Nova Keyword' }}</h2>
     <mat-dialog-content>
@@ -32,7 +39,14 @@ export interface KeywordDialogData {
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`.full-width { width: 100%; margin-bottom: 16px; }`]
+  styles: [
+    `
+      .full-width {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+    `,
+  ],
 })
 export class KeywordDialogComponent {
   termo: string;
@@ -40,7 +54,7 @@ export class KeywordDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<KeywordDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: KeywordDialogData
+    @Inject(MAT_DIALOG_DATA) public data: KeywordDialogData,
   ) {
     this.termo = this.data.keyword?.termo ?? '';
     this.ativo = this.data.keyword?.ativo ?? true;
