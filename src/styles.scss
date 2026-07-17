@@ -465,6 +465,14 @@ html[data-theme='dark'] {
   --mat-table-background-color:                   #151B2B;
   --mat-table-row-item-container-color:           #151B2B;
   --mat-paginator-container-background-color:     #151B2B;
+
+  // mat-chip-option (ex: fontes DODF/DOU/PNCP em Preferências) — o tema M3
+  // gera esses tokens com cor resolvida em build time a partir da paleta
+  // clara, não como var(--mat-sys-*) live, então precisam de override próprio.
+  --mdc-chip-label-text-color:                    #A9B7CC;
+  --mdc-chip-outline-color:                       #324063;
+  --mdc-chip-elevated-selected-container-color:   rgba(17,191,127,0.16);
+  --mdc-chip-selected-label-text-color:           #11BF7F;
 }
 
 // Forçar cor verde em todos os estados do slide-toggle
