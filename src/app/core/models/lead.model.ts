@@ -23,6 +23,7 @@ export interface Lead {
   observacao: string | null;
   editalId?: string | null;
   leadScore?: number;
+  leadCategoriaPrincipal?: string;
   valorEstimado?: number;
 }
 
