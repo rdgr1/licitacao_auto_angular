@@ -157,7 +157,7 @@ const QUICK_PROMPTS = [
       flex-direction: column;
       height: 100%;
       max-height: calc(100vh - 64px);
-      background: #F8FAFC;
+      background: var(--content-bg, #F8FAFC);
       font-family: 'Inter Tight', sans-serif;
     }
 
@@ -201,7 +201,7 @@ const QUICK_PROMPTS = [
     .header-title {
       font-size: 16px;
       font-weight: 700;
-      color: #0D1526;
+      color: var(--text-primary, #0D1526);
       margin: 0 0 3px;
     }
 
@@ -210,7 +210,7 @@ const QUICK_PROMPTS = [
       align-items: center;
       gap: 6px;
       font-size: 12px;
-      color: #64748B;
+      color: var(--text-muted, #64748B);
     }
 
     .status-dot {
@@ -228,12 +228,12 @@ const QUICK_PROMPTS = [
 
     .clear-btn {
       border-color: #E2E8F0 !important;
-      color: #64748B !important;
+      color: var(--text-muted, #64748B) !important;
       border-radius: 8px !important;
       font-size: 13px !important;
       gap: 6px;
 
-      &:hover { background: #F1F5F9 !important; color: #0D1526 !important; }
+      &:hover { background: var(--content-bg, #F1F5F9) !important; color: var(--text-primary, #0D1526) !important; }
 
       mat-icon { font-size: 16px; width: 16px; height: 16px; }
     }
@@ -264,13 +264,13 @@ const QUICK_PROMPTS = [
       h2 {
         font-size: 22px;
         font-weight: 700;
-        color: #0D1526;
+        color: var(--text-primary, #0D1526);
         margin: 16px 0 8px;
       }
 
       p {
         font-size: 14px;
-        color: #64748B;
+        color: var(--text-muted, #64748B);
         line-height: 1.6;
         margin-bottom: 28px;
       }
@@ -306,7 +306,7 @@ const QUICK_PROMPTS = [
       border-radius: 20px;
       padding: 8px 16px;
       font-size: 13px;
-      color: #475569;
+      color: var(--text-secondary, #475569);
       cursor: pointer;
       transition: all 150ms ease;
       font-family: inherit;
@@ -385,7 +385,7 @@ const QUICK_PROMPTS = [
     .msg-time {
       display: block;
       font-size: 11px;
-      color: #94A3B8;
+      color: var(--text-muted, #94A3B8);
       margin-top: 6px;
       text-align: right;
     }
@@ -400,7 +400,7 @@ const QUICK_PROMPTS = [
     .sources-label {
       font-size: 11px;
       font-weight: 600;
-      color: #94A3B8;
+      color: var(--text-muted, #94A3B8);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       display: block;
@@ -417,12 +417,12 @@ const QUICK_PROMPTS = [
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      background: #F8FAFC;
+      background: var(--content-bg, #F8FAFC);
       border: 1px solid #E2E8F0;
       border-radius: 6px;
       padding: 3px 8px;
       font-size: 11.5px;
-      color: #475569;
+      color: var(--text-secondary, #475569);
 
       mat-icon { font-size: 13px; width: 13px; height: 13px; color: #11BF7F; }
     }
@@ -473,7 +473,7 @@ const QUICK_PROMPTS = [
       display: flex;
       gap: 10px;
       align-items: flex-end;
-      background: #F8FAFC;
+      background: var(--content-bg, #F8FAFC);
       border: 1.5px solid #E2E8F0;
       border-radius: 12px;
       padding: 8px 8px 8px 16px;
@@ -493,13 +493,13 @@ const QUICK_PROMPTS = [
       outline: none;
       font-size: 14px;
       font-family: inherit;
-      color: #0D1526;
+      color: var(--text-primary, #0D1526);
       resize: none;
       line-height: 1.5;
       max-height: 140px;
       overflow-y: auto;
 
-      &::placeholder { color: #94A3B8; }
+      &::placeholder { color: var(--text-muted, #94A3B8); }
     }
 
     .input-actions {
@@ -541,7 +541,7 @@ const QUICK_PROMPTS = [
       align-items: center;
       gap: 5px;
       font-size: 11.5px;
-      color: #94A3B8;
+      color: var(--text-muted, #94A3B8);
       margin: 8px 0 0;
 
       mat-icon { font-size: 13px; width: 13px; height: 13px; }

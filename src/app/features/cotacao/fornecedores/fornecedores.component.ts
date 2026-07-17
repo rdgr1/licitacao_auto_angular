@@ -226,13 +226,13 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
       .page-title {
         font-size: 22px;
         font-weight: 700;
-        color: #0d1526;
+        color: var(--text-primary, #0d1526);
         margin: 0 0 4px;
         letter-spacing: -0.3px;
       }
       .page-sub {
         font-size: 13px;
-        color: #64748b;
+        color: var(--text-muted, #64748b);
         margin: 0;
       }
 
@@ -259,7 +259,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
         border-radius: 20px;
         border: 1.5px solid #e2e8f0;
         background: transparent;
-        color: #64748b;
+        color: var(--text-muted, #64748b);
         font-size: 12.5px;
         font-family: inherit;
         cursor: pointer;
@@ -270,8 +270,8 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
           height: 14px;
         }
         &:hover {
-          border-color: #94a3b8;
-          color: #1e293b;
+          border-color: var(--text-muted, #94a3b8);
+          color: var(--text-primary, #1e293b);
         }
         &.active {
           border-color: #11bf7f;
@@ -290,7 +290,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
       }
 
       .table-card {
-        background: #fff;
+        background: var(--card-bg, #fff);
         border-radius: 12px;
         border: 1px solid #e2e8f0;
         overflow: hidden;
@@ -302,7 +302,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
         cursor: pointer;
         transition: background 120ms;
         &:hover {
-          background: #f8fafc;
+          background: var(--content-bg, #f8fafc);
         }
       }
 
@@ -313,13 +313,13 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
         justify-content: center;
         gap: 10px;
         padding: 56px 24px;
-        color: #64748b;
+        color: var(--text-muted, #64748b);
         font-size: 14px;
         mat-icon {
           font-size: 36px;
           width: 36px;
           height: 36px;
-          color: #cbd5e1;
+          color: var(--text-muted, #cbd5e1);
         }
       }
 
@@ -344,15 +344,15 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
         display: block;
         font-size: 13.5px;
         font-weight: 600;
-        color: #1e293b;
+        color: var(--text-primary, #1e293b);
       }
       .nome-secondary {
         display: block;
         font-size: 12px;
-        color: #64748b;
+        color: var(--text-muted, #64748b);
       }
       .text-muted {
-        color: #94a3b8;
+        color: var(--text-muted, #94a3b8);
         font-size: 13px;
       }
 
@@ -380,8 +380,8 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
         font-weight: 600;
         border-radius: 5px;
         padding: 2px 7px;
-        background: #f1f5f9;
-        color: #475569;
+        background: var(--content-bg, #f1f5f9);
+        color: var(--text-secondary, #475569);
         text-transform: uppercase;
         letter-spacing: 0.04em;
       }
@@ -399,8 +399,8 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
           color: #166534;
         }
         &.inativo {
-          background: #f1f5f9;
-          color: #64748b;
+          background: var(--content-bg, #f1f5f9);
+          color: var(--text-muted, #64748b);
         }
       }
       .status-dot {

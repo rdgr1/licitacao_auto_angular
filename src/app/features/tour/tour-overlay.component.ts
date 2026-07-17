@@ -45,7 +45,7 @@ interface TooltipPos { top: string; left: string; }
       z-index: 1000; pointer-events: all;
     }
     .tour-tooltip {
-      position: fixed; z-index: 1001; background: #fff; border-radius: 12px;
+      position: fixed; z-index: 1001; background: var(--card-bg, #fff); border-radius: 12px;
       padding: 16px 20px; max-width: 300px; min-width: 260px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.18);
       pointer-events: all;
@@ -53,18 +53,18 @@ interface TooltipPos { top: string; left: string; }
     .tour-header {
       display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
     }
-    .tour-step-count { font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: .05em; }
+    .tour-step-count { font-size: 11px; font-weight: 700; color: var(--text-muted, #94A3B8); text-transform: uppercase; letter-spacing: .05em; }
     .tour-close {
-      background: none; border: none; cursor: pointer; padding: 2px; color: #94A3B8;
+      background: none; border: none; cursor: pointer; padding: 2px; color: var(--text-muted, #94A3B8);
       display: flex; align-items: center;
       mat-icon { font-size: 16px; width: 16px; height: 16px; }
     }
-    .tour-titulo { font-size: 15px; font-weight: 700; color: #0D1526; margin-bottom: 6px; }
-    .tour-desc { font-size: 13px; color: #64748B; line-height: 1.5; margin-bottom: 14px; }
+    .tour-titulo { font-size: 15px; font-weight: 700; color: var(--text-primary, #0D1526); margin-bottom: 6px; }
+    .tour-desc { font-size: 13px; color: var(--text-muted, #64748B); line-height: 1.5; margin-bottom: 14px; }
     .tour-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .btn-prox { background: #0D1526; color: #fff; font-size: 13px; font-weight: 600; border-radius: 7px; }
-    .btn-ant { font-size: 13px; color: #64748B; }
-    .btn-pular { font-size: 12px; color: #94A3B8; margin-left: auto; }
+    .btn-ant { font-size: 13px; color: var(--text-muted, #64748B); }
+    .btn-pular { font-size: 12px; color: var(--text-muted, #94A3B8); margin-left: auto; }
   `],
 })
 export class TourOverlayComponent {

@@ -32,18 +32,18 @@ import { MatButtonModule } from '@angular/material/button';
       font-size: 48px;
       width: 48px;
       height: 48px;
-      color: #64748B;
+      color: var(--text-muted, #64748B);
       opacity: 0.4;
     }
 
     h3 {
       margin: 16px 0 8px;
-      color: #0D1526;
+      color: var(--text-primary, #0D1526);
     }
 
     p {
       margin: 0 0 24px;
-      color: #64748B;
+      color: var(--text-muted, #64748B);
       max-width: 400px;
     }
   `]

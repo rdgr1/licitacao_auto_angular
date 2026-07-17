@@ -624,7 +624,7 @@ interface NavSection {
       .user-role {
         display: block;
         font-size: 11px;
-        color: #475569;
+        color: var(--text-secondary, #475569);
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-weight: 600;
@@ -634,7 +634,7 @@ interface NavSection {
         font-size: 18px;
         width: 18px;
         height: 18px;
-        color: #475569;
+        color: var(--text-secondary, #475569);
         flex-shrink: 0;
       }
 

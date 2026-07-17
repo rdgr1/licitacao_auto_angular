@@ -452,7 +452,7 @@ const ORG_COLORS = [
       .pd-title {
         font-size: 15px;
         font-weight: 700;
-        color: #0f172a;
+        color: var(--text-primary, #0f172a);
         margin: 0;
         line-height: 1.5;
       }
@@ -510,7 +510,7 @@ const ORG_COLORS = [
         display: block;
         font-size: 12.5px;
         font-weight: 500;
-        color: #1e293b;
+        color: var(--text-primary, #1e293b);
       }
 
       /* ── Sections ─────────────────────────────────────────────────────── */
@@ -559,7 +559,7 @@ const ORG_COLORS = [
           font-size: 20px;
           width: 20px;
           height: 20px;
-          color: #cbd5e1;
+          color: var(--text-muted, #cbd5e1);
           flex-shrink: 0;
         }
         div {
@@ -619,7 +619,7 @@ const ORG_COLORS = [
         display: block;
         font-size: 13px;
         font-weight: 600;
-        color: #1e293b;
+        color: var(--text-primary, #1e293b);
       }
       .edital-size {
         display: block;
@@ -668,7 +668,7 @@ const ORG_COLORS = [
           margin-bottom: 4px;
         }
         &:hover {
-          border-color: #cbd5e1;
+          border-color: var(--text-muted, #cbd5e1);
           background: var(--content-bg, #f1f5f9);
           transform: translateY(-1px);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
@@ -681,7 +681,7 @@ const ORG_COLORS = [
       .qa-label {
         font-size: 13px;
         font-weight: 700;
-        color: #1e293b;
+        color: var(--text-primary, #1e293b);
         line-height: 1.2;
       }
       .qa-sub {
