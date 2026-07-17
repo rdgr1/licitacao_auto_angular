@@ -38,6 +38,29 @@
 
   <!-- ── QUALIFICAÇÃO ─────────────────────────────────────────────── -->
   @if (active() === 'qual') {
+    <div class="qual-filter-bar" role="group" aria-label="Filtro e busca de leads">
+      <div class="qual-fonte-chips">
+        <button class="fonte-filter-chip" [class.active]="gridFonte() === null" (click)="setGridFonte(null)">
+          Todas as fontes
+        </button>
+        @for (f of fontes; track f.key) {
+          <button class="fonte-filter-chip" [class.active]="gridFonte() === f.key" (click)="setGridFonte(f.key)">
+            {{ f.label }}
+          </button>
+        }
+      </div>
+      <div class="qual-search">
+        <mat-icon aria-hidden="true">search</mat-icon>
+        <input
+          type="text"
+          placeholder="Buscar por título ou órgão..."
+          [value]="searchTerm()"
+          (input)="onSearchChange($any($event.target).value)"
+          aria-label="Buscar leads por título ou órgão"
+        />
+      </div>
+    </div>
+
     @if (loadingQual()) {
       <div class="pipeline-skeleton" aria-label="Carregando pipeline..." role="status">
         @for (col of [1,2,3,4,5]; track col) {

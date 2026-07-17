@@ -84,6 +84,14 @@ export class PipelineComponent implements OnInit {
   active = signal<'qual' | 'proc'>('qual');
   loadingQual = signal(true);
   loadingProc = signal(true);
+  gridFonte = signal<string | null>(null);
+  searchTerm = signal('');
+  fontes = [
+    { key: 'DODF', label: 'DODF' },
+    { key: 'DOU', label: 'DOU' },
+    { key: 'PNCP', label: 'PNCP' },
+  ];
+  private allLeadsRaw: Lead[] = [];
 
   qualColumns = signal<LeadCol[]>([
     {
@@ -232,25 +240,51 @@ export class PipelineComponent implements OnInit {
 
   loadLeads(): void {
     this.loadingQual.set(true);
-    this.leadService.listar({ page: 0, size: 500 }).subscribe({
-      next: (page) => {
-        const byStatus = new Map<LeadStatus, Lead[]>();
-        for (const lead of page.content ?? []) {
-          const list = byStatus.get(lead.status) ?? [];
-          list.push(lead);
-          byStatus.set(lead.status, list);
-        }
-        this.qualColumns.update((cols) =>
-          cols.map((c) => ({ ...c, leads: byStatus.get(c.key) ?? [] })),
-        );
-        this.refreshQualTotal();
-        this.loadingQual.set(false);
-      },
-      error: () => {
-        this.toast.error('Erro ao carregar leads');
-        this.loadingQual.set(false);
-      },
-    });
+    this.leadService
+      .listar({ fonte: this.gridFonte() ?? undefined, page: 0, size: 500 })
+      .subscribe({
+        next: (page) => {
+          this.allLeadsRaw = page.content ?? [];
+          this.redistribuirQualColumns();
+          this.loadingQual.set(false);
+        },
+        error: () => {
+          this.toast.error('Erro ao carregar leads');
+          this.loadingQual.set(false);
+        },
+      });
+  }
+
+  setGridFonte(fonte: string | null): void {
+    this.gridFonte.set(fonte);
+    this.loadLeads();
+  }
+
+  onSearchChange(term: string): void {
+    this.searchTerm.set(term);
+    this.redistribuirQualColumns();
+  }
+
+  /** Reaplica busca (client-side, sobre o lote já carregado) e redistribui nas colunas por status. */
+  private redistribuirQualColumns(): void {
+    const termo = this.searchTerm().trim().toLowerCase();
+    const filtrados = termo
+      ? this.allLeadsRaw.filter(
+          (l) =>
+            l.titulo?.toLowerCase().includes(termo) || l.orgao?.toLowerCase().includes(termo),
+        )
+      : this.allLeadsRaw;
+
+    const byStatus = new Map<LeadStatus, Lead[]>();
+    for (const lead of filtrados) {
+      const list = byStatus.get(lead.status) ?? [];
+      list.push(lead);
+      byStatus.set(lead.status, list);
+    }
+    this.qualColumns.update((cols) =>
+      cols.map((c) => ({ ...c, leads: byStatus.get(c.key) ?? [] })),
+    );
+    this.refreshQualTotal();
   }
 
   loadProcessos(): void {
