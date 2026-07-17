@@ -10,6 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 import { NotificacoesService } from '../../../core/services/notificacoes.service';
 import { ColetaAndamentoService } from '../../../core/services/coleta-andamento.service';
 import { Notificacao } from '../../../core/models/edital.model';
@@ -155,6 +156,14 @@ interface NavSection {
               </div>
             }
 
+            <button
+              class="icon-btn"
+              (click)="theme.toggle()"
+              [matTooltip]="theme.theme() === 'dark' ? 'Modo claro' : 'Modo escuro'"
+            >
+              <mat-icon>{{ theme.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            </button>
+
             <button class="icon-btn hide-mobile" matTooltip="Central de ajuda">
               <mat-icon>help_outline</mat-icon>
             </button>
@@ -177,7 +186,7 @@ interface NavSection {
                 aria-hidden="false"
                 >notifications_none</mat-icon
               >
-              @if (notifSvc.novas() === 0) {
+              @if (notifSvc.novas() > 0) {
                 <span class="notif-dot"></span>
               }
             </button>
@@ -729,13 +738,13 @@ interface NavSection {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #64748b;
+        color: var(--text-muted);
         transition: all 150ms ease;
         position: relative;
 
         &:hover {
-          background: #f1f5f9;
-          color: #0d1526;
+          background: var(--content-bg);
+          color: var(--text-primary);
         }
 
         mat-icon {
@@ -758,7 +767,7 @@ interface NavSection {
         height: 7px;
         background: #ef4444;
         border-radius: 50%;
-        border: 1.5px solid white;
+        border: 1.5px solid var(--header-bg);
       }
 
       .header-avatar {
@@ -834,12 +843,12 @@ interface NavSection {
       .user-menu-name {
         font-size: 14px;
         font-weight: 600;
-        color: #0d1526;
+        color: var(--text-primary);
       }
 
       .user-menu-email {
         font-size: 12px;
-        color: #94a3b8;
+        color: var(--text-muted);
       }
 
       ::ng-deep .logout-item {
@@ -881,13 +890,13 @@ interface NavSection {
         align-items: center;
         justify-content: space-between;
         padding: 12px 16px 8px;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid var(--border);
       }
 
       .notif-popup-title {
         font-size: 14px;
         font-weight: 700;
-        color: #0d1526;
+        color: var(--text-primary);
       }
 
       .notif-clear-btn {
@@ -895,7 +904,7 @@ interface NavSection {
         height: 28px;
         mat-icon {
           font-size: 18px;
-          color: #64748b;
+          color: var(--text-muted);
         }
       }
 
@@ -911,7 +920,7 @@ interface NavSection {
           background: transparent;
         }
         &::-webkit-scrollbar-thumb {
-          background: #e2e8f0;
+          background: var(--border);
           border-radius: 4px;
         }
       }
@@ -922,7 +931,7 @@ interface NavSection {
         align-items: center;
         gap: 6px;
         padding: 24px 16px;
-        color: #94a3b8;
+        color: var(--text-muted);
         font-size: 13px;
 
         mat-icon {
@@ -938,14 +947,14 @@ interface NavSection {
         align-items: flex-start;
         gap: 10px;
         padding: 10px 16px;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid var(--content-bg);
         cursor: default;
 
         &:last-child {
           border-bottom: none;
         }
         &:hover {
-          background: #f8fafc;
+          background: var(--content-bg);
         }
       }
 
@@ -953,8 +962,8 @@ interface NavSection {
         min-width: 34px;
         height: 22px;
         border-radius: 6px;
-        background: #e2e8f0;
-        color: #475569;
+        background: var(--content-bg);
+        color: var(--text-secondary);
         font-size: 11px;
         font-weight: 700;
         display: flex;
@@ -983,7 +992,7 @@ interface NavSection {
       .notif-popup-numero {
         font-size: 12px;
         font-weight: 600;
-        color: #0d1526;
+        color: var(--text-primary);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -991,7 +1000,7 @@ interface NavSection {
 
       .notif-popup-objeto {
         font-size: 12px;
-        color: #475569;
+        color: var(--text-secondary);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1011,6 +1020,7 @@ interface NavSection {
 })
 export class MainLayoutComponent implements OnInit {
   auth = inject(AuthService);
+  theme = inject(ThemeService);
   notifSvc = inject(NotificacoesService);
   readonly coletaAndamento = inject(ColetaAndamentoService);
   private router = inject(Router);
