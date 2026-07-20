@@ -1,0 +1,113 @@
+<h2>Configurações — Layout MVP</h2>
+<p class="subtitle">Estrutura unificada: usuário comum + base para super admin. Clique para selecionar.</p>
+
+<div class="options">
+
+  <div class="option" data-choice="sidebar-tabs" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Sidebar fixa + conteúdo à direita (atual expandido)</h3>
+      <p>Mantém a estrutura atual com sidebar de navegação. Adiciona as 4 novas seções de usuário. Familiar, escalável para o painel admin futuro.</p>
+      <div class="mockup" style="margin-top:10px;">
+        <div class="mockup-body" style="padding:0;overflow:hidden;border-radius:6px;">
+          <div style="display:flex;height:280px;font-size:11px;">
+            <!-- Sidebar -->
+            <div style="width:180px;background:#0D1526;padding:12px 8px;flex-shrink:0;display:flex;flex-direction:column;gap:2px;">
+              <div style="color:#475569;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:8px 8px 4px;">Conta</div>
+              <div style="padding:7px 10px;border-radius:7px;color:#94a3b8;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">👤</span>Meu Perfil</div>
+              <div style="padding:7px 10px;border-radius:7px;background:rgba(17,191,127,0.12);color:#F8FAFC;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">🔔</span>Notificações</div>
+              <div style="padding:7px 10px;border-radius:7px;color:#94a3b8;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">🔍</span>Busca</div>
+              <div style="padding:7px 10px;border-radius:7px;color:#94a3b8;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">🖥</span>Sessões</div>
+              <div style="color:#475569;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:14px 8px 4px;">Fontes</div>
+              <div style="padding:7px 10px;border-radius:7px;color:#94a3b8;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">📄</span>DODF</div>
+              <div style="padding:7px 10px;border-radius:7px;color:#94a3b8;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">📚</span>DOU</div>
+              <div style="padding:7px 10px;border-radius:7px;color:#94a3b8;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">🌐</span>PNCP</div>
+            </div>
+            <!-- Content -->
+            <div style="flex:1;background:#f8fafc;padding:16px;overflow:hidden;">
+              <div style="font-size:14px;font-weight:700;color:#0d1526;margin-bottom:2px;">Preferências de Notificação</div>
+              <div style="font-size:11px;color:#94a3b8;margin-bottom:12px;">Configure como e quando receber alertas</div>
+
+              <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:8px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                  <div><div style="font-size:12px;font-weight:600;color:#0d1526;">Novo Lead encontrado</div><div style="font-size:11px;color:#64748b;">Quando um lead acima do score mínimo é salvo</div></div>
+                  <div style="width:36px;height:20px;border-radius:10px;background:#11BF7F;position:relative;"><div style="width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;right:2px;top:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div></div>
+                </div>
+              </div>
+
+              <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:8px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                  <div><div style="font-size:12px;font-weight:600;color:#0d1526;">Busca concluída</div><div style="font-size:11px;color:#64748b;">Resumo ao final de cada coleta</div></div>
+                  <div style="width:36px;height:20px;border-radius:10px;background:#11BF7F;position:relative;"><div style="width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;right:2px;top:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div></div>
+                </div>
+              </div>
+
+              <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;">
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Score mínimo para notificar</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div style="flex:1;height:4px;background:#e2e8f0;border-radius:2px;position:relative;"><div style="position:absolute;left:0;width:60%;height:100%;background:#11BF7F;border-radius:2px;"></div><div style="position:absolute;left:calc(60% - 7px);top:-5px;width:14px;height:14px;border-radius:50%;background:#11BF7F;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div></div>
+                  <span style="font-size:13px;font-weight:700;color:#0d1526;min-width:24px;">60</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="stepper-cards" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Página única com seções em cards (settings moderno)</h3>
+      <p>Sem sidebar interna. Seções empilhadas em cards, navegadas por âncora ou MatTabGroup no topo. Responsivo naturalmente, mais limpo em mobile.</p>
+      <div class="mockup" style="margin-top:10px;">
+        <div class="mockup-body" style="padding:12px;background:#f8fafc;">
+          <!-- Tabs no topo -->
+          <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:14px;overflow-x:auto;">
+            <div style="padding:8px 14px;font-size:11px;font-weight:600;color:#11BF7F;border-bottom:2px solid #11BF7F;margin-bottom:-2px;white-space:nowrap;">Perfil</div>
+            <div style="padding:8px 14px;font-size:11px;font-weight:500;color:#94a3b8;white-space:nowrap;">Notificações</div>
+            <div style="padding:8px 14px;font-size:11px;font-weight:500;color:#94a3b8;white-space:nowrap;">Busca</div>
+            <div style="padding:8px 14px;font-size:11px;font-weight:500;color:#94a3b8;white-space:nowrap;">Sessões</div>
+            <div style="padding:8px 14px;font-size:11px;font-weight:500;color:#94a3b8;white-space:nowrap;">DODF</div>
+            <div style="padding:8px 14px;font-size:11px;font-weight:500;color:#94a3b8;white-space:nowrap;">DOU</div>
+          </div>
+
+          <!-- Card de perfil -->
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#0DA66E,#107357);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;">RD</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#0d1526;">Rodger Dias</div>
+                <div style="font-size:11px;color:#94a3b8;">rodger.dias@brasfort.com.br</div>
+                <div style="font-size:10px;color:#11BF7F;font-weight:600;margin-top:2px;">ADMIN</div>
+              </div>
+              <button style="margin-left:auto;background:#f1f5f9;border:none;padding:5px 10px;border-radius:6px;font-size:11px;color:#475569;cursor:pointer;font-weight:500;">Editar foto</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="border:1px solid #e2e8f0;border-radius:7px;padding:8px 10px;">
+                <div style="font-size:10px;color:#94a3b8;margin-bottom:2px;">Nome</div>
+                <div style="font-size:12px;color:#0d1526;font-weight:500;">Rodger Dias</div>
+              </div>
+              <div style="border:1px solid #e2e8f0;border-radius:7px;padding:8px 10px;">
+                <div style="font-size:10px;color:#94a3b8;margin-bottom:2px;">Função</div>
+                <div style="font-size:12px;color:#0d1526;font-weight:500;">Analista Sênior</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;height:48px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;display:flex;align-items:center;padding:0 10px;font-size:11px;color:#94a3b8;">Senha atual...</div>
+            <button style="background:#0d1526;color:#fff;border:none;padding:0 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;">
+  <h3 style="margin:0 0 6px;font-size:12px;color:#065f46;">Estrutura de auditoria futura (super admin)</h3>
+  <p style="margin:0;font-size:11px;color:#047857;line-height:1.6;">A mesma tela de configurações ganha uma visão admin: <strong>dropdown "Visualizando como: [usuário X]"</strong> no topo + tab extra "Auditoria" mostrando o log de mudanças. Nenhum componente novo — é reuso com contexto diferente.</p>
+</div>

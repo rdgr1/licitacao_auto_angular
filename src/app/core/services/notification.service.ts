@@ -8,28 +8,28 @@ export class NotificationService {
   success(message: string, action = 'OK') {
     this.snackBar.open(message, action, {
       duration: 3000,
-      panelClass: ['snackbar-success'],
+      panelClass: ['toast-success'],
     });
   }
 
   error(message: string, action = 'OK') {
     this.snackBar.open(message, action, {
       duration: 5000,
-      panelClass: ['snackbar-error'],
+      panelClass: ['toast-error'],
     });
   }
 
   info(message: string, action = 'OK') {
     this.snackBar.open(message, action, {
       duration: 3000,
-      panelClass: ['snackbar-info'],
+      panelClass: ['toast-info'],
     });
   }
 
   warning(message: string, action = 'OK') {
     this.snackBar.open(message, action, {
       duration: 4000,
-      panelClass: ['snackbar-warning'],
+      panelClass: ['toast-warning'],
     });
   }
 }

@@ -60,7 +60,7 @@ import { environment } from '../../../../environments/environment';
       background: #0D1526; padding: 24px;
     }
     .auth-card {
-      background: #fff; border-radius: 16px; padding: 40px 36px;
+      background: var(--card-bg, #fff); border-radius: 16px; padding: 40px 36px;
       width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
     .auth-logo {
@@ -71,10 +71,10 @@ import { environment } from '../../../../environments/environment';
       border-radius: 8px; display: flex; align-items: center; justify-content: center;
       mat-icon { font-size: 20px; width: 20px; height: 20px; color: white; }
     }
-    .logo-name { font-size: 16px; font-weight: 800; color: #0D1526; letter-spacing: -0.3px; }
+    .logo-name { font-size: 16px; font-weight: 800; color: var(--text-primary, #0D1526); letter-spacing: -0.3px; }
     .auth-header { margin-bottom: 24px; }
-    .auth-header h1 { font-size: 22px; font-weight: 700; color: #0D1526; margin: 0 0 6px; }
-    .auth-header p { font-size: 14px; color: #64748B; margin: 0; line-height: 1.5; }
+    .auth-header h1 { font-size: 22px; font-weight: 700; color: var(--text-primary, #0D1526); margin: 0 0 6px; }
+    .auth-header p { font-size: 14px; color: var(--text-muted, #64748B); margin: 0; line-height: 1.5; }
     .auth-form { display: flex; flex-direction: column; gap: 12px; }
     .full-width { width: 100%; }
     .submit-btn {
@@ -88,13 +88,13 @@ import { environment } from '../../../../environments/environment';
     .auth-success {
       text-align: center; padding: 16px 0 24px;
       .success-icon { font-size: 48px; width: 48px; height: 48px; color: #11BF7F; margin-bottom: 12px; }
-      h2 { font-size: 18px; font-weight: 700; color: #0D1526; margin: 0 0 8px; }
-      p { font-size: 14px; color: #64748B; line-height: 1.5; margin: 0; }
+      h2 { font-size: 18px; font-weight: 700; color: var(--text-primary, #0D1526); margin: 0 0 8px; }
+      p { font-size: 14px; color: var(--text-muted, #64748B); line-height: 1.5; margin: 0; }
     }
     .back-link {
       display: flex; align-items: center; gap: 6px; margin-top: 20px;
-      font-size: 13px; color: #64748B; text-decoration: none; justify-content: center;
-      &:hover { color: #0D1526; }
+      font-size: 13px; color: var(--text-muted, #64748B); text-decoration: none; justify-content: center;
+      &:hover { color: var(--text-primary, #0D1526); }
       mat-icon { font-size: 16px; width: 16px; height: 16px; }
     }
   `],

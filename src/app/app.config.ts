@@ -10,8 +10,8 @@ import localePt from '@angular/common/locales/pt';
 
 import { routes } from './app.routes';
 import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
-import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { pageNormalizeInterceptor } from './core/interceptors/page-normalize.interceptor';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -20,11 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(
-      withInterceptors([
-        authInterceptor,
-        loadingInterceptor,
-        httpErrorInterceptor,
-      ])
+      withInterceptors([authInterceptor, pageNormalizeInterceptor, httpErrorInterceptor]),
     ),
     provideAnimations(),
 

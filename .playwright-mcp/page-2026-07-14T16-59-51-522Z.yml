@@ -1,0 +1,91 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e4]:
+    - complementary [ref=f1e5]:
+      - generic [ref=f1e6]:
+        - img [ref=f1e8]: gavel
+        - generic [ref=f1e9]: LicitaFlow
+        - button [ref=f1e10] [cursor=pointer]:
+          - img [ref=f1e11]: chevron_left
+      - navigation [ref=f1e12]:
+        - generic [ref=f1e13]:
+          - generic [ref=f1e14]: Licitações
+          - link "Leads" [ref=f1e15] [cursor=pointer]:
+            - /url: /leads
+            - img [ref=f1e16]: list_alt
+          - link "Pipeline" [ref=f1e18] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=f1e19]: view_kanban
+          - link "Editais" [ref=f1e21] [cursor=pointer]:
+            - /url: /editais
+            - img [ref=f1e22]: description
+      - generic [ref=f1e26] [cursor=pointer]:
+        - generic [ref=f1e27]: A
+        - generic [ref=f1e28]:
+          - generic [ref=f1e29]: adminmaster
+          - generic [ref=f1e30]: ADMIN
+        - img [ref=f1e31]: unfold_more
+    - generic [ref=f1e32]:
+      - banner [ref=f1e33]:
+        - generic [ref=f1e34]:
+          - button [ref=f1e35] [cursor=pointer]:
+            - img [ref=f1e36]: help_outline
+          - button [ref=f1e37] [cursor=pointer]:
+            - img [ref=f1e38]: notifications_none
+          - button [ref=f1e40] [cursor=pointer]:
+            - img [ref=f1e41]: logout
+      - main [ref=f1e42]:
+        - generic [ref=f1e44]:
+          - generic [ref=f1e45]:
+            - generic [ref=f1e46]:
+              - heading "Leads" [level=1] [ref=f1e47]
+              - paragraph [ref=f1e48]: Matérias coletadas das fontes oficiais classificadas para análise
+            - button "Rastreabilidade" [ref=f1e49] [cursor=pointer]:
+              - img [ref=f1e50]: history
+              - text: Rastreabilidade
+          - generic [ref=f1e52]:
+            - generic [ref=f1e53]:
+              - img [ref=f1e54]: manage_search
+              - generic [ref=f1e55]:
+                - generic [ref=f1e56]: Buscar leads
+                - generic [ref=f1e57]: Colete matérias do DODF, DOU ou filtre por PNCP
+            - button "Buscar leads" [ref=f1e58] [cursor=pointer]:
+              - img [ref=f1e59]: search
+              - text: Buscar leads
+          - group "Filtros por status" [ref=f1e60]:
+            - button "Todos" [pressed] [ref=f1e61] [cursor=pointer]:
+              - text: Todos
+              - generic [ref=f1e62]: "0"
+            - button "Novos Leads" [ref=f1e63] [cursor=pointer]:
+              - text: Novos Leads
+              - generic [ref=f1e64]: "0"
+            - button "Aprov. Presidência" [ref=f1e65] [cursor=pointer]:
+              - text: Aprov. Presidência
+              - generic [ref=f1e66]: "0"
+            - button "Estudo e Viab." [ref=f1e67] [cursor=pointer]:
+              - text: Estudo e Viab.
+              - generic [ref=f1e68]: "0"
+            - button "2ª Aprovação" [ref=f1e69] [cursor=pointer]:
+              - text: 2ª Aprovação
+              - generic [ref=f1e70]: "0"
+            - button "Descartado" [ref=f1e71] [cursor=pointer]:
+              - text: Descartado
+              - generic [ref=f1e72]: "0"
+          - alert [ref=f1e73]:
+            - img [ref=f1e74]: cloud_off
+            - heading "Não foi possível carregar os leads" [level=2] [ref=f1e75]
+            - paragraph [ref=f1e76]: Verifique a conexão com o servidor e tente novamente.
+            - button "Tentar novamente" [ref=f1e77]:
+              - img [ref=f1e78]: refresh
+  - generic:
+    - generic [ref=f1e88]:
+      - generic [ref=f1e89]: Acesso negado.
+      - button [ref=f1e91]:
+        - generic [ref=f1e92]: OK
+    - generic [ref=f1e100]:
+      - generic [ref=f1e101]: Erro ao carregar leads
+      - button [ref=f1e103]:
+        - generic [ref=f1e104]: ✕
+    - generic [ref=f1e112]:
+      - generic [ref=f1e113]: Acesso negado.
+      - button [ref=f1e115]:
+        - generic [ref=f1e116]: OK

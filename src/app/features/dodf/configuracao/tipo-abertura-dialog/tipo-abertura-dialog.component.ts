@@ -15,7 +15,14 @@ export interface TipoAberturaDialogData {
 @Component({
   selector: 'app-tipo-abertura-dialog',
   standalone: true,
-  imports: [FormsModule, MatDialogModule, MatButtonModule, MatInputModule, MatFormFieldModule, MatSlideToggleModule],
+  imports: [
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSlideToggleModule,
+  ],
   template: `
     <h2 mat-dialog-title>{{ data.tipo ? 'Editar Tipo de Abertura' : 'Novo Tipo de Abertura' }}</h2>
     <mat-dialog-content>
@@ -32,7 +39,14 @@ export interface TipoAberturaDialogData {
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`.full-width { width: 100%; margin-bottom: 16px; }`]
+  styles: [
+    `
+      .full-width {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+    `,
+  ],
 })
 export class TipoAberturaDialogComponent {
   valor: string;
@@ -40,7 +54,7 @@ export class TipoAberturaDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<TipoAberturaDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: TipoAberturaDialogData
+    @Inject(MAT_DIALOG_DATA) public data: TipoAberturaDialogData,
   ) {
     this.valor = this.data.tipo?.valor ?? '';
     this.ativo = this.data.tipo?.ativo ?? true;

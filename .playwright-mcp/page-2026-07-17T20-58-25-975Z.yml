@@ -1,0 +1,162 @@
+- generic [ref=f42e4]:
+  - complementary [ref=f42e5]:
+    - generic [ref=f42e6]:
+      - img [ref=f42e8]: gavel
+      - generic [ref=f42e9]: LicitaFlow
+      - button [ref=f42e10] [cursor=pointer]:
+        - img [ref=f42e11]: chevron_left
+    - navigation [ref=f42e12]:
+      - generic [ref=f42e13]:
+        - generic [ref=f42e14]: Licitações
+        - link "Leads" [ref=f42e15] [cursor=pointer]:
+          - /url: /leads
+          - img [ref=f42e16]: list_alt
+        - link "Pipeline" [ref=f42e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=f42e19]: view_kanban
+        - link "Editais" [ref=f42e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=f42e22]: description
+    - generic [ref=f42e26] [cursor=pointer]:
+      - generic [ref=f42e27]: A
+      - generic [ref=f42e28]:
+        - generic [ref=f42e29]: adminmaster
+        - generic [ref=f42e30]: ADMIN
+      - img [ref=f42e31]: unfold_more
+  - generic [ref=f42e32]:
+    - banner [ref=f42e33]:
+      - generic [ref=f42e34]:
+        - button [ref=f42e35] [cursor=pointer]:
+          - img [ref=f42e36]: light_mode
+        - button [ref=f42e37] [cursor=pointer]:
+          - img [ref=f42e38]: help_outline
+        - button [ref=f42e39] [cursor=pointer]:
+          - img [ref=f42e40]:
+            - text: notifications_none
+            - generic: "3"
+        - button [ref=f42e42] [cursor=pointer]:
+          - img [ref=f42e43]: logout
+    - main [ref=f42e44]:
+      - generic [ref=f42e46]:
+        - generic [ref=f42e48]:
+          - generic [ref=f42e49]:
+            - heading "Pipeline" [level=1] [ref=f42e50]
+            - paragraph [ref=f42e51]: 3 oportunidades em qualificação
+          - generic [ref=f42e52]:
+            - generic [ref=f42e53]:
+              - button "Qualificação" [ref=f42e54] [cursor=pointer]:
+                - img [ref=f42e55]: filter_alt
+                - text: Qualificação
+                - generic [ref=f42e56]: "3"
+              - button "Processo Licitatório" [ref=f42e57] [cursor=pointer]:
+                - img [ref=f42e58]: account_tree
+                - text: Processo Licitatório
+                - generic [ref=f42e59]: "0"
+            - button "Recarregar pipeline" [ref=f42e60] [cursor=pointer]:
+              - img [ref=f42e61]: refresh
+        - group "Filtro e busca de leads" [ref=f42e64]:
+          - generic [ref=f42e65]:
+            - button "Todas as fontes" [ref=f42e66] [cursor=pointer]
+            - button "DODF" [ref=f42e67] [cursor=pointer]
+            - button "DOU" [ref=f42e68] [cursor=pointer]
+            - button "PNCP" [ref=f42e69] [cursor=pointer]
+          - generic [ref=f42e70]:
+            - img [ref=f42e71]: search
+            - textbox "Buscar leads por título ou órgão" [ref=f42e72]:
+              - /placeholder: Buscar por título ou órgão...
+        - generic [ref=f42e73]:
+          - generic [ref=f42e74]:
+            - generic [ref=f42e75]:
+              - img [ref=f42e76]: block
+              - generic [ref=f42e77]: Descarte
+              - generic [ref=f42e78]: "0"
+            - generic [ref=f42e80]:
+              - img [ref=f42e81]: block
+              - generic [ref=f42e82]: Vazio
+          - generic [ref=f42e83]:
+            - generic [ref=f42e84]:
+              - img [ref=f42e85]: inbox
+              - generic [ref=f42e86]: Novos Leads
+              - generic [ref=f42e87]: "3"
+            - generic [ref=f42e88]:
+              - 'button "Ver detalhes do lead: AVISO DE LICITAÇÃO" [ref=f42e89]':
+                - generic [ref=f42e90]:
+                  - generic "Edital ainda não vinculado" [ref=f42e91]
+                  - generic [ref=f42e92]: DODF
+                  - generic [ref=f42e93]: 29/05/26
+                  - img [ref=f42e94]: drag_indicator
+                - paragraph [ref=f42e95]: AVISO DE LICITAÇÃO
+                - generic [ref=f42e96]:
+                  - generic [ref=f42e97]:
+                    - generic [ref=f42e98]: S
+                    - generic [ref=f42e99]: SEEC
+                  - generic [ref=f42e100]: Aviso de licitação
+                - generic [ref=f42e101]: Clique para detalhes
+                - button "Mover lead para outra coluna" [ref=f42e102] [cursor=pointer]:
+                  - img [ref=f42e103]: more_vert
+              - 'button "Ver detalhes do lead: AVISO DE ABERTURA DE LICITAÇÃO" [ref=f42e106]':
+                - generic [ref=f42e107]:
+                  - generic "Edital ainda não vinculado" [ref=f42e108]
+                  - generic [ref=f42e109]: DODF
+                  - generic [ref=f42e110]: 29/05/26
+                  - img [ref=f42e111]: drag_indicator
+                - paragraph [ref=f42e112]: AVISO DE ABERTURA DE LICITAÇÃO
+                - generic [ref=f42e113]:
+                  - generic [ref=f42e114]:
+                    - generic [ref=f42e115]: S
+                    - generic [ref=f42e116]: SEJUS
+                  - generic [ref=f42e117]: Aviso de abertura de...
+                - generic [ref=f42e118]: Clique para detalhes
+                - button "Mover lead para outra coluna" [ref=f42e119] [cursor=pointer]:
+                  - img [ref=f42e120]: more_vert
+              - 'button "Ver detalhes do lead: AVISO DE LICITAÇÃO" [ref=f42e123]':
+                - generic [ref=f42e124]:
+                  - generic "Edital ainda não vinculado" [ref=f42e125]
+                  - generic [ref=f42e126]: DOU
+                  - generic [ref=f42e127]: 29/05/26
+                  - img [ref=f42e128]: drag_indicator
+                - paragraph [ref=f42e129]: AVISO DE LICITAÇÃO
+                - generic [ref=f42e130]:
+                  - generic [ref=f42e131]:
+                    - generic [ref=f42e132]: P
+                    - generic [ref=f42e133]: Prefeitura Municipal de Ri...
+                  - generic [ref=f42e134]: Aviso de Licitação
+                - generic [ref=f42e135]: Clique para detalhes
+                - button "Mover lead para outra coluna" [ref=f42e136] [cursor=pointer]:
+                  - img [ref=f42e137]: more_vert
+          - generic [ref=f42e140]:
+            - generic [ref=f42e141]:
+              - img [ref=f42e142]: how_to_reg
+              - generic [ref=f42e143]: Aprov. Presidência
+              - generic [ref=f42e144]: "0"
+            - generic [ref=f42e146]:
+              - img [ref=f42e147]: how_to_reg
+              - generic [ref=f42e148]: Vazio
+          - generic [ref=f42e149]:
+            - generic [ref=f42e150]:
+              - img [ref=f42e151]: science
+              - generic [ref=f42e152]: Estudo e Viabilidade
+              - generic [ref=f42e153]: "0"
+            - generic [ref=f42e155]:
+              - img [ref=f42e156]: science
+              - generic [ref=f42e157]: Vazio
+          - generic [ref=f42e158]:
+            - generic [ref=f42e159]:
+              - img [ref=f42e160]: verified_user
+              - generic [ref=f42e161]: 2ª Aprov. Presidência
+              - generic [ref=f42e162]: "0"
+            - generic [ref=f42e164]:
+              - img [ref=f42e165]: verified_user
+              - generic [ref=f42e166]: Vazio
+        - group [ref=f42e167]:
+          - generic [ref=f42e169]:
+            - generic [ref=f42e170]:
+              - generic [ref=f42e171]: "Items per page:"
+              - combobox "Items per page:" [ref=f42e176] [cursor=pointer]:
+                - generic [ref=f42e177]: "48"
+            - generic [ref=f42e185]:
+              - status [ref=f42e186]: 1 – 3 of 3
+              - button "First page" [disabled] [ref=f42e187]
+              - button "Previous page" [disabled] [ref=f42e192]
+              - button "Next page" [disabled] [ref=f42e197]
+              - button "Last page" [disabled] [ref=f42e202]

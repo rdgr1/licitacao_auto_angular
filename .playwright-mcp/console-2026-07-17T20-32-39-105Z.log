@@ -1,0 +1,247 @@
+[     236ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-3DEWNUCS.js?v=8b79a97d:10730
+[     409ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[     454ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[     454ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[     454ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  157518ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:4200/@vite/client:864
+[  170089ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-3DEWNUCS.js?v=8b79a97d:10730
+[  170384ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  170384ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  170384ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  170400ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  273956ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:4200/@vite/client:864
+[  298603ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  299213ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  299252ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  299252ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  299252ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  384427ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  384783ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  384783ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  384783ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  384873ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  384427ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  389614ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  389961ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  389961ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  389961ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  390095ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  389614ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  389961ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  389961ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  389961ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  390095ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  398654ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  399106ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  399106ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  399106ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  399197ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  402191ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  402485ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  402536ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  402536ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  402536ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  410266ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  411080ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  411080ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  411080ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  411392ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  416569ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  417004ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  417004ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  417004ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  417027ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  420250ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  420729ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  420729ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  420729ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  420789ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  424164ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  424534ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  424535ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  424535ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  424625ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  478299ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  478868ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  478868ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  478868ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  479020ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  482288ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  482692ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  482692ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  482692ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  483053ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  491720ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  492139ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  492139ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  492139ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  492428ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  491720ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  492139ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  492139ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  492139ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  492428ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  509330ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  510269ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  510269ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  510269ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  510391ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  513512ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  513933ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  513933ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  513933ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  513997ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  517879ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  518325ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  518377ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  518377ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  518377ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  523453ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  523767ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  523814ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  523814ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  523814ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  556587ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  556983ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  557032ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  557032ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  557032ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  558944ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  559208ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  559268ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  559268ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  559268ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  562601ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  562895ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  562895ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  562895ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  562953ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  568537ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  569053ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  569053ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  569053ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  569150ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  572729ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  573173ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  573173ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  573173ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  573259ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  595145ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  595240ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  595315ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  595315ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  595315ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  598609ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  598719ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  598773ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  598773ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  598773ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  612859ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  612942ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  613020ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  613020ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  613020ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  618906ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  619034ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  619107ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  619107ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  619107ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  625060ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  625179ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  625234ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  625234ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  625234ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  626711ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  626880ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  626928ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  626928ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  626928ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  627977ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[  628171ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[  628182ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  628182ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[  628182ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1165749ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[ 1165886ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/keywords?page=0&size=10:0
+[ 1165889ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[ 1165894ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/tipos-artigo?page=0&size=10:0
+[ 1165897ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/nao-lidas/count?destinatario=admin@email.com:0
+[ 1165899ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/keywords?page=0&size=10:0
+[ 1165901ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/tipos-abertura?page=0&size=10:0
+[ 1165905ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/regioes?page=0&size=10:0
+[ 1165909ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/ufs?page=0&size=10:0
+[ 1165911ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/modalidades?page=0&size=10:0
+[ 1165978ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/stream?token=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3ODQzMTk3ODAsImV4cCI6MTc4NDMyMTUwMSwidXVpZCI6ImQ2OTY4N2YyLThjZDYtNDkxNi1iMDhhLTBjYTY4Nzg0ZDM5NiIsIm5hbWUiOiJhZG1pbm1hc3RlciIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwicm9sZSI6IkFETUlOIn0.BKknoragU-2oy2MMQkKuVGnexLV031oJR5GMLyT-vXgQ1CjwcE3u3T4cEzvJ5BT-DVBrmpiQktMnWzbbU9r18p57QkL0ARoy2fPlI_G8GLFNKAq2tnXbQvxCw-RTXluVRTSX4fUIykrTPbIXyy2ucjbRyeS89TPTIDEJKVT4B2PYpPgzZGUrljdSXUMiJXelD5OxEnwrl0N59rctIEPSbgaZH7hQbmY5qFfqjw6RgVp7ud_XDtyhU9e3zCrDIjWTSXtgq0waXl3hBpr-ttYCUf5e0PJhKeDILmeOoMkSoFpCA5Vv6JkUOdzJo3Y2yuwbMvdQSK5f_JSuYx9KQz0GQQ:0
+[ 1165979ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1165979ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1165979ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1198525ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[ 1198689ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/nao-lidas/count?destinatario=admin@email.com:0
+[ 1198694ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/keywords?page=0&size=10:0
+[ 1198700ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[ 1198701ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/tipos-abertura?page=0&size=10:0
+[ 1198701ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/tipos-artigo?page=0&size=10:0
+[ 1198702ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/keywords?page=0&size=10:0
+[ 1198702ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/regioes?page=0&size=10:0
+[ 1198703ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/modalidades?page=0&size=10:0
+[ 1198703ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/ufs?page=0&size=10:0
+[ 1198754ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1198754ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1198754ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1198768ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/stream?token=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3ODQzMTk3ODAsImV4cCI6MTc4NDMyMTUwMSwidXVpZCI6ImQ2OTY4N2YyLThjZDYtNDkxNi1iMDhhLTBjYTY4Nzg0ZDM5NiIsIm5hbWUiOiJhZG1pbm1hc3RlciIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwicm9sZSI6IkFETUlOIn0.BKknoragU-2oy2MMQkKuVGnexLV031oJR5GMLyT-vXgQ1CjwcE3u3T4cEzvJ5BT-DVBrmpiQktMnWzbbU9r18p57QkL0ARoy2fPlI_G8GLFNKAq2tnXbQvxCw-RTXluVRTSX4fUIykrTPbIXyy2ucjbRyeS89TPTIDEJKVT4B2PYpPgzZGUrljdSXUMiJXelD5OxEnwrl0N59rctIEPSbgaZH7hQbmY5qFfqjw6RgVp7ud_XDtyhU9e3zCrDIjWTSXtgq0waXl3hBpr-ttYCUf5e0PJhKeDILmeOoMkSoFpCA5Vv6JkUOdzJo3Y2yuwbMvdQSK5f_JSuYx9KQz0GQQ:0
+[ 1204057ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[ 1204185ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/nao-lidas/count?destinatario=admin@email.com:0
+[ 1204191ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[ 1204192ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/keywords?page=0&size=10:0
+[ 1204206ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/tipos-abertura?page=0&size=10:0
+[ 1204217ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/keywords?page=0&size=10:0
+[ 1204245ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1204245ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1204245ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1204288ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/tipos-artigo?page=0&size=10:0
+[ 1204301ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/regioes?page=0&size=10:0
+[ 1204303ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/modalidades?page=0&size=10:0
+[ 1204316ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/ufs?page=0&size=10:0
+[ 1204320ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/stream?token=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3ODQzMTk3ODAsImV4cCI6MTc4NDMyMTUwMSwidXVpZCI6ImQ2OTY4N2YyLThjZDYtNDkxNi1iMDhhLTBjYTY4Nzg0ZDM5NiIsIm5hbWUiOiJhZG1pbm1hc3RlciIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwicm9sZSI6IkFETUlOIn0.BKknoragU-2oy2MMQkKuVGnexLV031oJR5GMLyT-vXgQ1CjwcE3u3T4cEzvJ5BT-DVBrmpiQktMnWzbbU9r18p57QkL0ARoy2fPlI_G8GLFNKAq2tnXbQvxCw-RTXluVRTSX4fUIykrTPbIXyy2ucjbRyeS89TPTIDEJKVT4B2PYpPgzZGUrljdSXUMiJXelD5OxEnwrl0N59rctIEPSbgaZH7hQbmY5qFfqjw6RgVp7ud_XDtyhU9e3zCrDIjWTSXtgq0waXl3hBpr-ttYCUf5e0PJhKeDILmeOoMkSoFpCA5Vv6JkUOdzJo3Y2yuwbMvdQSK5f_JSuYx9KQz0GQQ:0
+[ 1237348ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[ 1237545ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/keywords?page=0&size=10:0
+[ 1237551ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[ 1237551ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/tipos-abertura?page=0&size=10:0
+[ 1237562ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/keywords?page=0&size=10:0
+[ 1237563ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/nao-lidas/count?destinatario=admin@email.com:0
+[ 1237571ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/tipos-artigo?page=0&size=10:0
+[ 1237583ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1237583ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1237583ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1237632ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/modalidades?page=0&size=10:0
+[ 1237635ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/regioes?page=0&size=10:0
+[ 1237637ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/stream?token=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3ODQzMTk3ODAsImV4cCI6MTc4NDMyMTUwMSwidXVpZCI6ImQ2OTY4N2YyLThjZDYtNDkxNi1iMDhhLTBjYTY4Nzg0ZDM5NiIsIm5hbWUiOiJhZG1pbm1hc3RlciIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwicm9sZSI6IkFETUlOIn0.BKknoragU-2oy2MMQkKuVGnexLV031oJR5GMLyT-vXgQ1CjwcE3u3T4cEzvJ5BT-DVBrmpiQktMnWzbbU9r18p57QkL0ARoy2fPlI_G8GLFNKAq2tnXbQvxCw-RTXluVRTSX4fUIykrTPbIXyy2ucjbRyeS89TPTIDEJKVT4B2PYpPgzZGUrljdSXUMiJXelD5OxEnwrl0N59rctIEPSbgaZH7hQbmY5qFfqjw6RgVp7ud_XDtyhU9e3zCrDIjWTSXtgq0waXl3hBpr-ttYCUf5e0PJhKeDILmeOoMkSoFpCA5Vv6JkUOdzJo3Y2yuwbMvdQSK5f_JSuYx9KQz0GQQ:0
+[ 1237639ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/ufs?page=0&size=10:0
+[ 1245660ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[ 1245788ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/nao-lidas/count?destinatario=admin@email.com:0
+[ 1245790ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[ 1245792ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/tipos-abertura?page=0&size=10:0
+[ 1245793ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/keywords?page=0&size=10:0
+[ 1245793ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/tipos-artigo?page=0&size=10:0
+[ 1245794ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/keywords?page=0&size=10:0
+[ 1245805ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/regioes?page=0&size=10:0
+[ 1245806ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/modalidades?page=0&size=10:0
+[ 1245828ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/ufs?page=0&size=10:0
+[ 1245848ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1245848ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1245848ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1245850ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/stream?token=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3ODQzMTk3ODAsImV4cCI6MTc4NDMyMTUwMSwidXVpZCI6ImQ2OTY4N2YyLThjZDYtNDkxNi1iMDhhLTBjYTY4Nzg0ZDM5NiIsIm5hbWUiOiJhZG1pbm1hc3RlciIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwicm9sZSI6IkFETUlOIn0.BKknoragU-2oy2MMQkKuVGnexLV031oJR5GMLyT-vXgQ1CjwcE3u3T4cEzvJ5BT-DVBrmpiQktMnWzbbU9r18p57QkL0ARoy2fPlI_G8GLFNKAq2tnXbQvxCw-RTXluVRTSX4fUIykrTPbIXyy2ucjbRyeS89TPTIDEJKVT4B2PYpPgzZGUrljdSXUMiJXelD5OxEnwrl0N59rctIEPSbgaZH7hQbmY5qFfqjw6RgVp7ud_XDtyhU9e3zCrDIjWTSXtgq0waXl3hBpr-ttYCUf5e0PJhKeDILmeOoMkSoFpCA5Vv6JkUOdzJo3Y2yuwbMvdQSK5f_JSuYx9KQz0GQQ:0
+[ 1268092ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-RFUZ6HC7.js?v=b70e230d:10730
+[ 1268211ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/nao-lidas/count?destinatario=admin@email.com:0
+[ 1268214ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/users/me/preferences:0
+[ 1268217ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/keywords?page=0&size=10:0
+[ 1268220ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/keywords?page=0&size=10:0
+[ 1268221ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dodf/tipos-abertura?page=0&size=10:0
+[ 1268222ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/tipos-artigo?page=0&size=10:0
+[ 1268222ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/dou/regioes?page=0&size=10:0
+[ 1268222ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/modalidades?page=0&size=10:0
+[ 1268223ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/pncp/ufs?page=0&size=10:0
+[ 1268232ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/stream?token=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3ODQzMTk3ODAsImV4cCI6MTc4NDMyMTUwMSwidXVpZCI6ImQ2OTY4N2YyLThjZDYtNDkxNi1iMDhhLTBjYTY4Nzg0ZDM5NiIsIm5hbWUiOiJhZG1pbm1hc3RlciIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwicm9sZSI6IkFETUlOIn0.BKknoragU-2oy2MMQkKuVGnexLV031oJR5GMLyT-vXgQ1CjwcE3u3T4cEzvJ5BT-DVBrmpiQktMnWzbbU9r18p57QkL0ARoy2fPlI_G8GLFNKAq2tnXbQvxCw-RTXluVRTSX4fUIykrTPbIXyy2ucjbRyeS89TPTIDEJKVT4B2PYpPgzZGUrljdSXUMiJXelD5OxEnwrl0N59rctIEPSbgaZH7hQbmY5qFfqjw6RgVp7ud_XDtyhU9e3zCrDIjWTSXtgq0waXl3hBpr-ttYCUf5e0PJhKeDILmeOoMkSoFpCA5Vv6JkUOdzJo3Y2yuwbMvdQSK5f_JSuYx9KQz0GQQ:0
+[ 1268276ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1268276ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0
+[ 1268276ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/configuracoes:0

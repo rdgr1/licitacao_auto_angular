@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { listStagger, fadeSlideIn } from '../../shared/animations/app-animations';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,127 +18,181 @@ import { LeadService } from '../../core/services/lead.service';
 import { ColetaService } from '../../core/services/coleta.service';
 import { ColetaAndamentoService } from '../../core/services/coleta-andamento.service';
 import { ToastService } from '../../core/services/toast.service';
-import { NotificacoesService } from '../../core/services/notificacoes.service';
 import { Lead, LeadStatus } from '../../core/models/lead.model';
 import { ColetaLog, ColetaResumo } from '../../core/models/coleta-log.model';
 import { ColetaResultado } from '../../core/models/dodf.model';
 import { LeadDetalheDialogComponent } from './lead-detalhe-dialog/lead-detalhe-dialog.component';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { ScoreBadgePipe } from '../../shared/pipes/score-badge.pipe';
+import { LeadCategoriaPipe } from '../../shared/pipes/lead-categoria.pipe';
 
-interface StatusTab { label: string; value: LeadStatus | null; }
-interface FonteBusca { key: string; label: string; sublabel: string; icon: string; canCollect: boolean; showBadge?: boolean; }
+interface StatusTab {
+  label: string;
+  value: LeadStatus | null;
+}
+interface FonteBusca {
+  key: string;
+  label: string;
+  sublabel: string;
+  icon: string;
+  canCollect: boolean;
+  showBadge?: boolean;
+}
 
 interface HistoricoEntrada {
   logId: number;
-  dataKey: string;        // "YYYY-MM-DD"
+  dataKey: string; // "YYYY-MM-DD"
   dataDisplay: string;
   fonte: string;
-  totalMaterias: number;  // encontradas no diário (do ColetaLog)
-  salvos: number;         // passaram o filtro e foram gravadas (do ColetaLog)
-  duplicados: number;     // já existiam, ignoradas (do ColetaLog)
-  erros: number;          // exceções durante coleta (do ColetaLog)
-  rejeitados: number;     // leads salvos e depois descartados pelo analista
+  totalMaterias: number; // encontradas no diário (do ColetaLog)
+  salvos: number; // passaram o filtro e foram gravadas (do ColetaLog)
+  duplicados: number; // já existiam, ignoradas (do ColetaLog)
+  erros: number; // exceções durante coleta (do ColetaLog)
+  rejeitados: number; // leads salvos e depois descartados pelo analista
   leadsRejeitados: Lead[];
 }
 
 const FONTES: FonteBusca[] = [
-  { key: 'DODF', label: 'DODF', sublabel: 'Diário Oficial do DF',        icon: 'article',       canCollect: true  },
-  { key: 'DOU',  label: 'DOU',  sublabel: 'Diário Oficial da União',      icon: 'library_books', canCollect: true  },
-  { key: 'PNCP', label: 'PNCP', sublabel: 'Portal Nac. de Contratações', icon: 'public',        canCollect: true  },
+  {
+    key: 'DODF',
+    label: 'DODF',
+    sublabel: 'Diário Oficial do DF',
+    icon: 'article',
+    canCollect: true,
+  },
+  {
+    key: 'DOU',
+    label: 'DOU',
+    sublabel: 'Diário Oficial da União',
+    icon: 'library_books',
+    canCollect: true,
+  },
+  {
+    key: 'PNCP',
+    label: 'PNCP',
+    sublabel: 'Portal Nac. de Contratações',
+    icon: 'public',
+    canCollect: true,
+  },
 ];
 
-const ORG_COLORS = ['#E91E63','#9C27B0','#673AB7','#3F51B5','#2196F3','#0097A7','#00897B','#43A047','#FB8C00','#E53935'];
+const ORG_COLORS = [
+  '#E91E63',
+  '#9C27B0',
+  '#673AB7',
+  '#3F51B5',
+  '#2196F3',
+  '#0097A7',
+  '#00897B',
+  '#43A047',
+  '#FB8C00',
+  '#E53935',
+];
 
 @Component({
   selector: 'app-leads',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, MatButtonModule, MatIconModule, MatTooltipModule,
-    MatProgressSpinnerModule, MatProgressBarModule, MatDatepickerModule, MatFormFieldModule,
-    MatInputModule, MatNativeDateModule, TruncatePipe, MatPaginatorModule,
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
+    TruncatePipe,
+    ScoreBadgePipe,
+    LeadCategoriaPipe,
+    MatPaginatorModule,
   ],
   templateUrl: './leads.component.html',
   styleUrl: './leads.component.scss',
+  animations: [listStagger, fadeSlideIn],
 })
 export class LeadsComponent implements OnInit {
-  private leadService   = inject(LeadService);
+  private leadService = inject(LeadService);
   private coletaService = inject(ColetaService);
-  private toast         = inject(ToastService);
-  private dialog        = inject(MatDialog);
-  private notifSvc      = inject(NotificacoesService);
+  private toast = inject(ToastService);
+  private dialog = inject(MatDialog);
   readonly coletaAndamento = inject(ColetaAndamentoService);
 
   fontes = FONTES;
-  hoje   = new Date();
+  hoje = new Date();
 
   statusTabs: StatusTab[] = [
-    { label: 'Todos',              value: null },
-    { label: 'Novos Leads',        value: 'NOVO' },
+    { label: 'Todos', value: null },
+    { label: 'Novos Leads', value: 'NOVO' },
     { label: 'Aprov. Presidência', value: 'APROVACAO_PRESIDENCIA' },
-    { label: 'Estudo e Viab.',     value: 'ESTUDO_VIABILIDADE' },
-    { label: '2ª Aprovação',       value: 'SEGUNDA_APROVACAO_PRESIDENCIA' },
-    { label: 'Descartado',         value: 'DESCARTADO' },
+    { label: 'Estudo e Viab.', value: 'ESTUDO_VIABILIDADE' },
+    { label: '2ª Aprovação', value: 'SEGUNDA_APROVACAO_PRESIDENCIA' },
+    { label: 'Descartado', value: 'DESCARTADO' },
   ];
 
-  selectedTabIdx  = signal(0);
-  selectedStatus  = signal<LeadStatus | null>(null);
-  selectedFontes  = signal<string[]>([]);
-  allLeads        = signal<Lead[]>([]);
-  totalElements   = signal(0);
-  currentPage     = signal(0);
-  pageSize        = signal(12);
-  loading         = signal(true);
-  apiError        = signal(false);
-  buscaAtiva      = signal(false);
+  selectedTabIdx = signal(parseInt(sessionStorage.getItem('leads_filter_tab') ?? '0', 10));
+  selectedStatus = signal<LeadStatus | null>(
+    (sessionStorage.getItem('leads_filter_status') as LeadStatus | null) ?? null,
+  );
+  selectedFontes = signal<string[]>([]);
+  gridFonte = signal<string | null>(null);
+  scoreMin = signal<number | null>(null);
+  allLeads = signal<Lead[]>([]);
+  totalElements = signal(0);
+  currentPage = signal(0);
+  pageSize = signal(12);
+  loading = signal(true);
+  apiError = signal(false);
+  buscaAtiva = signal(false);
 
-  dateMode   = signal<'single' | 'range'>('single');
+  dateMode = signal<'single' | 'range'>('single');
   dateSingle = signal<Date>(new Date());
-  dateFrom   = signal<Date | null>(null);
-  dateTo     = signal<Date | null>(null);
+  dateFrom = signal<Date | null>(null);
+  dateTo = signal<Date | null>(null);
   coletaResultado = signal<ColetaResultado | null>(null);
 
-  historicoAtivo      = signal(false);
-  historicoLoading    = signal(false);
-  historicoLogs       = signal<ColetaLog[]>([]);
-  historicoResumoApi  = signal<ColetaResumo | null>(null);
-  descartadosLeads    = signal<Lead[]>([]);
+  legendaAtiva = signal(false);
+  historicoAtivo = signal(false);
+  historicoLoading = signal(false);
+  historicoLogs = signal<ColetaLog[]>([]);
+  historicoResumoApi = signal<ColetaResumo | null>(null);
+  descartadosLeads = signal<Lead[]>([]);
   historicoExpandidos = signal<Set<string>>(new Set());
-  historicoPage       = signal(0);
-  historicoPageSize   = signal(20);
-  historicoTotal      = signal(0);
+  historicoPage = signal(0);
+  historicoPageSize = signal(10);
+  historicoTotal = signal(0);
 
   // ── Computeds ──────────────────────────────────────────────────
 
-  filteredLeads = computed(() => {
-    const fontes = this.selectedFontes();
-    const leads  = this.allLeads();
-    if (!fontes.length) return leads;
-    return leads.filter(l => fontes.includes(l.fonte));
-  });
-
   countByStatus = (status: LeadStatus | null) =>
-    this.allLeads().filter(l => status === null || l.status === status).length;
+    this.allLeads().filter((l) => status === null || l.status === status).length;
 
   hasCollectableFonte = computed(() =>
-    this.selectedFontes().some(k => FONTES.find(f => f.key === k)?.canCollect)
+    this.selectedFontes().some((k) => FONTES.find((f) => f.key === k)?.canCollect),
   );
 
   hasNonCollectableFonte = computed(() =>
-    this.selectedFontes().some(k => !FONTES.find(f => f.key === k)?.canCollect)
+    this.selectedFontes().some((k) => !FONTES.find((f) => f.key === k)?.canCollect),
   );
 
   nonCollectableLabel = computed(() =>
-    this.selectedFontes().filter(k => !FONTES.find(f => f.key === k)?.canCollect).join(', ')
+    this.selectedFontes()
+      .filter((k) => !FONTES.find((f) => f.key === k)?.canCollect)
+      .join(', '),
   );
 
   canSubmit = computed(() => {
     if (this.dateMode() === 'single') return !!this.dateSingle();
-    const from = this.dateFrom(), to = this.dateTo();
+    const from = this.dateFrom(),
+      to = this.dateTo();
     return !!from && !!to && to.getTime() >= from.getTime();
   });
 
   rangeInfo = computed(() => {
-    const from = this.dateFrom(), to = this.dateTo();
+    const from = this.dateFrom(),
+      to = this.dateTo();
     if (!from || !to || to < from) return null;
     const days = Math.round((to.getTime() - from.getTime()) / 86_400_000) + 1;
     return `${days} dia${days !== 1 ? 's' : ''}`;
@@ -153,9 +208,9 @@ export class LeadsComponent implements OnInit {
 
   historicoEntradas = computed<HistoricoEntrada[]>(() => {
     const descartados = this.descartadosLeads();
-    return this.historicoLogs().map(log => {
-      const leadsRejeitados = descartados.filter(l =>
-        l.fonte === log.fonte && (l.detectadoEm ?? '').substring(0, 10) === log.data
+    return this.historicoLogs().map((log) => {
+      const leadsRejeitados = descartados.filter(
+        (l) => l.fonte === log.fonte && (l.detectadoEm ?? '').substring(0, 10) === log.data,
       );
       return {
         logId: log.id,
@@ -180,11 +235,15 @@ export class LeadsComponent implements OnInit {
 
   // ── Lifecycle ───────────────────────────────────────────────────
 
-  ngOnInit(): void { this.carregarLeads(); }
+  ngOnInit(): void {
+    this.carregarLeads();
+  }
 
   // ── Fontes ──────────────────────────────────────────────────────
 
-  isFonteSelected(key: string): boolean { return this.selectedFontes().includes(key); }
+  isFonteSelected(key: string): boolean {
+    return this.selectedFontes().includes(key);
+  }
 
   fecharBusca(): void {
     this.buscaAtiva.set(false);
@@ -193,17 +252,32 @@ export class LeadsComponent implements OnInit {
   }
 
   toggleFonte(key: string): void {
-    this.selectedFontes.update(list =>
-      list.includes(key) ? list.filter(k => k !== key) : [...list, key]
+    this.selectedFontes.update((list) =>
+      list.includes(key) ? list.filter((k) => k !== key) : [...list, key],
     );
     this.coletaResultado.set(null);
     this.currentPage.set(0);
     this.carregarLeads();
   }
 
+  setGridFonte(fonte: string | null): void {
+    this.gridFonte.set(fonte);
+    this.currentPage.set(0);
+    this.carregarLeads();
+  }
+
+  setScoreMin(scoreMin: number | null): void {
+    this.scoreMin.set(scoreMin);
+    this.currentPage.set(0);
+    this.carregarLeads();
+  }
+
   setDateMode(mode: 'single' | 'range'): void {
     this.dateMode.set(mode);
-    if (mode === 'single') { this.dateFrom.set(null); this.dateTo.set(null); }
+    if (mode === 'single') {
+      this.dateFrom.set(null);
+      this.dateTo.set(null);
+    }
   }
 
   // ── Leads ───────────────────────────────────────────────────────
@@ -211,29 +285,40 @@ export class LeadsComponent implements OnInit {
   carregarLeads(): void {
     this.loading.set(true);
     this.apiError.set(false);
-    this.leadService.listar({
-      status: this.selectedStatus() ?? undefined,
-      page:   this.currentPage(),
-      size:   this.pageSize(),
-    }).subscribe({
-      next: (page) => {
-        this.allLeads.set(page.content ?? []);
-        this.totalElements.set(page.totalElements ?? 0);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.apiError.set(true);
-        this.loading.set(false);
-        this.toast.error('Erro ao carregar leads');
-      }
-    });
+    this.leadService
+      .listar({
+        status: this.selectedStatus() ?? undefined,
+        fonte: this.gridFonte() ?? undefined,
+        scoreMin: this.scoreMin() ?? undefined,
+        page: this.currentPage(),
+        size: this.pageSize(),
+      })
+      .subscribe({
+        next: (page) => {
+          this.allLeads.set(page.content ?? []);
+          this.totalElements.set(page.totalElements ?? 0);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.apiError.set(true);
+          this.loading.set(false);
+          this.toast.error('Erro ao carregar leads');
+        },
+      });
+  }
+
+  setStatusFilter(status: LeadStatus | null, tabIdx: number): void {
+    this.selectedStatus.set(status);
+    this.selectedTabIdx.set(tabIdx);
+    if (status) sessionStorage.setItem('leads_filter_status', status);
+    else sessionStorage.removeItem('leads_filter_status');
+    sessionStorage.setItem('leads_filter_tab', String(tabIdx));
+    this.carregarLeads();
   }
 
   onTabChange(idx: number): void {
-    this.selectedTabIdx.set(idx);
-    this.selectedStatus.set(this.statusTabs[idx].value);
+    this.setStatusFilter(this.statusTabs[idx].value, idx);
     this.currentPage.set(0);
-    this.carregarLeads();
   }
 
   onPageChange(event: PageEvent): void {
@@ -251,16 +336,15 @@ export class LeadsComponent implements OnInit {
     const dates = this.buildDateList();
     if (!dates.length) return;
 
-    const collectableFontes = this.selectedFontes()
-      .filter(k => FONTES.find(f => f.key === k)?.canCollect);
+    const collectableFontes = this.selectedFontes().filter(
+      (k) => FONTES.find((f) => f.key === k)?.canCollect,
+    );
     if (!collectableFontes.length) return;
 
     this.coletaResultado.set(null);
     this.coletaAndamento.iniciarColeta(collectableFontes);
 
-    const tarefas = collectableFontes.map(fonte =>
-      this.coletarFonte(fonte, dates)
-    );
+    const tarefas = collectableFontes.map((fonte) => this.coletarFonte(fonte, dates));
 
     await Promise.allSettled(tarefas);
 
@@ -268,11 +352,17 @@ export class LeadsComponent implements OnInit {
     const totalSalvos = fontes.reduce((n, f) => n + f.salvos, 0);
     const totalMaterias = fontes.reduce((n, f) => n + f.materias, 0);
 
-    this.coletaResultado.set({ totalMaterias, salvos: totalSalvos, duplicados: 0, data: '' } as any);
+    this.coletaResultado.set({
+      totalMaterias,
+      salvos: totalSalvos,
+      duplicados: 0,
+      data: '',
+    } as any);
 
     if (totalSalvos > 0) {
-      this.notifSvc.emitirBuscaConcluida(totalSalvos, collectableFontes);
-      this.toast.success(`${totalSalvos} lead(s) encontrados em ${collectableFontes.length} fonte(s)`);
+      this.toast.success(
+        `${totalSalvos} lead(s) encontrados em ${collectableFontes.length} fonte(s)`,
+      );
       this.carregarLeads();
     } else {
       this.toast.info('Nenhum lead novo encontrado neste período');
@@ -281,16 +371,22 @@ export class LeadsComponent implements OnInit {
 
   private async coletarFonte(fonte: string, dates: Date[]): Promise<void> {
     const inicio = Date.now();
-    let totalSalvos = 0, totalMaterias = 0;
+    let totalSalvos = 0,
+      totalMaterias = 0;
 
     const datesParaFonte = fonte === 'PNCP' ? [dates[0]] : dates;
 
     for (let i = 0; i < datesParaFonte.length; i++) {
-      this.coletaAndamento.avancarEtapa(fonte, i + 1, datesParaFonte.length, this.formatDate(datesParaFonte[i]));
+      this.coletaAndamento.avancarEtapa(
+        fonte,
+        i + 1,
+        datesParaFonte.length,
+        this.formatDate(datesParaFonte[i]),
+      );
       try {
         const r = await this.coletaService.dispararColeta(fonte, datesParaFonte[i]).toPromise();
         if (r) {
-          totalSalvos   += r.salvos ?? 0;
+          totalSalvos += r.salvos ?? 0;
           totalMaterias += r.totalMaterias ?? 0;
         }
       } catch {
@@ -303,27 +399,46 @@ export class LeadsComponent implements OnInit {
 
   private buildDateList(): Date[] {
     if (this.dateMode() === 'single') return this.dateSingle() ? [this.dateSingle()] : [];
-    const from = this.dateFrom(), to = this.dateTo();
+    const from = this.dateFrom(),
+      to = this.dateTo();
     if (!from || !to) return [];
     const dates: Date[] = [];
     const cur = new Date(from);
-    while (cur <= to) { dates.push(new Date(cur)); cur.setDate(cur.getDate() + 1); }
+    while (cur <= to) {
+      dates.push(new Date(cur));
+      cur.setDate(cur.getDate() + 1);
+    }
     return dates;
   }
 
   // ── Lead actions ────────────────────────────────────────────────
 
   verDetalhe(lead: Lead): void {
-    const ref = this.dialog.open(LeadDetalheDialogComponent, { data: lead, width: '700px', maxWidth: '95vw' });
-    ref.afterClosed().subscribe(updated => { if (updated) this.carregarLeads(); });
+    const ref = this.dialog.open(LeadDetalheDialogComponent, {
+      data: lead,
+      width: '700px',
+      maxWidth: '95vw',
+    });
+    ref.afterClosed().subscribe((updated) => {
+      if (updated) this.carregarLeads();
+    });
   }
 
   atualizarStatus(lead: Lead, status: LeadStatus, event: Event): void {
     event.stopPropagation();
-    this.leadService.atualizarStatus(lead.uuid, { status, revisadoPor: 'analista@brasfort.com.br', observacao: 'Atualizado via lista de leads' }).subscribe({
-      next: () => { this.toast.success(this.statusLabel(status)); this.carregarLeads(); },
-      error: () => this.toast.error('Erro ao atualizar status'),
-    });
+    this.leadService
+      .atualizarStatus(lead.uuid, {
+        status,
+        revisadoPor: 'analista@brasfort.com.br',
+        observacao: 'Atualizado via lista de leads',
+      })
+      .subscribe({
+        next: () => {
+          this.toast.success(this.statusLabel(status));
+          this.carregarLeads();
+        },
+        error: () => this.toast.error('Erro ao atualizar status'),
+      });
   }
 
   // ── Histórico ───────────────────────────────────────────────────
@@ -338,9 +453,12 @@ export class LeadsComponent implements OnInit {
     this.historicoLoading.set(true);
     this.historicoExpandidos.set(new Set());
     forkJoin({
-      logs:        this.coletaService.getHistorico({ page: this.historicoPage(), size: this.historicoPageSize() }),
+      logs: this.coletaService.getHistorico({
+        page: this.historicoPage(),
+        size: this.historicoPageSize(),
+      }),
       descartados: this.leadService.listar({ status: 'DESCARTADO', size: 500 }),
-      resumo:      this.coletaService.getResumo(),
+      resumo: this.coletaService.getResumo(),
     }).subscribe({
       next: ({ logs, descartados, resumo }) => {
         this.historicoLogs.set(logs.content ?? []);
@@ -349,7 +467,10 @@ export class LeadsComponent implements OnInit {
         this.historicoResumoApi.set(resumo);
         this.historicoLoading.set(false);
       },
-      error: () => { this.historicoLoading.set(false); this.toast.error('Erro ao carregar histórico'); },
+      error: () => {
+        this.historicoLoading.set(false);
+        this.toast.error('Erro ao carregar histórico');
+      },
     });
   }
 
@@ -360,37 +481,53 @@ export class LeadsComponent implements OnInit {
   }
 
   toggleHistoricoExpand(key: string): void {
-    this.historicoExpandidos.update(set => {
+    this.historicoExpandidos.update((set) => {
       const next = new Set(set);
       next.has(key) ? next.delete(key) : next.add(key);
       return next;
     });
   }
 
-  isHistoricoExpandido(key: string): boolean { return this.historicoExpandidos().has(key); }
+  isHistoricoExpandido(key: string): boolean {
+    return this.historicoExpandidos().has(key);
+  }
 
   // ── Helpers ─────────────────────────────────────────────────────
 
-  orgColor(name: string): string { return ORG_COLORS[(name?.charCodeAt(0) ?? 0) % ORG_COLORS.length]; }
-  orgInitial(name: string): string { return name?.charAt(0).toUpperCase() ?? '?'; }
+  orgColor(name: string): string {
+    return ORG_COLORS[(name?.charCodeAt(0) ?? 0) % ORG_COLORS.length];
+  }
+  orgInitial(name: string): string {
+    return name?.charAt(0).toUpperCase() ?? '?';
+  }
 
   normalizeCase(text: string): string {
     if (!text) return '';
     const isAllCaps = text === text.toUpperCase() && /[A-ZÁÉÍÓÚÀÂÊÔÃÕÇ]/.test(text);
     if (!isAllCaps) return text;
-    return text.toLowerCase().replace(/(^\s*\S|[.!?]\s+\S)/g, c => c.toUpperCase());
+    return text.toLowerCase().replace(/(^\s*\S|[.!?]\s+\S)/g, (c) => c.toUpperCase());
   }
 
   statusLabel(s: LeadStatus): string {
-    const m: Record<LeadStatus, string> = { NOVO: 'Novo Lead', APROVACAO_PRESIDENCIA: 'Aprov. Presidência', ESTUDO_VIABILIDADE: 'Estudo e Viabilidade', SEGUNDA_APROVACAO_PRESIDENCIA: '2ª Aprovação', QUALIFICADO: 'Qualificado', DESCARTADO: 'Descartado' };
+    const m: Record<LeadStatus, string> = {
+      NOVO: 'Novo Lead',
+      APROVACAO_PRESIDENCIA: 'Aprov. Presidência',
+      ESTUDO_VIABILIDADE: 'Estudo e Viabilidade',
+      SEGUNDA_APROVACAO_PRESIDENCIA: '2ª Aprovação',
+      QUALIFICADO: 'Qualificado',
+      DESCARTADO: 'Descartado',
+    };
     return m[s] ?? s;
   }
 
   formatDate(d: string | Date): string {
     if (!d) return '';
     try {
-      const dt = typeof d === 'string' ? (d.includes('T') ? new Date(d) : new Date(d + 'T00:00:00')) : d;
+      const dt =
+        typeof d === 'string' ? (d.includes('T') ? new Date(d) : new Date(d + 'T00:00:00')) : d;
       return dt.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
-    } catch { return String(d); }
+    } catch {
+      return String(d);
+    }
   }
 }

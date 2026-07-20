@@ -1,0 +1,201 @@
+- generic [ref=f3e1]:
+  - generic [ref=f3e4]:
+    - complementary [ref=f3e5]:
+      - generic [ref=f3e6]:
+        - img [ref=f3e8]: gavel
+        - generic [ref=f3e9]: LicitaFlow
+        - button [ref=f3e10] [cursor=pointer]:
+          - img [ref=f3e11]: chevron_left
+      - navigation [ref=f3e12]:
+        - generic [ref=f3e13]:
+          - generic [ref=f3e14]: Licitações
+          - link "Leads" [ref=f3e15] [cursor=pointer]:
+            - /url: /leads
+            - img [ref=f3e16]: list_alt
+          - link "Pipeline" [ref=f3e18] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=f3e19]: view_kanban
+          - link "Editais" [ref=f3e21] [cursor=pointer]:
+            - /url: /editais
+            - img [ref=f3e22]: description
+      - generic [ref=f3e26] [cursor=pointer]:
+        - generic [ref=f3e27]: A
+        - generic [ref=f3e28]:
+          - generic [ref=f3e29]: adminmaster
+          - generic [ref=f3e30]: ADMIN
+        - img [ref=f3e31]: unfold_more
+    - generic [ref=f3e32]:
+      - banner [ref=f3e33]:
+        - generic [ref=f3e34]:
+          - button [active] [ref=f3e35] [cursor=pointer]:
+            - img [ref=f3e36]: light_mode
+          - button [ref=f3e37] [cursor=pointer]:
+            - img [ref=f3e38]: help_outline
+          - button [ref=f3e39] [cursor=pointer]:
+            - img [ref=f3e40]:
+              - text: notifications_none
+              - generic: "100"
+          - button [ref=f3e42] [cursor=pointer]:
+            - img [ref=f3e43]: logout
+      - main [ref=f3e44]:
+        - generic [ref=f3e46]:
+          - heading "Configurações" [level=1] [ref=f3e48]
+          - generic [ref=f3e49]:
+            - tablist [ref=f3e52]:
+              - generic [ref=f3e53]:
+                - tab "Perfil" [ref=f3e54] [cursor=pointer]
+                - tab "Notificações" [ref=f3e57] [cursor=pointer]
+                - tab "Busca" [ref=f3e60] [cursor=pointer]
+                - tab "Sessões" [ref=f3e63] [cursor=pointer]
+                - tab "DODF" [selected] [ref=f3e66] [cursor=pointer]
+                - tab "DOU" [ref=f3e69] [cursor=pointer]
+                - tab "PNCP" [ref=f3e72] [cursor=pointer]
+            - generic [ref=f3e75]:
+              - tabpanel [ref=f3e155]
+              - tabpanel [ref=f3e148]
+              - tabpanel [ref=f3e149]
+              - tabpanel [ref=f3e150]
+              - tabpanel "DODF" [ref=f3e156]:
+                - generic [ref=f3e159]:
+                  - generic [ref=f3e160]:
+                    - generic [ref=f3e161]: Configuração DODF
+                    - generic [ref=f3e162]: Keywords e tipos de abertura do Diário Oficial do DF
+                  - generic [ref=f3e164]:
+                    - generic [ref=f3e165]:
+                      - button "Keywords 118" [ref=f3e166] [cursor=pointer]:
+                        - text: Keywords
+                        - generic [ref=f3e167]: "118"
+                      - button "Tipos de Abertura 15" [ref=f3e168] [cursor=pointer]:
+                        - text: Tipos de Abertura
+                        - generic [ref=f3e169]: "15"
+                      - button "Desativar todas as keywords" [ref=f3e170] [cursor=pointer]:
+                        - img [ref=f3e171]: toggle_off
+                        - text: Desativar todas
+                      - button "Ativar todas as keywords" [ref=f3e172] [cursor=pointer]:
+                        - img [ref=f3e173]: toggle_on
+                        - text: Ativar todas
+                      - button "Nova Keyword" [ref=f3e174]:
+                        - img [ref=f3e175]: add
+                    - generic [ref=f3e179]:
+                      - table [ref=f3e180]:
+                        - rowgroup [ref=f3e181]:
+                          - row [ref=f3e182]:
+                            - columnheader "Termo" [ref=f3e183]
+                            - columnheader "Ativo" [ref=f3e184]
+                            - columnheader [ref=f3e185]
+                        - rowgroup [ref=f3e186]:
+                          - row "vigia" [ref=f3e187]:
+                            - cell [ref=f3e188]:
+                              - code [ref=f3e189]: vigia
+                            - cell [ref=f3e190]:
+                              - switch [checked] [ref=f3e193] [cursor=pointer]
+                            - cell [ref=f3e204]:
+                              - button [ref=f3e205] [cursor=pointer]:
+                                - img [ref=f3e206]: edit
+                              - button [ref=f3e209] [cursor=pointer]:
+                                - img [ref=f3e210]: delete_outline
+                          - row "vigilancia" [ref=f3e213]:
+                            - cell [ref=f3e214]:
+                              - code [ref=f3e215]: vigilancia
+                            - cell [ref=f3e216]:
+                              - switch [checked] [ref=f3e219] [cursor=pointer]
+                            - cell [ref=f3e230]:
+                              - button [ref=f3e231] [cursor=pointer]:
+                                - img [ref=f3e232]: edit
+                              - button [ref=f3e235] [cursor=pointer]:
+                                - img [ref=f3e236]: delete_outline
+                          - row "vigilante" [ref=f3e239]:
+                            - cell [ref=f3e240]:
+                              - code [ref=f3e241]: vigilante
+                            - cell [ref=f3e242]:
+                              - switch [checked] [ref=f3e245] [cursor=pointer]
+                            - cell [ref=f3e256]:
+                              - button [ref=f3e257] [cursor=pointer]:
+                                - img [ref=f3e258]: edit
+                              - button [ref=f3e261] [cursor=pointer]:
+                                - img [ref=f3e262]: delete_outline
+                          - row "vigilancia armada" [ref=f3e265]:
+                            - cell [ref=f3e266]:
+                              - code [ref=f3e267]: vigilancia armada
+                            - cell [ref=f3e268]:
+                              - switch [checked] [ref=f3e271] [cursor=pointer]
+                            - cell [ref=f3e282]:
+                              - button [ref=f3e283] [cursor=pointer]:
+                                - img [ref=f3e284]: edit
+                              - button [ref=f3e287] [cursor=pointer]:
+                                - img [ref=f3e288]: delete_outline
+                          - row "vigilancia desarmada" [ref=f3e291]:
+                            - cell [ref=f3e292]:
+                              - code [ref=f3e293]: vigilancia desarmada
+                            - cell [ref=f3e294]:
+                              - switch [checked] [ref=f3e297] [cursor=pointer]
+                            - cell [ref=f3e308]:
+                              - button [ref=f3e309] [cursor=pointer]:
+                                - img [ref=f3e310]: edit
+                              - button [ref=f3e313] [cursor=pointer]:
+                                - img [ref=f3e314]: delete_outline
+                          - row "vigilancia ostensiva" [ref=f3e317]:
+                            - cell [ref=f3e318]:
+                              - code [ref=f3e319]: vigilancia ostensiva
+                            - cell [ref=f3e320]:
+                              - switch [checked] [ref=f3e323] [cursor=pointer]
+                            - cell [ref=f3e334]:
+                              - button [ref=f3e335] [cursor=pointer]:
+                                - img [ref=f3e336]: edit
+                              - button [ref=f3e339] [cursor=pointer]:
+                                - img [ref=f3e340]: delete_outline
+                          - row "vigilancia eletronica" [ref=f3e343]:
+                            - cell [ref=f3e344]:
+                              - code [ref=f3e345]: vigilancia eletronica
+                            - cell [ref=f3e346]:
+                              - switch [checked] [ref=f3e349] [cursor=pointer]
+                            - cell [ref=f3e360]:
+                              - button [ref=f3e361] [cursor=pointer]:
+                                - img [ref=f3e362]: edit
+                              - button [ref=f3e365] [cursor=pointer]:
+                                - img [ref=f3e366]: delete_outline
+                          - row "seguranca privada" [ref=f3e369]:
+                            - cell [ref=f3e370]:
+                              - code [ref=f3e371]: seguranca privada
+                            - cell [ref=f3e372]:
+                              - switch [checked] [ref=f3e375] [cursor=pointer]
+                            - cell [ref=f3e386]:
+                              - button [ref=f3e387] [cursor=pointer]:
+                                - img [ref=f3e388]: edit
+                              - button [ref=f3e391] [cursor=pointer]:
+                                - img [ref=f3e392]: delete_outline
+                          - row "aspp" [ref=f3e395]:
+                            - cell [ref=f3e396]:
+                              - code [ref=f3e397]: aspp
+                            - cell [ref=f3e398]:
+                              - switch [checked] [ref=f3e401] [cursor=pointer]
+                            - cell [ref=f3e412]:
+                              - button [ref=f3e413] [cursor=pointer]:
+                                - img [ref=f3e414]: edit
+                              - button [ref=f3e417] [cursor=pointer]:
+                                - img [ref=f3e418]: delete_outline
+                          - row "seguranca em central de monitoramento" [ref=f3e421]:
+                            - cell [ref=f3e422]:
+                              - code [ref=f3e423]: seguranca em central de monitoramento
+                            - cell [ref=f3e424]:
+                              - switch [checked] [ref=f3e427] [cursor=pointer]
+                            - cell [ref=f3e438]:
+                              - button [ref=f3e439] [cursor=pointer]:
+                                - img [ref=f3e440]: edit
+                              - button [ref=f3e443] [cursor=pointer]:
+                                - img [ref=f3e444]: delete_outline
+                      - group [ref=f3e447]:
+                        - generic [ref=f3e449]:
+                          - generic [ref=f3e450]:
+                            - generic [ref=f3e451]: "Items per page:"
+                            - combobox "Items per page:" [ref=f3e456] [cursor=pointer]:
+                              - generic [ref=f3e457]: "10"
+                          - generic [ref=f3e465]:
+                            - status [ref=f3e466]: 1 – 10 of 118
+                            - button "First page" [disabled] [ref=f3e467]
+                            - button "Previous page" [disabled] [ref=f3e472]
+                            - button "Next page" [ref=f3e477] [cursor=pointer]
+                            - button "Last page" [ref=f3e482] [cursor=pointer]
+              - tabpanel [ref=f3e152]
+              - tabpanel [ref=f3e153]
+  - generic: Modo claro

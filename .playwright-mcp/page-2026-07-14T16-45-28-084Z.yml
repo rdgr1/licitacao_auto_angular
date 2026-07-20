@@ -1,0 +1,138 @@
+- generic [active] [ref=f7e1]:
+  - generic [ref=f7e4]:
+    - complementary [ref=f7e5]:
+      - generic [ref=f7e6]:
+        - img [ref=f7e8]: gavel
+        - generic [ref=f7e9]: LicitaFlow
+        - button [ref=f7e10] [cursor=pointer]:
+          - img [ref=f7e11]: chevron_left
+      - navigation [ref=f7e12]:
+        - generic [ref=f7e13]:
+          - generic [ref=f7e14]: Licitações
+          - link "Leads" [ref=f7e15] [cursor=pointer]:
+            - /url: /leads
+            - img [ref=f7e16]: list_alt
+          - link "Pipeline" [ref=f7e18] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=f7e19]: view_kanban
+          - link "Editais" [ref=f7e21] [cursor=pointer]:
+            - /url: /editais
+            - img [ref=f7e22]: description
+      - generic [ref=f7e26] [cursor=pointer]:
+        - generic [ref=f7e27]: A
+        - generic [ref=f7e28]:
+          - generic [ref=f7e29]: adminmaster
+          - generic [ref=f7e30]: ADMIN
+        - img [ref=f7e31]: unfold_more
+    - generic [ref=f7e32]:
+      - banner [ref=f7e33]:
+        - generic [ref=f7e34]:
+          - button [ref=f7e35] [cursor=pointer]:
+            - img [ref=f7e36]: help_outline
+          - button [ref=f7e37] [cursor=pointer]:
+            - img [ref=f7e38]: notifications_none
+          - button [ref=f7e40] [cursor=pointer]:
+            - img [ref=f7e41]: logout
+      - main [ref=f7e42]:
+        - generic [ref=f7e44]:
+          - heading "Configurações" [level=1] [ref=f7e46]
+          - generic [ref=f7e47]:
+            - tablist [ref=f7e50]:
+              - generic [ref=f7e51]:
+                - tab "Perfil" [selected] [ref=f7e52] [cursor=pointer]
+                - tab "Notificações" [ref=f7e55] [cursor=pointer]
+                - tab "Busca" [ref=f7e58] [cursor=pointer]
+                - tab "Sessões" [ref=f7e61] [cursor=pointer]
+                - tab "DODF" [ref=f7e64] [cursor=pointer]
+                - tab "DOU" [ref=f7e67] [cursor=pointer]
+                - tab "PNCP" [ref=f7e70] [cursor=pointer]
+            - generic [ref=f7e73]:
+              - tabpanel "Perfil" [ref=f7e74]:
+                - generic [ref=f7e76]:
+                  - generic [ref=f7e77]:
+                    - generic [ref=f7e78]:
+                      - generic [ref=f7e79]: Dados pessoais
+                      - generic [ref=f7e80]: Informações exibidas no sistema
+                    - generic [ref=f7e81]:
+                      - generic [ref=f7e82]: A
+                      - generic [ref=f7e83]:
+                        - generic [ref=f7e84]: adminmaster
+                        - generic [ref=f7e85]: admin@email.com
+                        - generic [ref=f7e86]: ADMIN
+                    - generic [ref=f7e87]:
+                      - generic [ref=f7e90]:
+                        - generic: Nome de exibição
+                        - textbox "Nome de exibição" [ref=f7e93]: adminmaster
+                      - generic [ref=f7e96]:
+                        - generic: Função / cargo
+                        - textbox "Função / cargo" [ref=f7e99]: Administrador
+                      - generic [ref=f7e102]:
+                        - generic: Empresa
+                        - textbox "Empresa" [ref=f7e105]: Brasfort ADM
+                    - generic [ref=f7e106]:
+                      - button "Salvar alterações" [ref=f7e107]
+                      - button "Refazer tour" [ref=f7e111]:
+                        - img [ref=f7e112]: help_outline
+                  - generic [ref=f7e116]:
+                    - generic [ref=f7e117]:
+                      - generic [ref=f7e118]: Segurança
+                      - generic [ref=f7e119]: Altere sua senha de acesso
+                    - generic [ref=f7e120]:
+                      - generic [ref=f7e123]:
+                        - generic: Senha atual
+                        - textbox "Senha atual" [ref=f7e126]
+                        - img [ref=f7e128]: lock_outline
+                      - generic [ref=f7e131]:
+                        - generic: Nova senha
+                        - textbox "Nova senha" [ref=f7e134]
+                      - generic [ref=f7e137]:
+                        - generic: Confirmar nova senha
+                        - textbox "Confirmar nova senha" [ref=f7e140]
+                    - button "Alterar senha" [ref=f7e142]
+              - tabpanel [ref=f7e146]
+              - tabpanel [ref=f7e147]
+              - tabpanel [ref=f7e148]
+              - tabpanel [ref=f7e149]
+              - tabpanel [ref=f7e150]
+              - tabpanel [ref=f7e151]
+  - generic:
+    - generic [ref=f7e158]:
+      - generic [ref=f7e159]: Acesso negado.
+      - button [ref=f7e161]:
+        - generic [ref=f7e162]: OK
+    - generic [ref=f7e170]:
+      - generic [ref=f7e171]: Acesso negado.
+      - button [ref=f7e173]:
+        - generic [ref=f7e174]: OK
+    - generic [ref=f7e182]:
+      - generic [ref=f7e183]: Erro ao carregar keywords
+      - button [ref=f7e185]:
+        - generic [ref=f7e186]: ✕
+    - generic [ref=f7e194]:
+      - generic [ref=f7e195]: Acesso negado.
+      - button [ref=f7e197]:
+        - generic [ref=f7e198]: OK
+    - generic [ref=f7e206]:
+      - generic [ref=f7e207]: Erro ao carregar tipos
+      - button [ref=f7e209]:
+        - generic [ref=f7e210]: ✕
+    - generic [ref=f7e218]:
+      - generic [ref=f7e219]: Acesso negado.
+      - button [ref=f7e221]:
+        - generic [ref=f7e222]: OK
+    - generic [ref=f7e230]:
+      - generic [ref=f7e231]: Acesso negado.
+      - button [ref=f7e233]:
+        - generic [ref=f7e234]: OK
+    - generic [ref=f7e242]:
+      - generic [ref=f7e243]: Acesso negado.
+      - button [ref=f7e245]:
+        - generic [ref=f7e246]: OK
+    - generic [ref=f7e254]:
+      - generic [ref=f7e255]: Acesso negado.
+      - button [ref=f7e257]:
+        - generic [ref=f7e258]: OK
+    - generic [ref=f7e266]:
+      - generic [ref=f7e267]: Acesso negado.
+      - button [ref=f7e269]:
+        - generic [ref=f7e270]: OK

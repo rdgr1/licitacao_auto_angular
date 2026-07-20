@@ -1,8 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { NotificacaoEvent } from '../models/edital.model';
+import { Notificacao, Page } from '../models/edital.model';
 import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
@@ -12,15 +12,39 @@ export class NotificacoesService {
   private apiUrl = environment.apiUrl;
 
   private _novas = signal(0);
-  private _stream$ = new Subject<NotificacaoEvent>();
 
   novas = this._novas.asReadonly();
-  stream$ = this._stream$.asObservable();
 
   private eventSource: EventSource | null = null;
 
-  getHistorico(): Observable<NotificacaoEvent[]> {
-    return this.http.get<NotificacaoEvent[]>(`${this.apiUrl}/notificacoes`);
+  /** Histórico persistido (TB_NOTIFICACAO) — não confundir com o legado em memória de /notificacoes. */
+  getHistorico(): Observable<Page<Notificacao>> {
+    const params = new HttpParams().set('size', '10').set('sort', 'createdAt,desc');
+    return this.http.get<Page<Notificacao>>(`${this.apiUrl}/notificacoes/lista`, { params });
+  }
+
+  carregarNaoLidas(): void {
+    this.http
+      .get<{ naoLidas: number }>(`${this.apiUrl}/notificacoes/nao-lidas/count`, {
+        params: this.destinatarioParams(),
+      })
+      .subscribe({
+        next: (r) => this._novas.set(r.naoLidas ?? 0),
+        error: () => {},
+      });
+  }
+
+  marcarTodasComoLidas(): Observable<{ atualizadas: number }> {
+    return this.http
+      .patch<{ atualizadas: number }>(`${this.apiUrl}/notificacoes/lidas`, null, {
+        params: this.destinatarioParams(),
+      })
+      .pipe(tap(() => this._novas.set(0)));
+  }
+
+  private destinatarioParams(): HttpParams {
+    const email = this.auth.currentUser()?.email;
+    return email ? new HttpParams().set('destinatario', email) : new HttpParams();
   }
 
   startSSE(): void {
@@ -32,14 +56,14 @@ export class NotificacoesService {
       : `${base}/api/notificacoes/stream`;
     this.eventSource = new EventSource(url);
 
-    this.eventSource.addEventListener('NOVO_LEAD', (e: MessageEvent) => {
+    const onEvento = (e: MessageEvent) => {
       try {
-        const event: NotificacaoEvent = JSON.parse(e.data);
-        this._stream$.next(event);
-        this._novas.update(n => n + 1);
-      } catch { /* ignore parse errors */ }
-    });
-
+        JSON.parse(e.data);
+        this._novas.update((n) => n + 1);
+      } catch {}
+    };
+    this.eventSource.addEventListener('NOVO_LEAD', onEvento);
+    this.eventSource.addEventListener('ACAO_PIPELINE', onEvento);
     this.eventSource.onerror = () => {};
   }
 
@@ -49,23 +73,6 @@ export class NotificacoesService {
   }
 
   clearNovas(): void {
-    this._novas.set(0);
-  }
-
-  emitirBuscaConcluida(salvos: number, fontes: string[]): void {
-    const evento: NotificacaoEvent = {
-      tipo: 'BUSCA_CONCLUIDA',
-      timestamp: new Date().toISOString(),
-      editalId: 0,
-      numero: '',
-      objeto: `${salvos} lead(s) encontrado(s) em ${fontes.join(', ')}`,
-      leadScore: 0,
-      categoria: '',
-      totalSalvos: salvos,
-      totalFontes: fontes.length,
-      fontesNomes: fontes,
-    };
-    this._stream$.next(evento);
-    this._novas.update(n => n + 1);
+    this.marcarTodasComoLidas().subscribe({ error: () => {} });
   }
 }

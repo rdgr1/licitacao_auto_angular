@@ -1,4 +1,5 @@
 <div class="pipeline-shell">
+  <div class="sr-only" aria-live="polite" aria-atomic="true">{{ moveAnnouncement() }}</div>
 
   <!-- ── Header ─────────────────────────────────────────────────── -->
   <div class="pipeline-header">
@@ -18,37 +19,79 @@
     <div class="header-right">
       <div class="pipeline-toggle">
         <button class="toggle-btn" [class.active]="active() === 'qual'" (click)="active.set('qual')">
-          <mat-icon>filter_alt</mat-icon>
+          <mat-icon aria-hidden="true">filter_alt</mat-icon>
           Qualificação
-          <span class="toggle-count" [class.green]="active() === 'qual'">{{ qualTotal() }}</span>
+          <span class="toggle-count" [class.green]="active() === 'qual'" aria-hidden="true">{{ qualTotal() }}</span>
         </button>
         <button class="toggle-btn" [class.active]="active() === 'proc'" (click)="active.set('proc')">
-          <mat-icon>account_tree</mat-icon>
+          <mat-icon aria-hidden="true">account_tree</mat-icon>
           Processo Licitatório
-          <span class="toggle-count" [class.green]="active() === 'proc'">{{ procTotal() }}</span>
+          <span class="toggle-count" [class.green]="active() === 'proc'" aria-hidden="true">{{ procTotal() }}</span>
         </button>
       </div>
-      <button mat-icon-button matTooltip="Recarregar"
-              (click)="active() === 'qual' ? loadLeads() : loadProcessos()">
-        <mat-icon>refresh</mat-icon>
+      <button mat-icon-button matTooltip="Recarregar" aria-label="Recarregar pipeline"
+              (click)="active() === 'qual' ? refreshQual() : loadProcessos()">
+        <mat-icon aria-hidden="true">refresh</mat-icon>
       </button>
     </div>
   </div>
 
   <!-- ── QUALIFICAÇÃO ─────────────────────────────────────────────── -->
   @if (active() === 'qual') {
+    <div class="qual-filter-bar" role="group" aria-label="Filtro e busca de leads">
+      <div class="qual-fonte-chips">
+        <button class="fonte-filter-chip" [class.active]="gridFonte() === null" (click)="setGridFonte(null)">
+          Todas as fontes
+        </button>
+        @for (f of fontes; track f.key) {
+          <button class="fonte-filter-chip" [class.active]="gridFonte() === f.key" (click)="setGridFonte(f.key)">
+            {{ f.label }}
+          </button>
+        }
+      </div>
+      <div class="qual-search">
+        <mat-icon aria-hidden="true">search</mat-icon>
+        <input
+          type="text"
+          placeholder="Buscar por título ou órgão..."
+          [value]="searchTerm()"
+          (input)="onSearchChange($any($event.target).value)"
+          aria-label="Buscar leads por título ou órgão"
+        />
+      </div>
+    </div>
+
     @if (loadingQual()) {
-      <div class="loading-state"><mat-spinner diameter="32" /><span>Carregando leads...</span></div>
+      <div class="pipeline-skeleton" aria-label="Carregando pipeline..." role="status">
+        @for (col of [1,2,3,4,5]; track col) {
+          <div class="psk-col">
+            <div class="skeleton psk-header"></div>
+            @for (card of [1,2,3]; track card) {
+              <div class="psk-card">
+                <div class="psk-row">
+                  <div class="skeleton psk-badge"></div>
+                  <div class="skeleton psk-date"></div>
+                </div>
+                <div class="skeleton psk-title"></div>
+                <div class="skeleton psk-org"></div>
+              </div>
+            }
+          </div>
+        }
+      </div>
     } @else {
       <div class="board cols-5" cdkDropListGroup>
-        @for (col of qualColumns; track col.id) {
+        @for (col of qualColumns(); track col.id) {
           <div class="col" [style.--cc]="col.color" [style.--ca]="col.accent">
 
             <!-- Column header -->
             <div class="col-header">
-              <mat-icon class="col-icon">{{ col.icon }}</mat-icon>
+              <mat-icon class="col-icon" aria-hidden="true">{{ col.icon }}</mat-icon>
               <span class="col-label">{{ col.label }}</span>
               <span class="col-count">{{ col.leads.length }}</span>
+              @if (colTotalValue(col.leads) > 0) {
+                <span class="col-total">{{ formatMillion(colTotalValue(col.leads)) }}</span>
+              }
             </div>
 
             <!-- Drop zone -->
@@ -58,14 +101,32 @@
                  (cdkDropListDropped)="dropQual($event)">
 
               @for (lead of col.leads; track lead.uuid) {
-                <div class="kcard" cdkDrag [cdkDragData]="lead">
+                <div class="kcard" cdkDrag [cdkDragData]="lead"
+                     role="button" tabindex="0"
+                     [attr.aria-label]="'Ver detalhes do lead: ' + lead.titulo"
+                     [class.just-dropped]="justDroppedId() === lead.uuid"
+                     [style.--score-color]="lead.leadScore != null ? (lead.leadScore | scoreBadge).color : null"
+                     (click)="openLeadDetalhe(lead)"
+                     (keydown.enter)="openLeadDetalhe(lead)"
+                     (keydown.space)="openLeadDetalhe(lead)">
                   <div class="kcard-placeholder" *cdkDragPlaceholder></div>
 
-                  <!-- Source + date + drag -->
+                  <!-- Edital link + source + date + drag -->
                   <div class="kcard-meta">
-                    <span class="src src-{{ lead.fonte?.toLowerCase() }}">{{ lead.fonte }}</span>
-                    <span class="kcard-date">{{ formatDate(lead.dataPublicacao) }}</span>
-                    <mat-icon class="kcard-drag">drag_indicator</mat-icon>
+                    <span class="edital-link-dot" [class.linked]="lead.editalId"
+                          [matTooltip]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"
+                          [attr.aria-label]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"></span>
+                    <span class="src src-{{ lead.fonte?.toLowerCase() }}"
+                          aria-hidden="true">{{ lead.fonte }}</span>
+                    @if (!(lead.leadCategoriaPrincipal | leadCategoria).hidden) {
+                      <span class="kcard-categoria"
+                            [style.background]="(lead.leadCategoriaPrincipal | leadCategoria).color + '1A'"
+                            [style.color]="(lead.leadCategoriaPrincipal | leadCategoria).color">
+                        {{ (lead.leadCategoriaPrincipal | leadCategoria).label }}
+                      </span>
+                    }
+                    <span class="kcard-date" aria-hidden="true">{{ formatDate(lead.dataPublicacao) }}</span>
+                    <mat-icon class="kcard-drag" aria-hidden="true" aria-label="">drag_indicator</mat-icon>
                   </div>
 
                   <!-- Title -->
@@ -74,43 +135,104 @@
                   <!-- Footer: org + tipo -->
                   <div class="kcard-footer">
                     <div class="kcard-org">
-                      <span class="org-dot" [style.background]="orgColor(lead.orgao)">{{ orgInitial(lead.orgao) }}</span>
+                      <span class="org-dot" [style.background]="orgColor(lead.orgao)" aria-hidden="true">{{ orgInitial(lead.orgao) }}</span>
                       <span class="org-name">{{ lead.orgao | truncate:26 }}</span>
                     </div>
                     @if (lead.tipo) {
                       <span class="tipo-tag">{{ tipoShort(lead.tipo) | truncate:20 }}</span>
                     }
                   </div>
+
+                  <div class="kcard-click-hint" aria-hidden="true">Clique para detalhes</div>
+
+                  <!-- Keyboard-accessible move button -->
+                  <button class="kcard-move-btn"
+                          mat-icon-button
+                          [matMenuTriggerFor]="moveMenu"
+                          aria-label="Mover lead para outra coluna"
+                          (click)="$event.stopPropagation()">
+                    <mat-icon aria-hidden="true">more_vert</mat-icon>
+                  </button>
+                  <mat-menu #moveMenu="matMenu">
+                    @for (destCol of qualColumns(); track destCol.id) {
+                      @if (destCol.id !== col.id) {
+                        <button mat-menu-item (click)="moveLeadToColumn(lead, destCol.id)">
+                          Mover para {{ destCol.label }}
+                        </button>
+                      }
+                    }
+                  </mat-menu>
                 </div>
               }
 
               @if (col.leads.length === 0) {
                 <div class="col-empty">
-                  <mat-icon>{{ col.icon }}</mat-icon>
+                  <mat-icon aria-hidden="true">{{ col.icon }}</mat-icon>
                   <span>Vazio</span>
                 </div>
+              }
+
+              @if (col.key === 'DESCARTADO' && col.leads.length < descartadosTotal()) {
+                <button class="col-load-more" (click)="loadMoreDescartados()" [disabled]="loadingDescartados()">
+                  @if (loadingDescartados()) {
+                    Carregando...
+                  } @else {
+                    Carregar mais ({{ col.leads.length }} de {{ descartadosTotal() }})
+                  }
+                </button>
               }
             </div>
           </div>
         }
       </div>
+
+      <!-- Paginação global — uma página por vez, distribuída entre as demais colunas
+           (Descarte não participa: tem busca própria, ver loadDescartados()) -->
+      <mat-paginator
+        class="qual-paginator"
+        [length]="totalElements()"
+        [pageSize]="pageSize()"
+        [pageIndex]="currentPage()"
+        [pageSizeOptions]="[24, 48, 96]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)">
+      </mat-paginator>
     }
   }
 
   <!-- ── PROCESSO LICITATÓRIO ─────────────────────────────────────── -->
   @if (active() === 'proc') {
     @if (loadingProc()) {
-      <div class="loading-state"><mat-spinner diameter="32" /><span>Carregando processos...</span></div>
+      <div class="pipeline-skeleton" aria-label="Carregando pipeline..." role="status">
+        @for (col of [1,2,3,4,5]; track col) {
+          <div class="psk-col">
+            <div class="skeleton psk-header"></div>
+            @for (card of [1,2,3]; track card) {
+              <div class="psk-card">
+                <div class="psk-row">
+                  <div class="skeleton psk-badge"></div>
+                  <div class="skeleton psk-date"></div>
+                </div>
+                <div class="skeleton psk-title"></div>
+                <div class="skeleton psk-org"></div>
+              </div>
+            }
+          </div>
+        }
+      </div>
     } @else {
       <div class="board cols-7" cdkDropListGroup>
-        @for (col of procColumns; track col.id) {
+        @for (col of procColumns(); track col.id) {
           <div class="col" [style.--cc]="col.color" [style.--ca]="col.accent"
                [class.col-final]="col.key === 'GANHO' || col.key === 'PERDIDO'">
 
             <div class="col-header">
-              <mat-icon class="col-icon">{{ col.icon }}</mat-icon>
+              <mat-icon class="col-icon" aria-hidden="true">{{ col.icon }}</mat-icon>
               <span class="col-label">{{ col.label }}</span>
               <span class="col-count">{{ col.processos.length }}</span>
+              @if (colTotalValue(col.processos) > 0) {
+                <span class="col-total">{{ formatMillion(colTotalValue(col.processos)) }}</span>
+              }
             </div>
 
             <div class="col-body" cdkDropList [id]="col.id"
@@ -152,7 +274,7 @@
 
               @if (col.processos.length === 0) {
                 <div class="col-empty">
-                  <mat-icon>{{ col.icon }}</mat-icon>
+                  <mat-icon aria-hidden="true">{{ col.icon }}</mat-icon>
                   <span>Vazio</span>
                 </div>
               }

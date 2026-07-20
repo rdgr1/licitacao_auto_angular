@@ -1,0 +1,313 @@
+- generic [ref=f5e1]:
+  - generic [ref=f5e4]:
+    - complementary [ref=f5e5]:
+      - generic [ref=f5e6]:
+        - img [ref=f5e8]: gavel
+        - generic [ref=f5e26]: LicitaFlow
+        - button [ref=f5e9] [cursor=pointer]:
+          - img [ref=f5e10]: chevron_left
+      - navigation [ref=f5e11]:
+        - generic [ref=f5e27]:
+          - generic [ref=f5e28]: Licitações
+          - link "Leads" [ref=f5e29] [cursor=pointer]:
+            - /url: /leads
+            - img [ref=f5e30]: list_alt
+          - link "Pipeline" [ref=f5e32] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=f5e33]: view_kanban
+          - link "Editais" [ref=f5e35] [cursor=pointer]:
+            - /url: /editais
+            - img [ref=f5e36]: description
+      - generic [ref=f5e14] [cursor=pointer]:
+        - generic [ref=f5e15]: A
+        - generic [ref=f5e38]:
+          - generic [ref=f5e39]: adminmaster
+          - generic [ref=f5e40]: ADMIN
+        - img [ref=f5e41]: unfold_more
+    - generic [ref=f5e16]:
+      - banner [ref=f5e17]:
+        - generic [ref=f5e18]:
+          - button [ref=f5e19] [cursor=pointer]:
+            - img [ref=f5e20]: help_outline
+          - button [ref=f5e21] [cursor=pointer]:
+            - img [ref=f5e22]: notifications_none
+          - button [ref=f5e23] [cursor=pointer]:
+            - img [ref=f5e24]: logout
+      - main [ref=f5e25]:
+        - generic [ref=f5e44]:
+          - generic [ref=f5e45]:
+            - generic [ref=f5e46]:
+              - heading "Leads" [level=1] [ref=f5e47]
+              - paragraph [ref=f5e48]: Matérias coletadas das fontes oficiais classificadas para análise
+            - generic [ref=f5e49]:
+              - button "Legenda" [active] [ref=f5e50] [cursor=pointer]:
+                - img [ref=f5e51]: info
+                - text: Legenda
+              - button "Rastreabilidade" [ref=f5e52] [cursor=pointer]:
+                - img [ref=f5e53]: history
+                - text: Rastreabilidade
+          - generic [ref=f5e318]:
+            - generic [ref=f5e319]: Indicadores dos cards
+            - generic [ref=f5e320]: Edital vinculado com sucesso a este lead
+            - generic [ref=f5e323]: Edital ainda não vinculado
+            - generic [ref=f5e326]: Mais indicadores serão adicionados aqui conforme o ecossistema evoluir.
+          - generic [ref=f5e55]:
+            - generic [ref=f5e56]:
+              - img [ref=f5e57]: manage_search
+              - generic [ref=f5e58]:
+                - generic [ref=f5e59]: Buscar leads
+                - generic [ref=f5e60]: Colete matérias do DODF, DOU ou filtre por PNCP
+            - button "Buscar leads" [ref=f5e61] [cursor=pointer]:
+              - img [ref=f5e62]: search
+              - text: Buscar leads
+          - group "Filtros por status" [ref=f5e63]:
+            - button "Todos" [pressed] [ref=f5e64] [cursor=pointer]:
+              - text: Todos
+              - generic [ref=f5e65]: "12"
+            - button "Novos Leads" [ref=f5e66] [cursor=pointer]:
+              - text: Novos Leads
+              - generic [ref=f5e67]: "11"
+            - button "Aprov. Presidência" [ref=f5e68] [cursor=pointer]:
+              - text: Aprov. Presidência
+              - generic [ref=f5e69]: "1"
+            - button "Estudo e Viab." [ref=f5e70] [cursor=pointer]:
+              - text: Estudo e Viab.
+              - generic [ref=f5e71]: "0"
+            - button "2ª Aprovação" [ref=f5e72] [cursor=pointer]:
+              - text: 2ª Aprovação
+              - generic [ref=f5e73]: "0"
+            - button "Descartado" [ref=f5e74] [cursor=pointer]:
+              - text: Descartado
+              - generic [ref=f5e75]: "0"
+          - list [ref=f5e76]:
+            - listitem [ref=f5e77] [cursor=pointer]:
+              - generic [ref=f5e78]:
+                - generic "Edital ainda não vinculado" [ref=f5e79]
+                - generic [ref=f5e80]: DODF
+                - generic [ref=f5e81]: Aviso de licitação
+                - generic [ref=f5e82]: Aprov. Presidência
+              - paragraph [ref=f5e84]: Aviso de licitação
+              - generic [ref=f5e85]:
+                - generic [ref=f5e86]: S
+                - generic [ref=f5e87]: SODF
+              - generic [ref=f5e88]:
+                - generic [ref=f5e89]:
+                  - img [ref=f5e90]: calendar_today
+                  - text: 03/06/26
+                - generic [ref=f5e91]: Porque sim
+              - generic [ref=f5e92]:
+                - button "Detalhes" [ref=f5e93]:
+                  - img [ref=f5e94]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e95]:
+                  - img [ref=f5e96]: block
+            - listitem [ref=f5e97] [cursor=pointer]:
+              - generic [ref=f5e99]:
+                - generic "Edital ainda não vinculado" [ref=f5e100]
+                - generic [ref=f5e101]: DODF
+                - generic [ref=f5e102]: Aviso de licitação
+                - generic [ref=f5e103]: Novo Lead
+              - paragraph [ref=f5e105]: Aviso de licitação
+              - generic [ref=f5e106]:
+                - generic [ref=f5e107]: S
+                - generic [ref=f5e108]: SSPDF
+              - generic [ref=f5e110]:
+                - img [ref=f5e111]: calendar_today
+                - text: 03/06/26
+              - generic [ref=f5e112]:
+                - button "Detalhes" [ref=f5e113]:
+                  - img [ref=f5e114]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e115]:
+                  - img [ref=f5e116]: block
+            - listitem [ref=f5e117] [cursor=pointer]:
+              - generic [ref=f5e119]:
+                - generic "Edital ainda não vinculado" [ref=f5e120]
+                - generic [ref=f5e121]: DODF
+                - generic [ref=f5e122]: Aviso de licitação
+                - generic [ref=f5e123]: Novo Lead
+              - paragraph [ref=f5e125]: Aviso de licitação
+              - generic [ref=f5e126]:
+                - generic [ref=f5e127]: S
+                - generic [ref=f5e128]: SEEC
+              - generic [ref=f5e130]:
+                - img [ref=f5e131]: calendar_today
+                - text: 02/06/26
+              - generic [ref=f5e132]:
+                - button "Detalhes" [ref=f5e133]:
+                  - img [ref=f5e134]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e135]:
+                  - img [ref=f5e136]: block
+            - listitem [ref=f5e137] [cursor=pointer]:
+              - generic [ref=f5e139]:
+                - generic "Edital ainda não vinculado" [ref=f5e140]
+                - generic [ref=f5e141]: DODF
+                - generic [ref=f5e142]: Aviso de abertura de licitação
+                - generic [ref=f5e143]: Novo Lead
+              - paragraph [ref=f5e145]: Aviso de abertura de licitação
+              - generic [ref=f5e146]:
+                - generic [ref=f5e147]: S
+                - generic [ref=f5e148]: SEDET
+              - generic [ref=f5e150]:
+                - img [ref=f5e151]: calendar_today
+                - text: 02/06/26
+              - generic [ref=f5e152]:
+                - button "Detalhes" [ref=f5e153]:
+                  - img [ref=f5e154]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e155]:
+                  - img [ref=f5e156]: block
+            - listitem [ref=f5e157] [cursor=pointer]:
+              - generic [ref=f5e159]:
+                - generic "Edital ainda não vinculado" [ref=f5e160]
+                - generic [ref=f5e161]: DODF
+                - generic [ref=f5e162]: Aviso de abertura de licitação
+                - generic [ref=f5e163]: Novo Lead
+              - paragraph [ref=f5e165]: Aviso de abertura de licitação
+              - generic [ref=f5e166]:
+                - generic [ref=f5e167]: S
+                - generic [ref=f5e168]: SEDET
+              - generic [ref=f5e170]:
+                - img [ref=f5e171]: calendar_today
+                - text: 02/06/26
+              - generic [ref=f5e172]:
+                - button "Detalhes" [ref=f5e173]:
+                  - img [ref=f5e174]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e175]:
+                  - img [ref=f5e176]: block
+            - listitem [ref=f5e177] [cursor=pointer]:
+              - generic [ref=f5e179]:
+                - generic "Edital vinculado com sucesso" [ref=f5e180]
+                - generic [ref=f5e181]: DODF
+                - generic [ref=f5e182]: Aviso de licitação
+                - generic [ref=f5e183]: Novo Lead
+              - paragraph [ref=f5e185]: AVISO DE LICITAÇÃO -&nbsp;PREGÃO ELETRÔNICO Nº 90005/2026
+              - generic [ref=f5e186]:
+                - generic [ref=f5e187]: S
+                - generic [ref=f5e188]: SEAGRI
+              - generic [ref=f5e190]:
+                - img [ref=f5e191]: calendar_today
+                - text: 01/06/26
+              - generic [ref=f5e192]:
+                - button "Detalhes" [ref=f5e193]:
+                  - img [ref=f5e194]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e195]:
+                  - img [ref=f5e196]: block
+            - listitem [ref=f5e197] [cursor=pointer]:
+              - generic [ref=f5e199]:
+                - generic "Edital ainda não vinculado" [ref=f5e200]
+                - generic [ref=f5e201]: DOU
+                - generic [ref=f5e202]: Aviso de Licitação-Pregão
+                - generic [ref=f5e203]: Novo Lead
+              - paragraph [ref=f5e205]: Aviso de licitação
+              - generic [ref=f5e206]:
+                - generic [ref=f5e207]: P
+                - generic [ref=f5e208]: PREFEITURA MUNICIPAL DE MINEIROS
+              - generic [ref=f5e210]:
+                - img [ref=f5e211]: calendar_today
+                - text: 16/06/26
+              - generic [ref=f5e212]:
+                - button "Detalhes" [ref=f5e213]:
+                  - img [ref=f5e214]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e215]:
+                  - img [ref=f5e216]: block
+            - listitem [ref=f5e217] [cursor=pointer]:
+              - generic [ref=f5e219]:
+                - generic "Edital ainda não vinculado" [ref=f5e220]
+                - generic [ref=f5e221]: DOU
+                - generic [ref=f5e222]: Aviso de Licitação-Pregão
+                - generic [ref=f5e223]: Novo Lead
+              - paragraph [ref=f5e225]: Aviso de licitação
+              - generic [ref=f5e226]:
+                - generic [ref=f5e227]: P
+                - generic [ref=f5e228]: PREFEITURA MUNICIPAL DE MINEIROS
+              - generic [ref=f5e230]:
+                - img [ref=f5e231]: calendar_today
+                - text: 15/06/26
+              - generic [ref=f5e232]:
+                - button "Detalhes" [ref=f5e233]:
+                  - img [ref=f5e234]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e235]:
+                  - img [ref=f5e236]: block
+            - listitem [ref=f5e237] [cursor=pointer]:
+              - generic [ref=f5e239]:
+                - generic "Edital ainda não vinculado" [ref=f5e240]
+                - generic [ref=f5e241]: DOU
+                - generic [ref=f5e242]: Aviso de Licitação-Pregão
+                - generic [ref=f5e243]: Novo Lead
+              - paragraph [ref=f5e245]: Aviso de licitação
+              - generic [ref=f5e246]:
+                - generic [ref=f5e247]: S
+                - generic [ref=f5e248]: Seção Judiciária do Distrito Federal
+              - generic [ref=f5e250]:
+                - img [ref=f5e251]: calendar_today
+                - text: 15/06/26
+              - generic [ref=f5e252]:
+                - button "Detalhes" [ref=f5e253]:
+                  - img [ref=f5e254]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e255]:
+                  - img [ref=f5e256]: block
+            - listitem [ref=f5e257] [cursor=pointer]:
+              - generic [ref=f5e259]:
+                - generic "Edital ainda não vinculado" [ref=f5e260]
+                - generic [ref=f5e261]: DOU
+                - generic [ref=f5e262]: Aviso de Licitação-Pregão
+                - generic [ref=f5e263]: Novo Lead
+              - paragraph [ref=f5e265]: Aviso de licitação
+              - generic [ref=f5e266]:
+                - generic [ref=f5e267]: I
+                - generic [ref=f5e268]: Instituto Federal de Educação, Ciência e Tecnologia de Brasília
+              - generic [ref=f5e270]:
+                - img [ref=f5e271]: calendar_today
+                - text: 10/06/26
+              - generic [ref=f5e272]:
+                - button "Detalhes" [ref=f5e273]:
+                  - img [ref=f5e274]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e275]:
+                  - img [ref=f5e276]: block
+            - listitem [ref=f5e277] [cursor=pointer]:
+              - generic [ref=f5e279]:
+                - generic "Edital ainda não vinculado" [ref=f5e280]
+                - generic [ref=f5e281]: DOU
+                - generic [ref=f5e282]: Aviso de Licitação-Pregão
+                - generic [ref=f5e283]: Novo Lead
+              - paragraph [ref=f5e285]: Aviso de licitação
+              - generic [ref=f5e286]:
+                - generic [ref=f5e287]: F
+                - generic [ref=f5e288]: Filial Hospital Universitário de Brasília
+              - generic [ref=f5e290]:
+                - img [ref=f5e291]: calendar_today
+                - text: 08/06/26
+              - generic [ref=f5e292]:
+                - button "Detalhes" [ref=f5e293]:
+                  - img [ref=f5e294]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e295]:
+                  - img [ref=f5e296]: block
+            - listitem [ref=f5e297] [cursor=pointer]:
+              - generic [ref=f5e299]:
+                - generic "Edital ainda não vinculado" [ref=f5e300]
+                - generic [ref=f5e301]: DOU
+                - generic [ref=f5e302]: Aviso de Licitação-Pregão
+                - generic [ref=f5e303]: Novo Lead
+              - paragraph [ref=f5e305]: Aviso de licitação
+              - generic [ref=f5e306]:
+                - generic [ref=f5e307]: G
+                - generic [ref=f5e308]: Gerência Regional de Brasília
+              - generic [ref=f5e310]:
+                - img [ref=f5e311]: calendar_today
+                - text: 08/06/26
+              - generic [ref=f5e312]:
+                - button "Detalhes" [ref=f5e313]:
+                  - img [ref=f5e314]: open_in_new
+                  - text: Detalhes
+                - button "Descartar lead" [ref=f5e315]:
+                  - img [ref=f5e316]: block
+  - generic: O que significam as bolinhas dos cards

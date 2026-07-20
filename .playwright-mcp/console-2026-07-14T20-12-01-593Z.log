@@ -1,0 +1,16 @@
+[    7916ms] [INFO] Autofocus processing was blocked because a document already has a focused element. @ https://www.google.com/search?q=sua+mae+aquela+ursa&oq=sua+mae+aqu&gs_lcrp=EgZjaHJvbWUqBwgBEAAYgAQyBggAEEUYOTIHCAEQABiABDIHCAIQABiABDIHCAMQABiABDIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCDM4NzlqMGo3qAIAsAIA&sourceid=chrome&source=chrome.ob&ie=UTF-8&sei=FphWao3hKfLc1sQPhvGR6QI:0
+[    8156ms] [INFO] mutation: current_page = Home @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[    8156ms] [INFO] action: clear @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[    8156ms] [INFO] mutation: cleared @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[    9671ms] [INFO] mutation: current_page = MessageList @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[    9671ms] [INFO] action: connect_to_box @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[    9672ms] [INFO] mutation: connect_to_box @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[    9674ms] [INFO] action: hydrate_messages @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[   11658ms] [LOG] sort @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[   11658ms] [INFO] mutation: sort_messages  @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[   17668ms] [INFO] mutation: current_page = MessageList @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[   17668ms] [INFO] action: connect_to_box @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[   17668ms] [INFO] mutation: connect_to_box @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[   17670ms] [INFO] action: hydrate_messages @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[   18048ms] [LOG] sort @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0
+[   18048ms] [INFO] mutation: sort_messages  @ https://tuamaeaquelaursa.com/static/js/app.a440de73c0756a3856a9.js:0

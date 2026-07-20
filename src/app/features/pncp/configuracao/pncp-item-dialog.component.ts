@@ -23,7 +23,16 @@ export interface PncpItemDialogData {
 @Component({
   selector: 'app-pncp-item-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatSlideToggleModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatIconModule,
+  ],
   template: `
     <h2 mat-dialog-title>
       <mat-icon>{{ data.editando ? 'edit' : 'add' }}</mat-icon>
@@ -31,7 +40,6 @@ export interface PncpItemDialogData {
     </h2>
 
     <mat-dialog-content>
-
       @if (data.mode === 'modalidade') {
         <!-- Select com todos os códigos PNCP oficiais -->
         <mat-form-field appearance="outline" style="width:100%; margin-top:10px">
@@ -54,7 +62,6 @@ export interface PncpItemDialogData {
             <span class="preview-name">{{ nomeResolvido }}</span>
           </div>
         }
-
       } @else {
         <!-- Select com todas as UFs brasileiras -->
         <mat-form-field appearance="outline" style="width:100%; margin-top:10px">
@@ -73,7 +80,6 @@ export interface PncpItemDialogData {
           {{ ativo ? 'Ativo — incluído nas buscas' : 'Inativo — ignorado nas buscas' }}
         </mat-slide-toggle>
       </div>
-
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
@@ -83,22 +89,54 @@ export interface PncpItemDialogData {
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    h2 mat-icon { font-size: 20px; width: 20px; height: 20px; vertical-align: middle; margin-right: 6px; }
-    .opt-code { font-family: 'JetBrains Mono','Courier New',monospace; font-size: 12px; font-weight: 700; color: #0DA66E; min-width: 20px; display: inline-block; }
-    .opt-sep  { color: #CBD5E1; margin: 0 4px; }
-    .selected-preview {
-      display: flex; align-items: center; gap: 10px;
-      background: rgba(17,191,127,0.06); border: 1px solid rgba(17,191,127,0.2);
-      border-radius: 8px; padding: 8px 12px; margin-top: -4px;
-    }
-    .preview-code { font-family: 'JetBrains Mono','Courier New',monospace; font-size: 13px; font-weight: 800; color: #0DA66E; }
-    .preview-name { font-size: 13px; font-weight: 500; color: #1E293B; }
-  `]
+  styles: [
+    `
+      h2 mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin-right: 0.375rem;
+      }
+      .opt-code {
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 12px;
+        font-weight: 700;
+        color: #0da66e;
+        min-width: 20px;
+        display: inline-block;
+      }
+      .opt-sep {
+        color: var(--text-muted, #cbd5e1);
+        margin: 0 0.25rem;
+      }
+      .selected-preview {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        background: rgba(17, 191, 127, 0.06);
+        border: 1px solid rgba(17, 191, 127, 0.2);
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        margin-top: -0.25rem;
+      }
+      .preview-code {
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 13px;
+        font-weight: 800;
+        color: #0da66e;
+      }
+      .preview-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-primary, #1e293b);
+      }
+    `,
+  ],
 })
 export class PncpItemDialogComponent {
   catalogo = PNCP_MODALIDADES_CATALOGO;
-  siglas   = SIGLAS_UF;
+  siglas = SIGLAS_UF;
 
   selectedCodigo: number | null;
   sigla: string;
@@ -106,15 +144,15 @@ export class PncpItemDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<PncpItemDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PncpItemDialogData
+    @Inject(MAT_DIALOG_DATA) public data: PncpItemDialogData,
   ) {
     this.selectedCodigo = data.codigoAtual ?? null;
-    this.sigla          = data.siglaAtual ?? '';
-    this.ativo          = data.ativoAtual ?? true;
+    this.sigla = data.siglaAtual ?? '';
+    this.ativo = data.ativoAtual ?? true;
   }
 
   get nomeResolvido(): string {
-    return this.catalogo.find(m => m.codigo === this.selectedCodigo)?.nome ?? '';
+    return this.catalogo.find((m) => m.codigo === this.selectedCodigo)?.nome ?? '';
   }
 
   onModalidadeSelect(codigo: number): void {
@@ -122,15 +160,17 @@ export class PncpItemDialogComponent {
   }
 
   canSave(): boolean {
-    return this.data.mode === 'modalidade'
-      ? !!this.selectedCodigo
-      : !!this.sigla;
+    return this.data.mode === 'modalidade' ? !!this.selectedCodigo : !!this.sigla;
   }
 
   salvar(): void {
     if (!this.canSave()) return;
     if (this.data.mode === 'modalidade') {
-      this.dialogRef.close({ codigo: this.selectedCodigo, nome: this.nomeResolvido, ativo: this.ativo });
+      this.dialogRef.close({
+        codigo: this.selectedCodigo,
+        nome: this.nomeResolvido,
+        ativo: this.ativo,
+      });
     } else {
       this.dialogRef.close({ sigla: this.sigla, ativo: this.ativo });
     }

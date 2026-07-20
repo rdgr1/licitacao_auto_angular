@@ -1,0 +1,75 @@
+- generic [ref=e86]:
+  - complementary [ref=e87]:
+    - generic [ref=e88]:
+      - img [ref=e90]: gavel
+      - generic [ref=e91]: LicitaFlow
+      - button [ref=e92] [cursor=pointer]:
+        - img [ref=e93]: chevron_left
+    - navigation [ref=e94]:
+      - generic [ref=e95]:
+        - generic [ref=e96]: Licitações
+        - link "Leads" [ref=e97] [cursor=pointer]:
+          - /url: /leads
+          - img [ref=e98]: list_alt
+        - link "Pipeline" [ref=e100] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=e101]: view_kanban
+        - link "Editais" [ref=e103] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=e104]: description
+    - generic [ref=e108] [cursor=pointer]:
+      - generic [ref=e109]: A
+      - generic [ref=e110]:
+        - generic [ref=e111]: adminmaster
+        - generic [ref=e112]: ADMIN
+      - img [ref=e113]: unfold_more
+  - generic [ref=e114]:
+    - banner [ref=e115]:
+      - generic [ref=e116]:
+        - button [ref=e117] [cursor=pointer]:
+          - img [ref=e118]: help_outline
+        - button [ref=e119] [cursor=pointer]:
+          - img [ref=e120]: notifications_none
+        - button [ref=e122] [cursor=pointer]:
+          - img [ref=e123]: logout
+    - main [ref=e124]:
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - generic [ref=e128]:
+            - heading "Leads" [level=1] [ref=e129]
+            - paragraph [ref=e130]: Matérias coletadas das fontes oficiais classificadas para análise
+          - button "Rastreabilidade" [ref=e131] [cursor=pointer]:
+            - img [ref=e132]: history
+            - text: Rastreabilidade
+        - generic [ref=e134]:
+          - generic [ref=e135]:
+            - img [ref=e136]: manage_search
+            - generic [ref=e137]:
+              - generic [ref=e138]: Buscar leads
+              - generic [ref=e139]: Colete matérias do DODF, DOU ou filtre por PNCP
+          - button "Buscar leads" [ref=e140] [cursor=pointer]:
+            - img [ref=e141]: search
+            - text: Buscar leads
+        - group "Filtros por status" [ref=e142]:
+          - button "Todos" [pressed] [ref=e143] [cursor=pointer]:
+            - text: Todos
+            - generic [ref=e144]: "0"
+          - button "Novos Leads" [ref=e145] [cursor=pointer]:
+            - text: Novos Leads
+            - generic [ref=e146]: "0"
+          - button "Aprov. Presidência" [ref=e147] [cursor=pointer]:
+            - text: Aprov. Presidência
+            - generic [ref=e148]: "0"
+          - button "Estudo e Viab." [ref=e149] [cursor=pointer]:
+            - text: Estudo e Viab.
+            - generic [ref=e150]: "0"
+          - button "2ª Aprovação" [ref=e151] [cursor=pointer]:
+            - text: 2ª Aprovação
+            - generic [ref=e152]: "0"
+          - button "Descartado" [ref=e153] [cursor=pointer]:
+            - text: Descartado
+            - generic [ref=e154]: "0"
+        - generic [ref=e155]:
+          - img [ref=e156]: inbox
+          - heading "Nenhum lead encontrado" [level=2] [ref=e157]
+          - paragraph [ref=e158]: Dispare uma busca nas fontes DODF, DOU ou PNCP para começar.

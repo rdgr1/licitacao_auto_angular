@@ -6,9 +6,10 @@ export const routes: Routes = [
   // Public: Login
   {
     path: 'login',
+    data: { title: 'Entrar — LicitaFlow' },
     canActivate: [guestGuard],
     loadComponent: () =>
-      import('./features/auth/login/login.component').then(m => m.LoginComponent),
+      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
   },
 
   // Public: Forgot password
@@ -16,7 +17,9 @@ export const routes: Routes = [
     path: 'forgot-password',
     canActivate: [guestGuard],
     loadComponent: () =>
-      import('./features/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent),
+      import('./features/auth/forgot-password/forgot-password.component').then(
+        (m) => m.ForgotPasswordComponent,
+      ),
   },
 
   // Public: Reset password
@@ -24,7 +27,9 @@ export const routes: Routes = [
     path: 'reset-password',
     canActivate: [guestGuard],
     loadComponent: () =>
-      import('./features/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
+      import('./features/auth/reset-password/reset-password.component').then(
+        (m) => m.ResetPasswordComponent,
+      ),
   },
 
   // Protected: App shell
@@ -40,38 +45,48 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
+        data: { title: 'Dashboard — LicitaFlow' },
         loadComponent: () =>
-          import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
       {
         path: 'pipeline',
+        data: { title: 'Pipeline — LicitaFlow' },
         loadComponent: () =>
-          import('./features/pipeline/pipeline.component').then(m => m.PipelineComponent),
+          import('./features/pipeline/pipeline.component').then((m) => m.PipelineComponent),
       },
       {
         path: 'editais',
+        data: { title: 'Editais — LicitaFlow' },
         loadComponent: () =>
-          import('./features/editais/editais-list/editais-list.component').then(m => m.EditaisListComponent),
+          import('./features/editais/editais-list/editais-list.component').then(
+            (m) => m.EditaisListComponent,
+          ),
       },
       {
         path: 'editais/:id',
+        data: { title: 'Edital — LicitaFlow' },
         loadComponent: () =>
-          import('./features/editais/edital-details/edital-details.component').then(m => m.EditalDetailsComponent),
+          import('./features/editais/edital-details/edital-details.component').then(
+            (m) => m.EditalDetailsComponent,
+          ),
       },
       {
         path: 'impugnacao',
         loadComponent: () =>
-          import('./features/impugnacao/impugnacao.component').then(m => m.ImpugnacaoComponent),
+          import('./features/impugnacao/impugnacao.component').then((m) => m.ImpugnacaoComponent),
       },
       {
         path: 'assistente',
-        loadComponent: () =>
-          import('./features/chat/chat.component').then(m => m.ChatComponent),
+        loadComponent: () => import('./features/chat/chat.component').then((m) => m.ChatComponent),
       },
       {
         path: 'configuracoes',
+        data: { title: 'Configurações — LicitaFlow' },
         loadComponent: () =>
-          import('./features/configuracoes/configuracoes.component').then(m => m.ConfiguracoesComponent),
+          import('./features/configuracoes/configuracoes.component').then(
+            (m) => m.ConfiguracoesComponent,
+          ),
       },
       // compatibilidade com rota antiga
       {
@@ -81,35 +96,33 @@ export const routes: Routes = [
       },
       {
         path: 'leads',
+        data: { title: 'Leads — LicitaFlow' },
         loadComponent: () =>
-          import('./features/leads/leads.component').then(m => m.LeadsComponent),
-      },
-      {
-        path: 'notificacoes',
-        loadComponent: () =>
-          import('./features/notificacoes/notificacoes.component').then(m => m.NotificacoesComponent),
+          import('./features/leads/leads.component').then((m) => m.LeadsComponent),
       },
       // Cotação domain
       {
         path: 'cotacao/fornecedores',
         loadComponent: () =>
-          import('./features/cotacao/fornecedores/fornecedores.component').then(m => m.FornecedoresComponent),
+          import('./features/cotacao/fornecedores/fornecedores.component').then(
+            (m) => m.FornecedoresComponent,
+          ),
       },
       {
         path: 'cotacao/itens',
         loadComponent: () =>
-          import('./features/cotacao/itens/itens.component').then(m => m.ItensComponent),
+          import('./features/cotacao/itens/itens.component').then((m) => m.ItensComponent),
       },
       // Placeholder routes
       {
         path: 'perfil',
         loadComponent: () =>
-          import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
       {
         path: 'configuracoes',
         loadComponent: () =>
-          import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
     ],
   },

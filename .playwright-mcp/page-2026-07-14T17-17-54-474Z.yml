@@ -1,0 +1,160 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img [ref=e8]: gavel
+      - generic [ref=e9]: LicitaFlow
+      - button [ref=e10] [cursor=pointer]:
+        - img [ref=e11]: chevron_left
+    - navigation [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: Licitações
+        - link "Leads" [ref=e15] [cursor=pointer]:
+          - /url: /leads
+          - img [ref=e16]: list_alt
+        - link "Pipeline" [ref=e18] [cursor=pointer]:
+          - /url: /pipeline
+          - img [ref=e19]: view_kanban
+        - link "Editais" [active] [ref=e21] [cursor=pointer]:
+          - /url: /editais
+          - img [ref=e22]: description
+    - generic [ref=e26] [cursor=pointer]:
+      - generic [ref=e27]: A
+      - generic [ref=e28]:
+        - generic [ref=e29]: adminmaster
+        - generic [ref=e30]: ADMIN
+      - img [ref=e31]: unfold_more
+  - generic [ref=e32]:
+    - banner [ref=e33]:
+      - generic [ref=e34]:
+        - button [ref=e35] [cursor=pointer]:
+          - img [ref=e36]: help_outline
+        - button [ref=e37] [cursor=pointer]:
+          - img [ref=e38]: notifications_none
+        - button [ref=e40] [cursor=pointer]:
+          - img [ref=e41]: logout
+    - main [ref=e42]:
+      - generic [ref=e313]:
+        - generic [ref=e314]:
+          - generic [ref=e315]:
+            - heading "Editais" [level=1] [ref=e316]
+            - paragraph [ref=e317]: 3 registro(s)
+          - generic [ref=e318]:
+            - generic [ref=e321]:
+              - generic: Buscar editais
+              - img [ref=e324]: search
+              - textbox "Buscar editais" [ref=e326]:
+                - /placeholder: Número, objeto ou órgão...
+            - button "Recarregar editais" [ref=e327] [cursor=pointer]:
+              - img [ref=e328]: refresh
+        - list "Resumo dos editais" [ref=e329]:
+          - listitem [ref=e330]:
+            - img [ref=e331]: inventory_2
+            - generic [ref=e332]: "3"
+            - generic [ref=e333]: Total
+          - listitem "0 processados" [ref=e334]:
+            - img [ref=e335]: task_alt
+            - generic [ref=e336]: "0"
+            - generic [ref=e337]: Processados
+          - listitem "3 pendentes" [ref=e338]:
+            - img [ref=e339]: pending
+            - generic [ref=e340]: "3"
+            - generic [ref=e341]: Pendentes
+          - listitem "0 erros" [ref=e342]:
+            - img [ref=e343]: error_outline
+            - generic [ref=e344]: "0"
+            - generic [ref=e345]: Erros
+          - listitem "Valor estimado total" [ref=e346]:
+            - img [ref=e347]: payments
+            - generic [ref=e348]: R$ 0,00
+            - generic [ref=e349]: Valor estimado
+        - navigation "Filtros por status" [ref=e350]:
+          - button "Todos, 3 editais" [pressed] [ref=e351] [cursor=pointer]:
+            - text: Todos
+            - generic [ref=e352]: "3"
+          - button "Processado, 0 editais" [ref=e353] [cursor=pointer]:
+            - text: Processado
+            - generic [ref=e355]: "0"
+          - button "Pendente, 3 editais" [ref=e356] [cursor=pointer]:
+            - text: Pendente
+            - generic [ref=e358]: "3"
+          - button "Processando, undefined editais" [ref=e359] [cursor=pointer]: Processando
+          - button "Erro, 0 editais" [ref=e361] [cursor=pointer]:
+            - text: Erro
+            - generic [ref=e363]: "0"
+          - button "Antecipado, undefined editais" [ref=e364] [cursor=pointer]: Antecipado
+          - button "Arquivado, undefined editais" [ref=e366] [cursor=pointer]: Arquivado
+        - generic [ref=e368]:
+          - table "Lista de editais" [ref=e369]:
+            - rowgroup [ref=e370]:
+              - row [ref=e371]:
+                - columnheader [ref=e372] [cursor=pointer]:
+                  - button "Número / Órgão" [ref=e373]
+                - columnheader [ref=e378] [cursor=pointer]:
+                  - button "Objeto" [ref=e379]
+                - columnheader [ref=e384] [cursor=pointer]:
+                  - button "Modalidade" [ref=e385]
+                - columnheader [ref=e390] [cursor=pointer]:
+                  - button "Valor est." [ref=e391]
+                - columnheader [ref=e396] [cursor=pointer]:
+                  - button "Abertura" [ref=e397]
+                - columnheader [ref=e402] [cursor=pointer]:
+                  - button "Status" [ref=e403]
+                - columnheader "Ações" [ref=e408]
+            - rowgroup [ref=e409]:
+              - 'row "Ver detalhes: 00394700000108-1-000213/2026" [ref=e410] [cursor=pointer]':
+                - cell "00394700000108-1-000213/2026 DISTRITO FEDERAL SECRETARIA DE SAUDE" [ref=e411]:
+                  - generic [ref=e412]:
+                    - generic "00394700000108-1-000213/2026" [ref=e413]
+                    - generic "DISTRITO FEDERAL SECRETARIA DE SAUDE" [ref=e414]
+                - cell [ref=e415]:
+                  - paragraph [ref=e416]: Processo de Solicitação de Registro de Preços potencial aquisição de Órteses, Próteses e M...
+                - cell "PREGAO ELETRÔNICO" [ref=e417]
+                - cell "R$ 51.420,00" [ref=e418]
+                - cell "25/05/2026" [ref=e421]
+                - cell [ref=e425]:
+                  - 'generic "Status: Pendente" [ref=e426]': Pendente
+                - cell [ref=e428]:
+                  - button "Ações do edital 00394700000108-1-000213/2026" [ref=e429]:
+                    - img [ref=e430]: more_vert
+              - 'row "Ver detalhes: 01173053000177-1-000006/2026" [ref=e431] [cursor=pointer]':
+                - cell "01173053000177-1-000006/2026 MUNICIPIO DE AGUA LIMPA" [ref=e432]:
+                  - generic [ref=e433]:
+                    - generic "01173053000177-1-000006/2026" [ref=e434]
+                    - generic "MUNICIPIO DE AGUA LIMPA" [ref=e435]
+                - cell [ref=e436]:
+                  - paragraph [ref=e437]: ABERTURA DE PROCESSO LICITATÓRIO PARA AQUISIÇÃO DE PNEUS E AFINS, ATRAVÉS DO SISTEMA DE RE...
+                - cell "PREGAO ELETRÔNICO" [ref=e438]
+                - cell "R$ 361.871,20" [ref=e439]
+                - cell "01/06/2026" [ref=e442]
+                - cell [ref=e446]:
+                  - 'generic "Status: Pendente" [ref=e447]': Pendente
+                - cell [ref=e449]:
+                  - button "Ações do edital 01173053000177-1-000006/2026" [ref=e450]:
+                    - img [ref=e451]: more_vert
+              - 'row "Ver detalhes: 15126437000305-1-001965/2026" [ref=e452] [cursor=pointer]':
+                - cell "15126437000305-1-001965/2026 EMPRESA BRASILEIRA DE SERVICOS HOSPITALARES - EBSERH" [ref=e453]:
+                  - generic [ref=e454]:
+                    - generic "15126437000305-1-001965/2026" [ref=e455]
+                    - generic "EMPRESA BRASILEIRA DE SERVICOS HOSPITALARES - EBSERH" [ref=e456]
+                - cell [ref=e457]:
+                  - paragraph [ref=e458]: Este Termo de Referência tem como objeto o Registro de Preços para a aquisição de Produtos...
+                - cell "PREGAO ELETRÔNICO" [ref=e459]
+                - cell "—" [ref=e460]
+                - cell "01/06/2026" [ref=e463]
+                - cell [ref=e467]:
+                  - 'generic "Status: Pendente" [ref=e468]': Pendente
+                - cell [ref=e470]:
+                  - button "Ações do edital 15126437000305-1-001965/2026" [ref=e471]:
+                    - img [ref=e472]: more_vert
+          - group "Navegação de páginas" [ref=e473]:
+            - generic [ref=e475]:
+              - generic [ref=e476]:
+                - generic [ref=e477]: "Items per page:"
+                - combobox "Items per page:" [ref=e482] [cursor=pointer]:
+                  - generic [ref=e483]: "25"
+              - generic [ref=e491]:
+                - status [ref=e492]: 1 – 3 of 3
+                - button "First page" [disabled] [ref=e493]
+                - button "Previous page" [disabled] [ref=e498]
+                - button "Next page" [disabled] [ref=e503]
+                - button "Last page" [disabled] [ref=e508]

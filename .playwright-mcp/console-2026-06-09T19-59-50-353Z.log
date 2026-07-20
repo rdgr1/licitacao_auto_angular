@@ -1,0 +1,4 @@
+[     344ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/Users/rrxx/rdPersonal/Trabalho/licitacao_auto_angular/.angular/cache/21.1.3/licitacao_auto_angular/vite/deps/chunk-P4QADCRM.js?v=814bfaf5:13958
+[     432ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/leads?page=0&size=12:0
+[     438ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/notificacoes/stream:0
+[   94937ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ http://localhost:8083/licitaflow/api/leads?page=0&size=12:0

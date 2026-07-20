@@ -285,8 +285,8 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       gap: 16px;
       margin-bottom: 28px;
 
-      h1 { font-size: 22px; font-weight: 800; color: #0D1526; margin: 0 0 4px; }
-      p  { color: #64748B; font-size: 13.5px; line-height: 1.5; margin: 0; }
+      h1 { font-size: 22px; font-weight: 800; color: var(--text-primary, #0D1526); margin: 0 0 4px; }
+      p  { color: var(--text-muted, #64748B); font-size: 13.5px; line-height: 1.5; margin: 0; }
     }
 
     .header-icon {
@@ -330,7 +330,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       gap: 10px;
       font-size: 14px;
       font-weight: 700;
-      color: #0D1526;
+      color: var(--text-primary, #0D1526);
       margin-bottom: 16px;
     }
 
@@ -352,7 +352,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
 
     .optional {
       font-weight: 400;
-      color: #94A3B8;
+      color: var(--text-muted, #94A3B8);
       font-size: 12px;
     }
 
@@ -415,14 +415,14 @@ type Step = 'search' | 'found' | 'generating' | 'done';
     .edital-number {
       font-size: 20px;
       font-weight: 800;
-      color: #0D1526;
+      color: var(--text-primary, #0D1526);
       letter-spacing: -0.3px;
       margin-bottom: 8px;
     }
 
     .edital-objeto {
       font-size: 13px;
-      color: #475569;
+      color: var(--text-secondary, #475569);
       line-height: 1.5;
       margin: 0 0 16px;
     }
@@ -439,13 +439,13 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       align-items: center;
       gap: 8px;
       font-size: 13px;
-      color: #475569;
+      color: var(--text-secondary, #475569);
 
       mat-icon {
         font-size: 16px;
         width: 16px;
         height: 16px;
-        color: #94A3B8;
+        color: var(--text-muted, #94A3B8);
         flex-shrink: 0;
       }
 
@@ -501,7 +501,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       gap: 12px;
       padding: 18px 20px;
       border-bottom: 1px solid #E2E8F0;
-      background: #F8FAFC;
+      background: var(--content-bg, #F8FAFC);
     }
 
     .result-title {
@@ -510,7 +510,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       gap: 8px;
       font-size: 15px;
       font-weight: 700;
-      color: #0D1526;
+      color: var(--text-primary, #0D1526);
 
       mat-icon { font-size: 20px; width: 20px; height: 20px; color: #0DA66E; }
     }
@@ -525,10 +525,10 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       border-radius: 8px !important;
       font-size: 13px !important;
       border-color: #E2E8F0 !important;
-      color: #475569 !important;
+      color: var(--text-secondary, #475569) !important;
       gap: 5px;
 
-      &:hover { background: #F1F5F9 !important; }
+      &:hover { background: var(--content-bg, #F1F5F9) !important; }
 
       mat-icon { font-size: 16px; width: 16px; height: 16px; }
     }
@@ -576,7 +576,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #94A3B8;
+      color: var(--text-muted, #94A3B8);
       margin-bottom: 10px;
     }
 
@@ -593,7 +593,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
         align-items: flex-start;
         gap: 8px;
         font-size: 13px;
-        color: #475569;
+        color: var(--text-secondary, #475569);
 
         mat-icon {
           font-size: 16px;
@@ -633,7 +633,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       font-family: 'Georgia', serif;
       font-size: 12.5px;
       line-height: 1.8;
-      color: #1E293B;
+      color: var(--text-primary, #1E293B);
       white-space: pre-wrap;
       word-break: break-word;
       background: #FEFEFE;
@@ -651,12 +651,12 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       gap: 8px;
       padding: 14px 20px;
       font-size: 13px;
-      color: #475569;
+      color: var(--text-secondary, #475569);
       background: #FFFBEB;
 
       mat-icon { font-size: 18px; width: 18px; height: 18px; color: #F59E0B; }
 
-      strong { color: #0D1526; }
+      strong { color: var(--text-primary, #0D1526); }
     }
 
     /* ── Generating card ─────────────────────────────────────────────── */
@@ -669,8 +669,8 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       align-items: center;
       gap: 16px;
 
-      h3 { font-size: 18px; font-weight: 700; color: #0D1526; margin: 0; }
-      p  { font-size: 13.5px; color: #64748B; max-width: 320px; line-height: 1.6; margin: 0; }
+      h3 { font-size: 18px; font-weight: 700; color: var(--text-primary, #0D1526); margin: 0; }
+      p  { font-size: 13.5px; color: var(--text-muted, #64748B); max-width: 320px; line-height: 1.6; margin: 0; }
     }
 
     .generating-steps {
@@ -687,7 +687,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       align-items: center;
       gap: 8px;
       font-size: 13px;
-      color: #94A3B8;
+      color: var(--text-muted, #94A3B8);
 
       mat-icon { font-size: 16px; width: 16px; height: 16px; color: #11BF7F; }
 
@@ -701,7 +701,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
 
       &.done { color: #11BF7F; }
       &.active { color: #0DA66E; animation: blink 1s infinite; }
-      &.pending { color: #CBD5E1; }
+      &.pending { color: var(--text-muted, #CBD5E1); }
     }
 
     @keyframes blink {
@@ -710,14 +710,14 @@ type Step = 'search' | 'found' | 'generating' | 'done';
     }
 
     /* ── Placeholder card ────────────────────────────────────────────── */
-    .placeholder-card { border: 2px dashed #E2E8F0; background: #FAFBFC; }
+    .placeholder-card { border: 2px dashed #E2E8F0; background: var(--content-bg, #FAFBFC); }
 
     .placeholder-inner {
       padding: 32px;
       text-align: center;
 
-      h3 { font-size: 18px; font-weight: 700; color: #0D1526; margin: 16px 0 8px; }
-      p  { font-size: 13.5px; color: #64748B; max-width: 340px; margin: 0 auto 24px; line-height: 1.6; }
+      h3 { font-size: 18px; font-weight: 700; color: var(--text-primary, #0D1526); margin: 16px 0 8px; }
+      p  { font-size: 13.5px; color: var(--text-muted, #64748B); max-width: 340px; margin: 0 auto 24px; line-height: 1.6; }
     }
 
     .placeholder-icon {
@@ -730,7 +730,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       justify-content: center;
       margin: 0 auto;
 
-      mat-icon { font-size: 28px; width: 28px; height: 28px; color: #94A3B8; }
+      mat-icon { font-size: 28px; width: 28px; height: 28px; color: var(--text-muted, #94A3B8); }
     }
 
     .capabilities {
@@ -747,7 +747,7 @@ type Step = 'search' | 'found' | 'generating' | 'done';
       align-items: center;
       gap: 8px;
       font-size: 13px;
-      color: #475569;
+      color: var(--text-secondary, #475569);
 
       mat-icon { font-size: 16px; width: 16px; height: 16px; color: #11BF7F; flex-shrink: 0; }
     }

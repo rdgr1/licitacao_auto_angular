@@ -4,11 +4,21 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Lead, LeadStatus, AtualizarStatusRequest } from '../models/lead.model';
-import { Page, EditalResponse } from '../models/edital.model';
+import { Page } from '../models/edital.model';
+import { BuscaEdital } from '../models/busca-edital.model';
 
 const toPage = <T>(res: Page<T> | T[]): Page<T> =>
   Array.isArray(res)
-    ? { content: res, totalElements: res.length, totalPages: 1, size: res.length, number: 0, first: true, last: true, empty: res.length === 0 }
+    ? {
+        content: res,
+        totalElements: res.length,
+        totalPages: 1,
+        size: res.length,
+        number: 0,
+        first: true,
+        last: true,
+        empty: res.length === 0,
+      }
     : res;
 
 @Injectable({ providedIn: 'root' })
@@ -16,12 +26,19 @@ export class LeadService {
   private http = inject(HttpClient);
   private base = `${environment.apiUrl}/leads`;
 
-  listar(filtros: { status?: LeadStatus; fonte?: string; page?: number; size?: number } = {}): Observable<Page<Lead>> {
-    let params = new HttpParams()
-      .set('page', filtros.page ?? 0)
-      .set('size', filtros.size ?? 20);
+  listar(
+    filtros: {
+      status?: LeadStatus;
+      fonte?: string;
+      scoreMin?: number;
+      page?: number;
+      size?: number;
+    } = {},
+  ): Observable<Page<Lead>> {
+    let params = new HttpParams().set('page', filtros.page ?? 0).set('size', filtros.size ?? 20);
     if (filtros.status) params = params.set('status', filtros.status);
     if (filtros.fonte) params = params.set('fonte', filtros.fonte);
+    if (filtros.scoreMin != null) params = params.set('scoreMin', filtros.scoreMin);
     return this.http.get<Page<Lead> | Lead[]>(this.base, { params }).pipe(map(toPage));
   }
 
@@ -33,8 +50,12 @@ export class LeadService {
     return this.http.patch<Lead>(`${this.base}/${uuid}/status`, req);
   }
 
-  // Vincula o lead ao melhor edital encontrado no PNCP (idempotente)
-  buscarEdital(uuid: string): Observable<EditalResponse> {
-    return this.http.post<EditalResponse>(`${this.base}/${uuid}/buscar-edital`, {});
+  // Dispara a busca assíncrona do edital no PNCP (202 Accepted — conclui via statusBuscaEdital)
+  buscarEdital(uuid: string): Observable<BuscaEdital> {
+    return this.http.post<BuscaEdital>(`${this.base}/${uuid}/buscar-edital`, {});
+  }
+
+  statusBuscaEdital(uuid: string): Observable<BuscaEdital> {
+    return this.http.get<BuscaEdital>(`${this.base}/${uuid}/buscar-edital/status`);
   }
 }

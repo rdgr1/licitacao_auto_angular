@@ -1,0 +1,64 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]: gavel
+        - generic [ref=e10]: LicitaFlow
+      - generic [ref=e11]:
+        - heading "Inteligência artificial a serviço das licitações" [level=1] [ref=e12]: Inteligência artificiala serviço das licitações
+        - paragraph [ref=e13]: Automatize a coleta, classifique editais e impugne irregularidades com IA de ponta.
+      - list [ref=e14]:
+        - listitem [ref=e15]:
+          - img [ref=e17]: auto_awesome
+          - generic [ref=e18]:
+            - strong [ref=e19]: Classificação automática
+            - text: IA analisa e pontua cada edital por relevância
+        - listitem [ref=e20]:
+          - img [ref=e22]: view_kanban
+          - generic [ref=e23]:
+            - strong [ref=e24]: Pipeline estilo CRM
+            - text: Gerencie leads de licitação como oportunidades
+        - listitem [ref=e25]:
+          - img [ref=e27]: smart_toy
+          - generic [ref=e28]:
+            - strong [ref=e29]: Assistente RAG
+            - text: Pergunte qualquer coisa sobre os seus editais
+        - listitem [ref=e30]:
+          - img [ref=e32]: gavel
+          - generic [ref=e33]:
+            - strong [ref=e34]: Motor de Impugnação
+            - text: Gere petições fundamentadas em segundos
+  - main [ref=e35]:
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - heading "Bem-vindo de volta" [level=2] [ref=e39]
+        - paragraph [ref=e40]: Entre com suas credenciais para acessar o painel
+      - generic [ref=e41]:
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - text: E-mail corporativo
+            - generic [ref=e46]: "*"
+          - img [ref=e48]: mail_outline
+          - textbox "E-mail corporativo" [ref=e50]:
+            - /placeholder: voce@empresa.com.br
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - text: Senha
+            - generic [ref=e55]: "*"
+          - img [ref=e57]: lock_outline
+          - textbox "Senha" [ref=e59]:
+            - /placeholder: ••••••••
+          - button "Mostrar senha" [ref=e61] [cursor=pointer]:
+            - img [ref=e62]: visibility
+        - generic [ref=e67]:
+          - checkbox "Lembrar por 30 dias" [ref=e70] [cursor=pointer]
+          - generic [ref=e71] [cursor=pointer]: Lembrar por 30 dias
+        - button "Entrar na plataforma" [ref=e72]:
+          - generic [ref=e74]:
+            - generic [ref=e75]: Entrar na plataforma
+            - img [ref=e76]: arrow_forward
+      - paragraph [ref=e79]:
+        - text: Não tem acesso?
+        - link "Solicitar demonstração" [ref=e80] [cursor=pointer]:
+          - /url: "#"
+    - paragraph [ref=e81]: Monitoramento inteligente de licitações públicas

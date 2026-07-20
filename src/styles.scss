@@ -83,6 +83,57 @@ html {
   --color-error:             #EF4444;
   --color-info:              #3B82F6;
 
+  // Fontes de coleta
+  --fonte-dodf-bg:    rgba(99,102,241,0.10);
+  --fonte-dodf-color: #4F46E5;
+  --fonte-dou-bg:     rgba(59,130,246,0.10);
+  --fonte-dou-color:  #2563EB;
+  --fonte-pncp-bg:    rgba(245,158,11,0.10);
+  --fonte-pncp-color: #D97706;
+
+  // Lead status
+  --lead-novo-bg:      rgba(59,130,246,0.10);
+  --lead-novo-color:   #1E40AF;
+  --lead-qual-bg:      rgba(17,191,127,0.10);
+  --lead-qual-color:   #065F46;
+  --lead-desc-bg:      #F1F5F9;
+  --lead-desc-color:   #64748B;
+
+  // Tints semânticos (badges/status) — reaproveitados em várias telas (ex: editais)
+  --tint-green-bg:         #F0FDF4;
+  --tint-green-text:       #166534;
+  --tint-green-text-strong:#059669;
+  --tint-amber-bg:         #FFFBEB;
+  --tint-amber-text:       #92400E;
+  --tint-purple-bg:        #F5F3FF;
+  --tint-purple-text:      #5B21B6;
+  --tint-purple-icon:      #8B5CF6;
+  --tint-red-bg:           #FFF1F2;
+  --tint-red-text:         #9F1239;
+  --tint-red-text-strong:  #DC2626;
+  --tint-blue-bg:          #EFF6FF;
+  --tint-blue-text:        #1E40AF;
+  --tint-indigo-bg:        #EEF2FF;
+  --tint-indigo-text:      #3730A3;
+  --tint-indigo-icon:      #6366F1;
+  --tint-teal-bg:          #F0FDFA;
+  --tint-teal-text:        #0F766E;
+  --tint-teal-icon:        #14B8A6;
+
+  // Skeleton
+  --skeleton-base:  #E2E8F0;
+  --skeleton-shine: #F8FAFC;
+
+  // Backgrounds animados
+  --lf-bg:       #0c1322;
+  --lf-bg-soft:  #101a2e;
+  --lf-ink:      #e8eef7;
+  --lf-teal:     #2dd4bf;
+  --lf-cyan:     #38bdf8;
+  --lf-indigo:   #6366f1;
+  --lf-gold:     #f0b429;
+  --lf-line:     rgba(141,166,200,.14);
+
   // Spacing
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -104,6 +155,52 @@ html {
   --transition-md: 250ms ease;
 }
 
+// ── Dark mode — overrides das variáveis semânticas ────────────────────────────
+// Sidebar (--sidebar-*) fica de fora de propósito: já é escura nos dois temas.
+:root[data-theme='dark'] {
+  --header-bg:     #151B2B;
+  --header-border: #263248;
+  --content-bg:    #0C1322;
+
+  --card-bg:           #151B2B;
+  --card-border:       #263248;
+  --card-shadow:       0 1px 3px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.25);
+  --card-shadow-hover: 0 8px 24px rgba(0,0,0,0.45);
+
+  --text-primary:   #E8EEF7;
+  --text-secondary: #A9B7CC;
+  --text-muted:     #6B7A93;
+
+  --border:       #263248;
+  --border-focus: #3B82F6;
+
+  --skeleton-base:  #1D2740;
+  --skeleton-shine: #26314C;
+
+  --lead-desc-bg:      #1D2740;
+  --lead-desc-color:   #8A99B3;
+
+  --tint-green-bg:          rgba(22,163,74,0.16);
+  --tint-green-text:        #4ADE80;
+  --tint-green-text-strong: #34D399;
+  --tint-amber-bg:          rgba(217,119,6,0.16);
+  --tint-amber-text:        #FBBF24;
+  --tint-purple-bg:         rgba(139,92,246,0.16);
+  --tint-purple-text:       #C4B5FD;
+  --tint-purple-icon:       #A78BFA;
+  --tint-red-bg:            rgba(225,29,72,0.16);
+  --tint-red-text:          #FDA4AF;
+  --tint-red-text-strong:   #FB7185;
+  --tint-blue-bg:           rgba(59,130,246,0.16);
+  --tint-blue-text:         #93C5FD;
+  --tint-indigo-bg:         rgba(99,102,241,0.16);
+  --tint-indigo-text:       #A5B4FC;
+  --tint-indigo-icon:       #818CF8;
+  --tint-teal-bg:           rgba(20,184,166,0.16);
+  --tint-teal-text:         #5EEAD4;
+  --tint-teal-icon:         #2DD4BF;
+}
+
 // ── Override Material tonal palette ──────────────────────────────────────────
 // mat.$spring-green-palette tone-90 = amarelo-esverdeado → forçamos o verde real
 html {
@@ -115,6 +212,21 @@ html {
   --mat-sys-tertiary:             #0DA66E;
   --mat-sys-tertiary-container:   #D4F5E9;
   --mat-sys-secondary-container:  #E8F5F0;
+
+  // Superfícies neutras — elimina o tint amarelado gerado pelo spring-green-palette
+  --mat-sys-surface:                   #FFFFFF;
+  --mat-sys-on-surface:                #0F172A;
+  --mat-sys-surface-variant:           #F1F5F9;
+  --mat-sys-on-surface-variant:        #475569;
+  --mat-sys-surface-container-lowest:  #FFFFFF;
+  --mat-sys-surface-container-low:     #F8FAFC;
+  --mat-sys-surface-container:         #F1F5F9;
+  --mat-sys-surface-container-high:    #E2E8F0;
+  --mat-sys-surface-container-highest: #CBD5E1;
+  --mat-sys-background:                #F1F5F9;
+  --mat-sys-on-background:             #0F172A;
+  --mat-sys-outline:                   #E2E8F0;
+  --mat-sys-outline-variant:           #CBD5E1;
 
   // MDC Switch (slide-toggle)
   --mdc-switch-selected-track-color:           #11BF7F;
@@ -142,6 +254,25 @@ html {
   --mat-sys-state-layers-primary-opacity: 0.08;
 }
 
+// ── Dark mode — overrides dos tokens M3 do Material ───────────────────────────
+// Cores de marca (primary/tertiary/switch/button) ficam iguais nos dois temas —
+// só as superfícies neutras (fundo/texto/outline) mudam.
+html[data-theme='dark'] {
+  --mat-sys-surface:                   #151B2B;
+  --mat-sys-on-surface:                #E8EEF7;
+  --mat-sys-surface-variant:           #1D2740;
+  --mat-sys-on-surface-variant:        #A9B7CC;
+  --mat-sys-surface-container-lowest:  #0C1322;
+  --mat-sys-surface-container-low:     #151B2B;
+  --mat-sys-surface-container:         #1D2740;
+  --mat-sys-surface-container-high:    #263248;
+  --mat-sys-surface-container-highest: #324063;
+  --mat-sys-background:                #0C1322;
+  --mat-sys-on-background:             #E8EEF7;
+  --mat-sys-outline:                   #263248;
+  --mat-sys-outline-variant:           #324063;
+}
+
 // ── Font variables ────────────────────────────────────────────────────────────
 :root {
   --font-primary: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -160,6 +291,9 @@ body {
   height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+html[data-theme='dark'] body {
+  color-scheme: dark;
 }
 
 // ── Typography ────────────────────────────────────────────────────────────────
@@ -328,27 +462,6 @@ h1, h2, h3, h4, h5, h6 {
   &.cold { background: var(--score-cold); }
 }
 
-// ── Snackbars ─────────────────────────────────────────────────────────────────
-.snackbar-success {
-  --mdc-snackbar-container-color: var(--color-success);
-  --mat-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
-}
-.snackbar-error {
-  --mdc-snackbar-container-color: var(--color-error);
-  --mat-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
-}
-.snackbar-info {
-  --mdc-snackbar-container-color: var(--color-info);
-  --mat-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
-}
-.snackbar-warning {
-  --mdc-snackbar-container-color: var(--color-warning);
-  --mat-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
-}
 
 // ── Responsive Utilities ──────────────────────────────────────────────────────
 .hide-mobile { display: block; }
@@ -366,6 +479,42 @@ h1, h2, h3, h4, h5, h6 {
 .mat-mdc-flat-button.mat-primary .mat-ripple-element { background-color: rgba(17,191,127,0.12) !important; }
 
 .mat-mdc-chip.mat-primary { background-color: rgba(17,191,127,0.10) !important; }
+
+// Componentes MDC — força branco/neutro nos containers internos
+html {
+  --mdc-filled-text-field-container-color:        #F8FAFC;
+  --mdc-filled-text-field-hover-container-color:  #F1F5F9;
+  --mat-select-panel-background-color:            #FFFFFF;
+  --mat-autocomplete-background-color:            #FFFFFF;
+  --mat-menu-container-color:                     #FFFFFF;
+  --mat-dialog-container-color:                   #FFFFFF;
+  --mat-table-background-color:                   #FFFFFF;
+  --mat-table-row-item-container-color:           #FFFFFF;
+  --mat-paginator-container-background-color:     #FAFBFC;
+  --mat-option-selected-state-layer-color:        rgba(17,191,127,0.10);
+}
+
+// Dark mode — os mesmos containers MDC forçados acima (dialogs, menus,
+// select/autocomplete panels, tabelas, paginator) recebem superfícies escuras.
+html[data-theme='dark'] {
+  --mdc-filled-text-field-container-color:        #1D2740;
+  --mdc-filled-text-field-hover-container-color:  #263248;
+  --mat-select-panel-background-color:            #151B2B;
+  --mat-autocomplete-background-color:            #151B2B;
+  --mat-menu-container-color:                     #151B2B;
+  --mat-dialog-container-color:                   #151B2B;
+  --mat-table-background-color:                   #151B2B;
+  --mat-table-row-item-container-color:           #151B2B;
+  --mat-paginator-container-background-color:     #151B2B;
+
+  // mat-chip-option (ex: fontes DODF/DOU/PNCP em Preferências) — o tema M3
+  // gera esses tokens com cor resolvida em build time a partir da paleta
+  // clara, não como var(--mat-sys-*) live, então precisam de override próprio.
+  --mdc-chip-label-text-color:                    #A9B7CC;
+  --mdc-chip-outline-color:                       #324063;
+  --mdc-chip-elevated-selected-container-color:   rgba(17,191,127,0.16);
+  --mdc-chip-selected-label-text-color:           #11BF7F;
+}
 
 // Forçar cor verde em todos os estados do slide-toggle
 mat-slide-toggle.mat-primary {
@@ -392,16 +541,16 @@ html {
 // Fonte única: mudança aqui reflete em ambos os componentes automaticamente.
 // clamp(min, preferred, max) — ligeiramente maior em telas grandes.
 .cfg-table {
-  --mat-table-background-color:           #ffffff !important;
-  --mat-table-row-item-container-color:   #ffffff !important;
-  --mat-table-row-item-label-text-color:  #334155;
+  --mat-table-background-color:           var(--card-bg, #ffffff) !important;
+  --mat-table-row-item-container-color:   var(--card-bg, #ffffff) !important;
+  --mat-table-row-item-label-text-color:  var(--text-secondary, #334155);
   --mat-table-header-container-height:    40px;
   --mat-table-row-item-container-height:  clamp(38px, 3.2vw, 46px);
 
   .mat-mdc-row,
-  .mat-mdc-header-row { background: #ffffff !important; }
+  .mat-mdc-header-row { background: var(--card-bg, #ffffff) !important; }
 
-  .mat-mdc-row:hover .mat-mdc-cell { background: #F8FAFC !important; }
+  .mat-mdc-row:hover .mat-mdc-cell { background: var(--content-bg, #F8FAFC) !important; }
 
   // Toggle compacto — clamp: ligeiramente maior em telas maiores
   .mdc-switch {
@@ -427,6 +576,20 @@ html {
   }
 }
 
+// ── Accessibility ─────────────────────────────────────────────────────────────
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 // ── Scrollbar ─────────────────────────────────────────────────────────────────
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -437,9 +600,13 @@ html {
 }
 
 // ── Toast styles ──────────────────────────────────────────────────────────────
+// Single source of truth for all snackbar/toast variants (ToastService + NotificationService).
 .toast-success .mdc-snackbar__surface { background: #10B981 !important; }
 .toast-error .mdc-snackbar__surface { background: #EF4444 !important; }
-.mdc-snackbar__label { color: white !important; font-weight: 500 !important; }
+.toast-info .mdc-snackbar__surface { background: var(--color-info) !important; }
+.toast-warning .mdc-snackbar__surface { background: var(--color-warning) !important; }
+.mdc-snackbar__surface { padding-inline: 0.25rem; }
+.mdc-snackbar__label { color: white !important; font-weight: 500 !important; padding: 0.875rem 1rem !important; }
 .mdc-snackbar__actions button { color: rgba(255,255,255,0.8) !important; }
 
 // ── Text Utilities ────────────────────────────────────────────────────────────
@@ -612,6 +779,25 @@ html {
   animation: grid-drift 16s linear infinite;
 }
 
+@keyframes skeleton-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-shine) 50%,
+    var(--skeleton-base) 75%);
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+.page-content {
+  transition: opacity 200ms ease;
+}
+
 // Reduced motion
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -619,4 +805,5 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  .skeleton { animation: none; background: var(--skeleton-base); }
 }

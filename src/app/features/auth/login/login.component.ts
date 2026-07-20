@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth.service';
+import { BackgroundLayerComponent } from '../../../shared/components/background-layer/background-layer.component';
 
 @Component({
   selector: 'app-login',
@@ -21,9 +22,11 @@ import { AuthService } from '../../../core/services/auth.service';
     MatIconModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    BackgroundLayerComponent,
   ],
   template: `
     <div class="auth-shell">
+      <app-bg-layer variant="network"></app-bg-layer>
 
       <!-- ── Left panel ──────────────────────────────────────────────── -->
       <aside class="auth-brand">
@@ -85,88 +88,95 @@ import { AuthService } from '../../../core/services/auth.service';
 
       <!-- ── Right panel ─────────────────────────────────────────────── -->
       <main class="auth-form-panel">
-        <div class="form-inner animate-fade-up">
-          <!-- Mobile logo -->
-          <div class="mobile-logo">
-            <div class="logo-icon sm"><mat-icon>gavel</mat-icon></div>
-            <span>LicitaFlow</span>
-          </div>
-
-          <div class="form-header">
-            <h2>Bem-vindo de volta</h2>
-            <p>Entre com suas credenciais para acessar o painel</p>
-          </div>
-
-          @if (errorMsg()) {
-            <div class="error-banner" role="alert">
-              <mat-icon>error_outline</mat-icon>
-              <span>{{ errorMsg() }}</span>
+        <div class="container-inner">
+          <div class="form-inner animate-fade-up">
+            <!-- Mobile logo -->
+            <div class="mobile-logo">
+              <div class="logo-icon sm"><mat-icon>gavel</mat-icon></div>
+              <span>LicitaFlow</span>
             </div>
-          }
 
-          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+            <div class="form-header">
+              <h2>Bem-vindo de volta</h2>
+              <p>Entre com suas credenciais para acessar o painel</p>
+            </div>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>E-mail corporativo</mat-label>
-              <mat-icon matPrefix>mail_outline</mat-icon>
-              <input matInput type="email" formControlName="email"
-                     placeholder="voce@empresa.com.br"
-                     autocomplete="email" />
-              @if (form.controls.email.touched && form.controls.email.errors?.['required']) {
-                <mat-error>E-mail é obrigatório</mat-error>
-              }
-              @if (form.controls.email.touched && form.controls.email.errors?.['email']) {
-                <mat-error>Informe um e-mail válido</mat-error>
-              }
-            </mat-form-field>
+            @if (errorMsg()) {
+              <div class="error-banner" role="alert">
+                <mat-icon>error_outline</mat-icon>
+                <span>{{ errorMsg() }}</span>
+              </div>
+            }
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Senha</mat-label>
-              <mat-icon matPrefix>lock_outline</mat-icon>
-              <input matInput
-                     [type]="showPass() ? 'text' : 'password'"
-                     formControlName="password"
-                     placeholder="••••••••"
-                     autocomplete="current-password" />
-              <button mat-icon-button matSuffix type="button"
-                      (click)="showPass.set(!showPass())"
-                      [attr.aria-label]="showPass() ? 'Ocultar senha' : 'Mostrar senha'">
-                <mat-icon>{{ showPass() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>E-mail corporativo</mat-label>
+                <mat-icon matPrefix>mail_outline</mat-icon>
+                <input matInput type="email" formControlName="email"
+                       placeholder="voce@empresa.com.br"
+                       autocomplete="email" />
+                @if (form.controls.email.touched && form.controls.email.errors?.['required']) {
+                  <mat-error>E-mail é obrigatório</mat-error>
+                }
+                @if (form.controls.email.touched && form.controls.email.errors?.['email']) {
+                  <mat-error>Informe um e-mail válido</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Senha</mat-label>
+                <mat-icon matPrefix>lock_outline</mat-icon>
+                <input matInput
+                       [type]="showPass() ? 'text' : 'password'"
+                       formControlName="password"
+                       placeholder="••••••••"
+                       autocomplete="current-password" />
+                <button mat-icon-button matSuffix type="button"
+                        (click)="showPass.set(!showPass())"
+                        [attr.aria-label]="showPass() ? 'Ocultar senha' : 'Mostrar senha'">
+                  <mat-icon>{{ showPass() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                @if (form.controls.password.touched && form.controls.password.errors?.['required']) {
+                  <mat-error>Senha é obrigatória</mat-error>
+                }
+              </mat-form-field>
+
+              <div class="form-row">
+                <mat-checkbox formControlName="rememberMe" color="primary">
+                  Lembrar por 30 dias
+                </mat-checkbox>
+                <!-- MVP: endpoint não existe ainda no backend -->
+                <!-- <a routerLink="/forgot-password" class="forgot-link">Esqueci minha senha</a> -->
+              </div>
+
+              <button mat-flat-button type="submit"
+                      class="submit-btn"
+                      [disabled]="loading()">
+                @if (loading()) {
+                  <div class="button-loading" >
+                    <mat-spinner diameter="20" color="accent"></mat-spinner>
+                    <span>Autenticando...</span>
+                  </div>
+                } @else {
+                  <ng-container >
+                    <div class="button-on">
+                    <span>Entrar na plataforma</span>
+                    <mat-icon>arrow_forward</mat-icon>
+                    </div>
+                  </ng-container>
+                }
               </button>
-              @if (form.controls.password.touched && form.controls.password.errors?.['required']) {
-                <mat-error>Senha é obrigatória</mat-error>
-              }
-            </mat-form-field>
 
-            <div class="form-row">
-              <mat-checkbox formControlName="rememberMe" color="primary">
-                Lembrar por 30 dias
-              </mat-checkbox>
-              <a routerLink="/forgot-password" class="forgot-link">
-                Esqueci minha senha
-              </a>
-            </div>
+            </form>
 
-            <button mat-flat-button type="submit"
-                    class="submit-btn"
-                    [disabled]="loading()">
-              @if (loading()) {
-                <mat-spinner diameter="20" color="accent"></mat-spinner>
-                <span>Autenticando...</span>
-              } @else {
-                <ng-container>
-                  <span>Entrar na plataforma</span>
-                  <mat-icon>arrow_forward</mat-icon>
-                </ng-container>
-              }
-            </button>
-
-          </form>
-
-          <p class="form-footer">
-            Não tem acesso? <a href="#" (click)="$event.preventDefault()">Solicitar demonstração</a>
-          </p>
+            <p class="form-footer">
+              Não tem acesso? <a href="#" (click)="$event.preventDefault()">Solicitar demonstração</a>
+            </p>
+          </div>
         </div>
+        <p class="login-tagline">Monitoramento inteligente de licitações públicas</p>
+
       </main>
     </div>
   `,
@@ -175,8 +185,24 @@ import { AuthService } from '../../../core/services/auth.service';
     .auth-shell {
       display: flex;
       min-height: 100vh;
-      background: #F1F5F9;
+      background: var(--lf-bg, #0D1526);
       font-family: 'Inter Tight', sans-serif;
+      position: relative;
+    }
+
+    .login-tagline {
+      position: relative;
+      display: block;
+      z-index: 1;
+      font-size: 13px;
+      color: rgba(139, 155, 180, 0.7);
+      margin-top: 16px;
+      text-align: center;
+      letter-spacing: 0.02em;
+      align-self: flex-end;
+      padding-bottom: 20px;
+      width: 55%; /* aligns with the right panel */
+      margin-left: auto;
     }
 
     /* ── Left panel ─────────────────────────────────────────────────── */
@@ -253,7 +279,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
       p {
         font-size: 15px;
-        color: #94A3B8;
+        color: var(--text-muted, #94A3B8);
         line-height: 1.6;
       }
     }
@@ -300,7 +326,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
       span {
         font-size: 13px;
-        color: #64748B;
+        color: var(--text-muted, #64748B);
         line-height: 1.4;
       }
     }
@@ -312,7 +338,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
       span {
         font-size: 12px;
-        color: #475569;
+        color: var(--text-secondary, #475569);
         background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 6px;
@@ -345,20 +371,35 @@ import { AuthService } from '../../../core/services/auth.service';
     /* ── Right panel ────────────────────────────────────────────────── */
     .auth-form-panel {
       flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #FFFFFF;
+      width: 100%;
+      background: transparent;
       padding: 32px;
+      position: relative;
+      z-index: 1;
 
       @media (max-width: 480px) { padding: 24px 20px; align-items: flex-start; padding-top: 48px; }
     }
-
+    .container-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .form-inner {
       width: 100%;
       max-width: 400px;
+      background: rgba(16, 26, 46, 0.60) !important;
+      border: 1px solid var(--lf-line, rgba(255,255,255,0.08)) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 18px 50px rgba(3, 8, 20, 0.45) !important;
+      border-radius: 18px;
+      padding: 36px 32px;
+      position: relative;
+      z-index: 1;
     }
-
     .mobile-logo {
       display: none;
       align-items: center;
@@ -366,7 +407,7 @@ import { AuthService } from '../../../core/services/auth.service';
       margin-bottom: 32px;
       font-size: 18px;
       font-weight: 700;
-      color: #0D1526;
+      color: #e8eef7;
 
       @media (max-width: 900px) { display: flex; }
     }
@@ -377,14 +418,14 @@ import { AuthService } from '../../../core/services/auth.service';
       h2 {
         font-size: 26px;
         font-weight: 800;
-        color: #0D1526;
+        color: #e8eef7 !important;
         letter-spacing: -0.4px;
         margin-bottom: 6px;
       }
 
       p {
         font-size: 14px;
-        color: #64748B;
+        color: #8b9bb4 !important;
       }
     }
 
@@ -415,12 +456,6 @@ import { AuthService } from '../../../core/services/auth.service';
         .mat-mdc-text-field-wrapper {
           border-radius: 8px !important;
         }
-        .mdc-outlined-text-field--outlined .mdc-notched-outline__leading {
-          border-radius: 8px 0 0 8px !important;
-        }
-        .mdc-outlined-text-field--outlined .mdc-notched-outline__trailing {
-          border-radius: 0 8px 8px 0 !important;
-        }
       }
     }
 
@@ -438,10 +473,24 @@ import { AuthService } from '../../../core/services/auth.service';
       font-weight: 500;
       &:hover { text-decoration: underline; }
     }
-
+    .button-on{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+    }
+    .button-loading {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+      margin: 0.5rem;
+    }
     .submit-btn {
       width: 100%;
       height: 48px;
+
       border-radius: 8px !important;
       font-size: 15px;
       font-weight: 600;
@@ -473,14 +522,50 @@ import { AuthService } from '../../../core/services/auth.service';
       text-align: center;
       margin-top: 24px;
       font-size: 13px;
-      color: #64748B;
+      color: #8b9bb4;
 
       a {
-        color: #0DA66E;
+        color: #11BF7F;
         text-decoration: none;
         font-weight: 600;
         &:hover { text-decoration: underline; }
       }
+    }
+
+    /* Material checkbox label color in dark context */
+    ::ng-deep .form-inner .mdc-label {
+      color: #8b9bb4 !important;
+    }
+    /* Material input label + text color in dark glassmorphism */
+    ::ng-deep .form-inner .mat-mdc-form-field .mdc-floating-label {
+      color: rgba(139, 155, 180, 0.75) !important;
+    }
+    ::ng-deep .form-inner .mat-mdc-form-field input.mat-mdc-input-element {
+      color: #e8eef7 !important;
+    }
+    /* Input outline borders */
+    ::ng-deep .form-inner .mdc-notched-outline__leading,
+    ::ng-deep .form-inner .mdc-notched-outline__notch,
+    ::ng-deep .form-inner .mdc-notched-outline__trailing {
+      border-color: rgba(141, 166, 200, 0.3) !important;
+    }
+    ::ng-deep .form-inner .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+    ::ng-deep .form-inner .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+    ::ng-deep .form-inner .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+      border-color: rgba(141, 166, 200, 0.55) !important;
+    }
+    ::ng-deep .form-inner .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+    ::ng-deep .form-inner .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+    ::ng-deep .form-inner .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+      border-color: var(--brand-primary, #11BF7F) !important;
+    }
+    /* Prefix icons in dark bg */
+    ::ng-deep .form-inner .mat-mdc-form-field mat-icon[matPrefix] {
+      color: rgba(139, 155, 180, 0.6) !important;
+    }
+    /* Suffix icon button */
+    ::ng-deep .form-inner .mat-mdc-icon-button mat-icon {
+      color: rgba(139, 155, 180, 0.6) !important;
     }
   `],
 })
@@ -488,6 +573,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -498,7 +584,6 @@ export class LoginComponent {
   loading = signal(false);
   errorMsg = signal<string | null>(null);
   showPass = signal(false);
-
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -510,8 +595,10 @@ export class LoginComponent {
     const { email, password } = this.form.value;
     this.auth.login({ email: email!, password: password! }).subscribe({
       next: () => {
-        this.loading.set(false);
-        this.router.navigate(['/dashboard']);
+          this.loading.set(false);
+
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/leads';
+          this.router.navigateByUrl(returnUrl);
       },
       error: (err: Error) => {
         this.errorMsg.set(err.message);

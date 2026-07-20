@@ -14,6 +14,6 @@ export class ToastService {
   }
 
   info(message: string): void {
-    this.snackBar.open(message, '✕', { duration: 3500 });
+    this.snackBar.open(message, '✕', { panelClass: ['toast-info'], duration: 3500 });
   }
 }

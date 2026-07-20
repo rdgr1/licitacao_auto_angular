@@ -1,0 +1,114 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - complementary [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]: gavel
+        - generic [ref=e9]: LicitaFlow
+        - button [ref=e10] [cursor=pointer]:
+          - img [ref=e11]: chevron_left
+      - navigation [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: Licitações
+          - link "Leads" [ref=e15] [cursor=pointer]:
+            - /url: /leads
+            - img [ref=e16]: list_alt
+            - generic [ref=e17]: Leads
+          - link "Pipeline" [ref=e18] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e19]: view_kanban
+            - generic [ref=e20]: Pipeline
+          - link "Editais" [ref=e21] [cursor=pointer]:
+            - /url: /editais
+            - img [ref=e22]: description
+            - generic [ref=e23]: Editais
+        - generic [ref=e24]:
+          - generic [ref=e25]: Inteligência
+          - link "Dashboard" [ref=e26] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e27]: dashboard
+            - generic [ref=e28]: Dashboard
+          - link "Impugnação" [ref=e29] [cursor=pointer]:
+            - /url: /impugnacao
+            - img [ref=e30]: gavel
+            - generic [ref=e31]: Impugnação
+          - link "Assistente IA" [ref=e32] [cursor=pointer]:
+            - /url: /assistente
+            - img [ref=e33]: smart_toy
+            - generic [ref=e34]: Assistente IA
+        - generic [ref=e35]:
+          - generic [ref=e36]: Cotação
+          - link "Fornecedores" [ref=e37] [cursor=pointer]:
+            - /url: /cotacao/fornecedores
+            - img [ref=e38]: storefront
+            - generic [ref=e39]: Fornecedores
+          - link "Itens" [ref=e40] [cursor=pointer]:
+            - /url: /cotacao/itens
+            - img [ref=e41]: inventory_2
+            - generic [ref=e42]: Itens
+      - generic [ref=e45] [cursor=pointer]:
+        - generic [ref=e46]: RR
+        - generic [ref=e47]:
+          - generic [ref=e48]: Rafael Ribeiro
+          - generic [ref=e49]: ADMIN
+        - img [ref=e50]: unfold_more
+    - generic [ref=e51]:
+      - banner [ref=e52]:
+        - generic [ref=e53]:
+          - button [ref=e54] [cursor=pointer]:
+            - img [ref=e55]: help_outline
+          - button [ref=e56] [cursor=pointer]:
+            - img [ref=e57]: notifications_none
+          - generic [ref=e59] [cursor=pointer]: RR
+      - main [ref=e60]:
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - heading "Leads" [level=1] [ref=e65]
+              - paragraph [ref=e66]: Matérias coletadas das fontes oficiais classificadas para análise
+            - button "Rastreabilidade" [ref=e67] [cursor=pointer]:
+              - img [ref=e68]: history
+              - text: Rastreabilidade
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - img [ref=e72]: manage_search
+              - generic [ref=e73]:
+                - generic [ref=e74]: Buscar leads
+                - generic [ref=e75]: Colete matérias do DODF, DOU ou filtre por PNCP
+            - button "Buscar leads" [ref=e76] [cursor=pointer]:
+              - img [ref=e77]: search
+              - text: Buscar leads
+          - generic [ref=e78]:
+            - button "Todos 0" [ref=e79] [cursor=pointer]:
+              - text: Todos
+              - generic [ref=e80]: "0"
+            - button "Novos Leads 0" [ref=e81] [cursor=pointer]:
+              - text: Novos Leads
+              - generic [ref=e82]: "0"
+            - button "Aprov. Presidência 0" [ref=e83] [cursor=pointer]:
+              - text: Aprov. Presidência
+              - generic [ref=e84]: "0"
+            - button "Estudo e Viab. 0" [ref=e85] [cursor=pointer]:
+              - text: Estudo e Viab.
+              - generic [ref=e86]: "0"
+            - button "2ª Aprovação 0" [ref=e87] [cursor=pointer]:
+              - text: 2ª Aprovação
+              - generic [ref=e88]: "0"
+            - button "Descartado 0" [ref=e89] [cursor=pointer]:
+              - text: Descartado
+              - generic [ref=e90]: "0"
+          - generic [ref=e91]:
+            - img [ref=e92]: cloud_off
+            - strong [ref=e93]: Não foi possível carregar os leads
+            - generic [ref=e94]: Verifique se o backend está rodando e tente novamente.
+            - button "Tentar novamente" [ref=e95]:
+              - img [ref=e96]: refresh
+              - generic [ref=e97]: Tentar novamente
+  - generic:
+    - generic [ref=e106]:
+      - generic [ref=e107]: Acesso negado.
+      - button [ref=e109]:
+        - generic [ref=e110]: OK
+    - generic [ref=e118]:
+      - generic [ref=e119]: Erro ao carregar leads
+      - button [ref=e121]:
+        - generic [ref=e122]: ✕

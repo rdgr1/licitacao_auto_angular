@@ -4,7 +4,7 @@ export enum EditalStatus {
   ERRO = 'ERRO',
   ANTECIPADO = 'ANTECIPADO',
   PROCESSANDO = 'PROCESSANDO',
-  ARQUIVADO = 'ARQUIVADO'
+  ARQUIVADO = 'ARQUIVADO',
 }
 
 export enum Modalidade {
@@ -13,7 +13,7 @@ export enum Modalidade {
   TOMADA_PRECOS = 'TOMADA_PRECOS',
   CONVITE = 'CONVITE',
   CONCURSO = 'CONCURSO',
-  LEILAO = 'LEILAO'
+  LEILAO = 'LEILAO',
 }
 
 export enum CategoriaLead {
@@ -21,7 +21,7 @@ export enum CategoriaLead {
   MAO_DE_OBRA = 'MAO_DE_OBRA',
   LIMPEZA = 'LIMPEZA',
   BRIGADA = 'BRIGADA',
-  COPEIRAGEM = 'COPEIRAGEM'
+  COPEIRAGEM = 'COPEIRAGEM',
 }
 
 export enum TipoRegra {
@@ -30,7 +30,7 @@ export enum TipoRegra {
   FAIXA_VALOR = 'FAIXA_VALOR',
   PRAZO_MIN_MAX = 'PRAZO_MIN_MAX',
   MODALIDADE_PERMITIDA = 'MODALIDADE_PERMITIDA',
-  DESCARTE = 'DESCARTE'
+  DESCARTE = 'DESCARTE',
 }
 
 export interface Page<T> {
@@ -65,6 +65,11 @@ export interface EditalResponse {
   createdAt: string;
   updatedAt: string;
   quantidadeExigencias: number;
+  /** Só preenchidos em GET /editais/{numero} e /editais/id/{id} (view Detalhe); ausentes em listas e nulos em editais coletados antes de 2026-07-16. */
+  cnpjOrgao?: string;
+  numeroCompra?: string;
+  anoCompra?: number;
+  municipio?: string;
 }
 
 export interface LeadResponse {
@@ -171,10 +176,10 @@ export interface AtaRegistroPreco {
 /** Histórico retorna os mesmos documentos PNCP que Arquivos */
 export type HistoricoEdital = ArquivoEdital;
 
-export type NotificacaoTipo = 'NOVO_LEAD' | 'BUSCA_CONCLUIDA';
+export type NotificacaoTipo = 'NOVO_LEAD' | 'ACAO_PIPELINE' | 'BUSCA_EDITAL' | 'SISTEMA';
 
 export interface NotificacaoEvent {
-  tipo: NotificacaoTipo | string;  // string for backend compatibility
+  tipo: NotificacaoTipo | string; // string for backend compatibility
   timestamp: string;
   editalId: number;
   numero: string;
@@ -184,10 +189,20 @@ export interface NotificacaoEvent {
   leadScore: number;
   categoria: string;
   urlPncp?: string;
-  // fields for BUSCA_CONCLUIDA type:
-  totalSalvos?: number;
-  totalFontes?: number;
-  fontesNomes?: string[];
+}
+
+/** Notificação persistida (TB_NOTIFICACAO), retornada por GET /notificacoes/lista. */
+export interface Notificacao {
+  uuid: string;
+  tipo: NotificacaoTipo | string;
+  titulo: string;
+  mensagem?: string;
+  destinatario?: string;
+  lida: boolean;
+  referenciaId?: string;
+  referenciaTipo?: string;
+  origem?: string;
+  createdAt: string;
 }
 
 export interface ProcessarResult {

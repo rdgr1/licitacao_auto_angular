@@ -1,104 +1,542 @@
-<div class="details-shell">
+<main class="det-shell">
 
-  <app-loading-spinner [isLoading]="loading" />
+  <!-- ── Skeleton loading ──────────────────────────────────────────── -->
+  @if (loading()) {
+    <div class="det-skeleton" role="status" aria-label="Carregando edital" aria-busy="true">
+      <div class="skel skel-nav"></div>
+      <div class="skel skel-hero"></div>
+      <div class="skel-grid">
+        <div class="skel skel-main"></div>
+        <div class="skel skel-aside"></div>
+      </div>
+    </div>
+  }
 
   @if (!loading() && edital()) {
 
-    <!-- ── Header ─────────────────────────────────────────────── -->
-    <div class="detail-header">
-      <button mat-icon-button (click)="goBack()" matTooltip="Voltar">
-        <mat-icon>arrow_back</mat-icon>
+    <!-- ── Nav: voltar + número + status ─────────────────────────── -->
+    <nav class="det-nav" aria-label="Navegação do edital">
+      <button class="back-btn" (click)="goBack()" aria-label="Voltar para a lista de editais">
+        <mat-icon aria-hidden="true">arrow_back</mat-icon>
+        <span>Editais</span>
       </button>
-
-      <div class="header-crumb">
-        <span class="crumb-parent">Editais</span>
-        <mat-icon class="crumb-sep">chevron_right</mat-icon>
-        <span class="crumb-current">{{ edital()!.numero }}</span>
-      </div>
-
-      <span class="status-badge {{ edital()!.status | lowercase }}">
-        <span class="sdot"></span>{{ formatStatus(edital()!.status) }}
+      <span class="nav-sep" aria-hidden="true">/</span>
+      <span class="nav-numero" aria-current="page">{{ edital()!.numero }}</span>
+      <span class="nav-spacer" aria-hidden="true"></span>
+      <span class="status-pill status-{{ edital()!.status | lowercase }}"
+            role="status"
+            [attr.aria-label]="'Status: ' + formatStatus(edital()!.status)">
+        <span class="spill-dot" aria-hidden="true"></span>
+        {{ formatStatus(edital()!.status) }}
       </span>
+    </nav>
 
-      <span class="flex-1"></span>
+    <!-- ── Cabeçalho-documento: faixa PNCP + timeline ───────────── -->
+    @if (edital()) {
+      <div class="edital-doc-header">
 
-      <div class="header-acts">
-        @if (edital()!.pdfUrl) {
-          <a mat-icon-button [href]="edital()!.pdfUrl" target="_blank" matTooltip="Abrir PDF">
-            <mat-icon>picture_as_pdf</mat-icon>
-          </a>
-        }
-        @if (edital()!.sourceUrl) {
-          <a mat-icon-button [href]="edital()!.sourceUrl" target="_blank" matTooltip="Fonte original">
-            <mat-icon>open_in_new</mat-icon>
-          </a>
-        }
-        <button mat-icon-button matTooltip="Reprocessar" (click)="reprocessar()">
-          <mat-icon>refresh</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Excluir" color="warn" (click)="delete()">
-          <mat-icon>delete_outline</mat-icon>
-        </button>
-      </div>
-    </div>
-
-    <!-- ── Info strip ─────────────────────────────────────────── -->
-    <div class="info-strip">
-      <div class="strip-item">
-        <span class="strip-k">Valor estimado</span>
-        <span class="strip-v money">{{ edital()!.valorEstimado | currencyBr }}</span>
-      </div>
-      <div class="strip-div"></div>
-      <div class="strip-item">
-        <span class="strip-k">Abertura</span>
-        <span class="strip-v" [class.urgent]="isUrgent(edital()!.dataAbertura)">
-          {{ edital()!.dataAbertura | dateBr }}
-        </span>
-      </div>
-      <div class="strip-div"></div>
-      <div class="strip-item">
-        <span class="strip-k">Modalidade</span>
-        <span class="strip-v">{{ formatModalidade(edital()!.modalidade) }}</span>
-      </div>
-      <div class="strip-div"></div>
-      <div class="strip-item flex-grow">
-        <span class="strip-k">Órgão</span>
-        <span class="strip-v">{{ edital()!.orgaoOrigem }}</span>
-      </div>
-    </div>
-
-    <!-- ── Objeto ──────────────────────────────────────────────── -->
-    <div class="section-card">
-      <span class="section-label">Objeto da contratação</span>
-      <p class="objeto-text">{{ edital()!.objeto }}</p>
-    </div>
-
-    <!-- ── Meta grid ──────────────────────────────────────────── -->
-    <div class="meta-grid">
-      <div class="meta-item">
-        <span class="meta-k">Número</span>
-        <span class="meta-v mono">{{ edital()!.numero }}</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-k">Cadastrado em</span>
-        <span class="meta-v">{{ edital()!.createdAt | dateBr }}</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-k">Atualizado em</span>
-        <span class="meta-v">{{ edital()!.updatedAt | dateBr }}</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-k">Exigências</span>
-        <span class="meta-v">{{ edital()!.quantidadeExigencias ?? 0 }}</span>
-      </div>
-      @if (edital()!.errorMessage) {
-        <div class="meta-item full-width">
-          <span class="meta-k">Erro de processamento</span>
-          <span class="meta-v error-text">{{ edital()!.errorMessage }}</span>
+        <!-- Número de controle + Modalidade -->
+        <div class="edital-pncp-strip">
+          <span class="edital-pncp-label">Controle</span>
+          <code class="edital-pncp-num">{{ edital()!.numero }}</code>
+          @if (edital()!.modalidade) {
+            <span class="edital-modalidade-seal">{{ formatModalidade(edital()!.modalidade) }}</span>
+          }
         </div>
-      }
+
+        <!-- Timeline horizontal — apenas dataAbertura disponível no modelo -->
+        @if (edital()!.dataAbertura) {
+          <div class="edital-timeline" role="list" aria-label="Cronograma do edital">
+            <div class="etl-track">
+              <div class="etl-step"
+                   [class.etl-past]="isPast(edital()!.dataAbertura)"
+                   [class.etl-today]="isToday(edital()!.dataAbertura)"
+                   role="listitem">
+                <div class="etl-dot"></div>
+                <div class="etl-label">Abertura</div>
+                <div class="etl-date">{{ edital()!.dataAbertura | date:'dd/MM/yy':'':'pt-BR' }}</div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+    }
+
+    <!-- ── Hero: métricas principais ─────────────────────────────── -->
+    <header class="det-hero" aria-label="Dados principais do edital">
+      <div class="hero-block hero-valor">
+        <span class="hero-label">Valor estimado</span>
+        <strong class="hero-num"
+                [class.hero-num-zero]="!edital()!.valorEstimado">
+          {{ edital()!.valorEstimado ? (edital()!.valorEstimado | currencyBr) : 'Não informado' }}
+        </strong>
+      </div>
+      <div class="hero-block hero-abertura"
+           [class.urgent]="isUrgent(edital()!.dataAbertura)">
+        <span class="hero-label">
+          @if (isUrgent(edital()!.dataAbertura)) {
+            <mat-icon class="urg-icon" aria-label="Urgente — abertura em menos de 3 dias">warning_amber</mat-icon>
+          }
+          Abertura das propostas
+        </span>
+        <time class="hero-date" [dateTime]="edital()!.dataAbertura">
+          {{ edital()!.dataAbertura | dateBr }}
+        </time>
+      </div>
+      <div class="hero-block hero-mod">
+        <span class="hero-label">Modalidade</span>
+        <span class="hero-modalidade">{{ formatModalidade(edital()!.modalidade) }}</span>
+      </div>
+      <div class="hero-block hero-orgao">
+        <span class="hero-label">Órgão</span>
+        <span class="hero-orgao-name">{{ edital()!.orgaoOrigem }}</span>
+        @if (edital()!.municipio) {
+          <span class="hero-orgao-municipio">{{ edital()!.municipio }}</span>
+        }
+      </div>
+    </header>
+
+    <!-- ── Layout: main + aside ──────────────────────────────────── -->
+    <div class="det-layout">
+
+      <!-- ── Main: objeto + exigências + erro ──────────────────── -->
+      <section class="det-main" aria-labelledby="objeto-heading">
+
+        <div class="objeto-block">
+          <h2 class="section-heading" id="objeto-heading">
+            <mat-icon aria-hidden="true">subject</mat-icon>
+            Objeto da Contratação
+          </h2>
+          <p class="objeto-text">{{ edital()!.objeto }}</p>
+        </div>
+
+        <!-- Exigências -->
+        @if ((edital()!.quantidadeExigencias ?? 0) > 0) {
+          <div class="info-strip">
+            <mat-icon aria-hidden="true">rule</mat-icon>
+            <span>
+              <strong>{{ edital()!.quantidadeExigencias }}</strong>
+              exigência{{ edital()!.quantidadeExigencias !== 1 ? 's' : '' }} identificada{{ edital()!.quantidadeExigencias !== 1 ? 's' : '' }}
+            </span>
+          </div>
+        }
+
+        <!-- Erro de processamento -->
+        @if (edital()!.errorMessage) {
+          <div class="error-block" role="alert" aria-live="assertive">
+            <mat-icon aria-hidden="true">error_outline</mat-icon>
+            <div>
+              <strong class="error-title">Erro de processamento</strong>
+              <p class="error-msg">{{ edital()!.errorMessage }}</p>
+            </div>
+          </div>
+        }
+
+        <!-- Meta: número, datas, etc. -->
+        <div class="meta-section">
+          <h3 class="meta-section-heading">Informações técnicas</h3>
+          <dl class="meta-grid">
+            <div class="mg-item">
+              <dt>Número</dt>
+              <dd class="mono">{{ edital()!.numero }}</dd>
+            </div>
+            @if (edital()!.cnpjOrgao) {
+              <div class="mg-item">
+                <dt>CNPJ do órgão</dt>
+                <dd class="mono">{{ edital()!.cnpjOrgao }}</dd>
+              </div>
+            }
+            @if (edital()!.numeroCompra) {
+              <div class="mg-item">
+                <dt>Número da compra</dt>
+                <dd>{{ edital()!.numeroCompra }}{{ edital()!.anoCompra ? '/' + edital()!.anoCompra : '' }}</dd>
+              </div>
+            }
+            <div class="mg-item">
+              <dt>Exigências</dt>
+              <dd>{{ edital()!.quantidadeExigencias ?? 0 }}</dd>
+            </div>
+            <div class="mg-item">
+              <dt>Cadastrado em</dt>
+              <dd>{{ edital()!.createdAt | dateBr }}</dd>
+            </div>
+            <div class="mg-item">
+              <dt>Atualizado em</dt>
+              <dd>{{ edital()!.updatedAt | dateBr }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Seções expansíveis sob demanda -->
+        <div class="lazy-sections" role="list" aria-label="Seções de dados adicionais">
+
+          <!-- ── Itens ──────────────────────────────────────────────── -->
+          <div class="sec-acc" [class.sec-open]="itensSection().open" role="listitem">
+            <button class="sec-hdr" type="button" (click)="toggleItens()"
+                    [attr.aria-expanded]="itensSection().open"
+                    aria-label="Ver itens do edital">
+              <mat-icon class="sec-ico" aria-hidden="true">list_alt</mat-icon>
+              <div class="sec-hdr-text">
+                <span class="sec-title">Itens</span>
+                <span class="sec-sub">Produtos e serviços licitados</span>
+              </div>
+              @if (itensSection().state === 'loading') {
+                <mat-spinner diameter="14" class="sec-spin"></mat-spinner>
+              }
+              @if (itensSection().state === 'loaded') {
+                <span class="sec-badge">{{ itensSection().data.length }}</span>
+              }
+              <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
+            </button>
+            @if (itensSection().open) {
+              <div class="sec-body" role="region" aria-label="Itens do edital" [@expandCollapse]>
+                @if (itensSection().state === 'loading') {
+                  <div class="sec-loading">
+                    <div class="skel skel-row"></div>
+                    <div class="skel skel-row"></div>
+                    <div class="skel skel-row"></div>
+                    <span class="sync-hint">Buscando itens no PNCP...</span>
+                  </div>
+                }
+                @if (itensSection().state === 'empty') {
+                  <div class="sec-empty"><mat-icon aria-hidden="true">inbox</mat-icon><span>Nenhum item encontrado no PNCP</span></div>
+                }
+                @if (itensSection().state === 'error') {
+                  <div class="sec-error">
+                    <mat-icon aria-hidden="true">error_outline</mat-icon>
+                    <span>Erro ao carregar itens</span>
+                    <button class="retry-btn" type="button" (click)="retryItens()">Tentar novamente</button>
+                  </div>
+                }
+                @if (itensSection().state === 'loaded') {
+                  <div class="sec-table-wrap">
+                    <table class="sec-table" aria-label="Itens do edital">
+                      <thead>
+                        <tr>
+                          <th class="col-num" scope="col">#</th>
+                          <th scope="col">Descrição</th>
+                          <th scope="col">Tipo</th>
+                          <th class="col-num" scope="col">Qtd</th>
+                          <th scope="col">Unidade</th>
+                          <th class="col-money" scope="col">Vlr Unit.</th>
+                          <th class="col-money" scope="col">Vlr Total</th>
+                          <th scope="col">Situação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (item of itensSection().data; track item.numeroItem) {
+                          <tr [class.item-sigiloso]="item.orcamentoSigiloso">
+                            <td class="col-num mono">{{ item.numeroItem }}</td>
+                            <td class="col-desc">
+                              {{ item.descricao }}
+                              @if (item.ncmNbsCodigo) {
+                                <span class="item-ncm mono" [title]="item.ncmNbsDescricao ?? ''">{{ item.ncmNbsCodigo }}</span>
+                              }
+                              @if (item.informacaoComplementar) {
+                                <span class="item-complementar">{{ item.informacaoComplementar }}</span>
+                              }
+                            </td>
+                            <td>
+                              @if (item.materialOuServicoNome) {
+                                <span class="item-tipo-badge" [class.material]="item.materialOuServico === 'M'" [class.servico]="item.materialOuServico === 'S'">
+                                  {{ item.materialOuServicoNome }}
+                                </span>
+                              }
+                            </td>
+                            <td class="col-num">{{ item.quantidade }}</td>
+                            <td>{{ item.unidadeMedida }}</td>
+                            <td class="col-money">
+                              @if (item.orcamentoSigiloso) {
+                                <span class="item-sigiloso-label">Sigiloso</span>
+                              } @else {
+                                {{ item.valorUnitarioEstimado | currencyBr }}
+                              }
+                            </td>
+                            <td class="col-money money-strong">
+                              @if (!item.orcamentoSigiloso) {
+                                {{ item.valorTotal | currencyBr }}
+                              }
+                            </td>
+                            <td>
+                              @if (item.situacaoCompraItemNome) {
+                                <span class="item-status">{{ item.situacaoCompraItemNome }}</span>
+                              }
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- ── Arquivos ───────────────────────────────────────────── -->
+          <div class="sec-acc" [class.sec-open]="arquivosSection().open" role="listitem">
+            <button class="sec-hdr" type="button" (click)="toggleArquivos()"
+                    [attr.aria-expanded]="arquivosSection().open"
+                    aria-label="Ver arquivos do edital">
+              <mat-icon class="sec-ico" aria-hidden="true">folder_open</mat-icon>
+              <div class="sec-hdr-text">
+                <span class="sec-title">Arquivos</span>
+                <span class="sec-sub">Edital, anexos e minutas</span>
+              </div>
+              @if (arquivosSection().state === 'loading') { <mat-spinner diameter="14" class="sec-spin"></mat-spinner> }
+              @if (arquivosSection().state === 'loaded')  { <span class="sec-badge">{{ arquivosSection().data.length }}</span> }
+              <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
+            </button>
+            @if (arquivosSection().open) {
+              <div class="sec-body" role="region" aria-label="Arquivos do edital" [@expandCollapse]>
+                @if (arquivosSection().state === 'loading') { <div class="sec-loading"><div class="skel skel-row"></div><div class="skel skel-row"></div></div> }
+                @if (arquivosSection().state === 'empty')   { <div class="sec-empty"><mat-icon aria-hidden="true">folder_off</mat-icon><span>Nenhum arquivo encontrado</span></div> }
+                @if (arquivosSection().state === 'error')   { <div class="sec-error"><mat-icon aria-hidden="true">error_outline</mat-icon><span>Erro ao carregar</span><button class="retry-btn" type="button" (click)="retryArquivos()">Tentar novamente</button></div> }
+                @if (arquivosSection().state === 'loaded') {
+                  <div class="sec-file-list">
+                    @for (arq of arquivosSection().data; track arq.sequencialDocumento) {
+                      <a class="file-row" [href]="arq.url" target="_blank" rel="noopener noreferrer"
+                         [attr.aria-label]="'Abrir ' + arq.titulo + ' (nova aba)'">
+                        <mat-icon class="file-ico" aria-hidden="true">description</mat-icon>
+                        <div class="file-info">
+                          <span class="file-title">{{ arq.titulo }}</span>
+                          @if (arq.tipoDocumentoDescricao) {
+                            <span class="file-tipo">{{ arq.tipoDocumentoDescricao }}</span>
+                          }
+                        </div>
+                        @if (arq.dataPublicacaoPncp) {
+                          <span class="file-date">{{ arq.dataPublicacaoPncp | dateBr }}</span>
+                        }
+                        <mat-icon class="file-arrow" aria-hidden="true">arrow_outward</mat-icon>
+                      </a>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- ── Atas de Registro de Preço ──────────────────────────── -->
+          <div class="sec-acc" [class.sec-open]="atasSection().open" role="listitem">
+            <button class="sec-hdr" type="button" (click)="toggleAtas()"
+                    [attr.aria-expanded]="atasSection().open"
+                    aria-label="Ver atas de registro de preço">
+              <mat-icon class="sec-ico" aria-hidden="true">assignment</mat-icon>
+              <div class="sec-hdr-text">
+                <span class="sec-title">Atas de Registro de Preço</span>
+                <span class="sec-sub">ARP vigentes</span>
+              </div>
+              @if (atasSection().state === 'loading') { <mat-spinner diameter="14" class="sec-spin"></mat-spinner> }
+              @if (atasSection().state === 'loaded')  { <span class="sec-badge">{{ atasSection().data.length }}</span> }
+              <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
+            </button>
+            @if (atasSection().open) {
+              <div class="sec-body" role="region" aria-label="Atas de registro de preço" [@expandCollapse]>
+                @if (atasSection().state === 'loading') { <div class="sec-loading"><div class="skel skel-row"></div><div class="skel skel-row"></div></div> }
+                @if (atasSection().state === 'empty')   { <div class="sec-empty"><mat-icon aria-hidden="true">assignment_late</mat-icon><span>Nenhuma ARP encontrada</span></div> }
+                @if (atasSection().state === 'error')   { <div class="sec-error"><mat-icon aria-hidden="true">error_outline</mat-icon><span>Erro ao carregar</span><button class="retry-btn" type="button" (click)="retryAtas()">Tentar novamente</button></div> }
+                @if (atasSection().state === 'loaded') {
+                  <div class="sec-cards">
+                    @for (ata of atasSection().data; track ata.sequencialAta) {
+                      <div class="contrato-card">
+                        <div class="cc-header">
+                          <span class="cc-num mono">{{ ata.numero }}</span>
+                        </div>
+                        @if (ata.objeto) { <p class="cc-objeto">{{ ata.objeto }}</p> }
+                        <div class="cc-row">
+                          @if (ata.nomeRazaoSocialFornecedor) {
+                            <div class="cc-field">
+                              <span class="cc-label">Fornecedor</span>
+                              <span class="cc-val">{{ ata.nomeRazaoSocialFornecedor }}</span>
+                              @if (ata.numeroCnpjFornecedor) { <span class="cc-cnpj mono">{{ ata.numeroCnpjFornecedor }}</span> }
+                            </div>
+                          }
+                          @if (ata.valorTotal) {
+                            <div class="cc-field">
+                              <span class="cc-label">Valor</span>
+                              <span class="cc-val money-strong">{{ ata.valorTotal | currencyBr }}</span>
+                            </div>
+                          }
+                          @if (ata.vigenciaDataInicio || ata.vigenciaDataFim) {
+                            <div class="cc-field">
+                              <span class="cc-label">Vigência</span>
+                              <span class="cc-val">{{ ata.vigenciaDataInicio ?? null | dateBr }} → {{ ata.vigenciaDataFim ?? null | dateBr }}</span>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- ── Contratos / Empenhos ───────────────────────────────── -->
+          <div class="sec-acc" [class.sec-open]="contratosSection().open" role="listitem">
+            <button class="sec-hdr" type="button" (click)="toggleContratos()"
+                    [attr.aria-expanded]="contratosSection().open"
+                    aria-label="Ver contratos e empenhos">
+              <mat-icon class="sec-ico" aria-hidden="true">receipt_long</mat-icon>
+              <div class="sec-hdr-text">
+                <span class="sec-title">Contratos / Empenhos</span>
+                <span class="sec-sub">Instrumentos gerados</span>
+              </div>
+              @if (contratosSection().state === 'loading') { <mat-spinner diameter="14" class="sec-spin"></mat-spinner> }
+              @if (contratosSection().state === 'loaded')  { <span class="sec-badge">{{ contratosSection().data.length }}</span> }
+              <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
+            </button>
+            @if (contratosSection().open) {
+              <div class="sec-body" role="region" aria-label="Contratos e empenhos" [@expandCollapse]>
+                @if (contratosSection().state === 'loading') { <div class="sec-loading"><div class="skel skel-row"></div><div class="skel skel-row"></div></div> }
+                @if (contratosSection().state === 'empty')   { <div class="sec-empty"><mat-icon aria-hidden="true">receipt</mat-icon><span>Nenhum contrato encontrado</span></div> }
+                @if (contratosSection().state === 'error')   { <div class="sec-error"><mat-icon aria-hidden="true">error_outline</mat-icon><span>Erro ao carregar</span><button class="retry-btn" type="button" (click)="retryContratos()">Tentar novamente</button></div> }
+                @if (contratosSection().state === 'loaded') {
+                  <div class="sec-cards">
+                    @for (c of contratosSection().data; track c.sequencialContrato) {
+                      <div class="contrato-card">
+                        <div class="cc-header">
+                          <span class="cc-num mono">{{ c.numero }}</span>
+                          @if (c.nomeStatusContrato) { <span class="cc-status">{{ c.nomeStatusContrato }}</span> }
+                        </div>
+                        @if (c.objeto) { <p class="cc-objeto">{{ c.objeto }}</p> }
+                        <div class="cc-row">
+                          @if (c.nomeRazaoSocialFornecedor) {
+                            <div class="cc-field">
+                              <span class="cc-label">Fornecedor</span>
+                              <span class="cc-val">{{ c.nomeRazaoSocialFornecedor }}</span>
+                              @if (c.numeroCnpjFornecedor) { <span class="cc-cnpj mono">{{ c.numeroCnpjFornecedor }}</span> }
+                            </div>
+                          }
+                          @if (c.valorInicial) {
+                            <div class="cc-field">
+                              <span class="cc-label">Valor</span>
+                              <span class="cc-val money-strong">{{ c.valorInicial | currencyBr }}</span>
+                            </div>
+                          }
+                          @if (c.dataAssinatura) {
+                            <div class="cc-field">
+                              <span class="cc-label">Assinatura</span>
+                              <span class="cc-val">{{ c.dataAssinatura | dateBr }}</span>
+                            </div>
+                          }
+                          @if (c.dataVigenciaInicio || c.dataVigenciaFim) {
+                            <div class="cc-field">
+                              <span class="cc-label">Vigência</span>
+                              <span class="cc-val">{{ c.dataVigenciaInicio ?? null | dateBr }} → {{ c.dataVigenciaFim ?? null | dateBr }}</span>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- ── Histórico ──────────────────────────────────────────── -->
+          <div class="sec-acc" [class.sec-open]="historicoSection().open" role="listitem">
+            <button class="sec-hdr" type="button" (click)="toggleHistorico()"
+                    [attr.aria-expanded]="historicoSection().open"
+                    aria-label="Ver histórico de alterações">
+              <mat-icon class="sec-ico" aria-hidden="true">history</mat-icon>
+              <div class="sec-hdr-text">
+                <span class="sec-title">Histórico</span>
+                <span class="sec-sub">Alterações e impugnações</span>
+              </div>
+              @if (historicoSection().state === 'loading') { <mat-spinner diameter="14" class="sec-spin"></mat-spinner> }
+              @if (historicoSection().state === 'loaded')  { <span class="sec-badge">{{ historicoSection().data.length }}</span> }
+              <mat-icon class="sec-chevron" aria-hidden="true">chevron_right</mat-icon>
+            </button>
+            @if (historicoSection().open) {
+              <div class="sec-body" role="region" aria-label="Histórico do edital" [@expandCollapse]>
+                @if (historicoSection().state === 'loading') { <div class="sec-loading"><div class="skel skel-row"></div><div class="skel skel-row"></div></div> }
+                @if (historicoSection().state === 'empty')   { <div class="sec-empty"><mat-icon aria-hidden="true">history_toggle_off</mat-icon><span>Nenhum evento encontrado</span></div> }
+                @if (historicoSection().state === 'error')   { <div class="sec-error"><mat-icon aria-hidden="true">error_outline</mat-icon><span>Erro ao carregar</span><button class="retry-btn" type="button" (click)="retryHistorico()">Tentar novamente</button></div> }
+                @if (historicoSection().state === 'loaded') {
+                  <div class="sec-file-list">
+                    @for (h of historicoSection().data; track h.sequencialDocumento) {
+                      <a class="file-row" [href]="h.url" target="_blank" rel="noopener noreferrer"
+                         [attr.aria-label]="'Abrir ' + h.titulo + ' (nova aba)'">
+                        <mat-icon class="file-ico" aria-hidden="true">history_edu</mat-icon>
+                        <div class="file-info">
+                          <span class="file-title">{{ h.titulo }}</span>
+                          @if (h.tipoDocumentoDescricao) {
+                            <span class="file-tipo">{{ h.tipoDocumentoDescricao }}</span>
+                          }
+                        </div>
+                        @if (h.dataPublicacaoPncp) {
+                          <span class="file-date">{{ h.dataPublicacaoPncp | dateBr }}</span>
+                        }
+                        <mat-icon class="file-arrow" aria-hidden="true">arrow_outward</mat-icon>
+                      </a>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ── Aside: ações rápidas ──────────────────────────────── -->
+      <aside class="det-aside">
+
+        <div class="aside-section">
+          <h3 class="aside-heading">Ações</h3>
+          <div class="actions-list" role="list">
+            @if (edital()!.pdfUrl) {
+              <a class="action-row action-primary"
+                 [href]="edital()!.pdfUrl"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 role="listitem"
+                 aria-label="Abrir edital em PDF (nova aba)">
+                <mat-icon class="ar-icon" aria-hidden="true">picture_as_pdf</mat-icon>
+                <span class="ar-label">Edital em PDF</span>
+                <mat-icon class="ar-arrow" aria-hidden="true">arrow_outward</mat-icon>
+              </a>
+            }
+            @if (edital()!.sourceUrl) {
+              <a class="action-row action-source"
+                 [href]="edital()!.sourceUrl"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 role="listitem"
+                 aria-label="Abrir fonte original (nova aba)">
+                <mat-icon class="ar-icon" aria-hidden="true">open_in_new</mat-icon>
+                <span class="ar-label">Fonte original</span>
+                <mat-icon class="ar-arrow" aria-hidden="true">arrow_outward</mat-icon>
+              </a>
+            }
+            <button class="action-row action-util"
+                    role="listitem"
+                    type="button"
+                    (click)="reprocessar()"
+                    [disabled]="reprocessando()"
+                    [attr.aria-label]="reprocessando() ? 'Reprocessando...' : 'Reprocessar edital'">
+              <mat-icon class="ar-icon"
+                        [class.ar-spin]="reprocessando()"
+                        aria-hidden="true">sync</mat-icon>
+              <span class="ar-label">{{ reprocessando() ? 'Reprocessando...' : 'Reprocessar' }}</span>
+            </button>
+            <button class="action-row action-danger"
+                    role="listitem"
+                    type="button"
+                    (click)="delete()"
+                    aria-label="Excluir este edital permanentemente">
+              <mat-icon class="ar-icon" aria-hidden="true">delete_outline</mat-icon>
+              <span class="ar-label">Excluir edital</span>
+            </button>
+          </div>
+        </div>
+
+      </aside>
     </div>
 
   }
 
-</div>
+</main>

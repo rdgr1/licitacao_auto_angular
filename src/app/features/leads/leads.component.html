@@ -1,17 +1,39 @@
 <div class="leads-shell">
-
   <!-- ── Header ──────────────────────────────────────────────────── -->
   <div class="leads-header">
     <div>
       <h1 class="leads-title">Leads</h1>
       <p class="leads-sub">Matérias coletadas das fontes oficiais classificadas para análise</p>
     </div>
-    <button class="btn-historico" [class.active]="historicoAtivo()" (click)="toggleHistorico()"
-            matTooltip="Rastreabilidade de coletas">
-      <mat-icon>{{ historicoAtivo() ? 'query_stats' : 'history' }}</mat-icon>
-      Rastreabilidade
-    </button>
+    <div class="header-actions">
+      <button class="btn-legenda" [class.active]="legendaAtiva()" (click)="legendaAtiva.set(!legendaAtiva())"
+              matTooltip="O que significam as bolinhas dos cards">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        Legenda
+      </button>
+      <button class="btn-historico" [class.active]="historicoAtivo()" (click)="toggleHistorico()"
+              matTooltip="Rastreabilidade de coletas">
+        <mat-icon aria-hidden="true">{{ historicoAtivo() ? 'query_stats' : 'history' }}</mat-icon>
+        Rastreabilidade
+      </button>
+    </div>
   </div>
+
+  <!-- ── Legenda dos indicadores ─────────────────────────────────────── -->
+  @if (legendaAtiva()) {
+    <div class="legenda-panel animate-in">
+      <span class="legenda-title">Indicadores dos cards</span>
+      <div class="legenda-item">
+        <span class="edital-link-dot linked" aria-hidden="true"></span>
+        <span>Edital vinculado com sucesso a este lead</span>
+      </div>
+      <div class="legenda-item">
+        <span class="edital-link-dot" aria-hidden="true"></span>
+        <span>Edital ainda não vinculado</span>
+      </div>
+      <span class="legenda-note">Mais indicadores serão adicionados aqui conforme o ecossistema evoluir.</span>
+    </div>
+  }
 
   <!-- ── Painel de Coleta ─────────────────────────────────────────── -->
   <div class="coleta-panel">
@@ -39,7 +61,7 @@
           </div>
         } @else {
           <div class="busca-trigger-info">
-            <mat-icon>manage_search</mat-icon>
+            <mat-icon aria-hidden="true">manage_search</mat-icon>
             <div>
               <span class="trigger-title">Buscar leads</span>
               <span class="trigger-sub">Colete matérias do DODF, DOU ou filtre por PNCP</span>
@@ -47,7 +69,7 @@
           </div>
         }
         <button class="btn-buscar-leads" (click)="buscaAtiva.set(true)" [disabled]="coletaAndamento.ativa()">
-          <mat-icon>{{ coletaAndamento.ativa() ? 'hourglass_empty' : 'search' }}</mat-icon>
+          <mat-icon aria-hidden="true">{{ coletaAndamento.ativa() ? 'hourglass_empty' : 'search' }}</mat-icon>
           {{ coletaAndamento.ativa() ? 'Aguarde...' : 'Buscar leads' }}
         </button>
       </div>
@@ -63,9 +85,9 @@
             <button class="fonte-chip pop-in" [style.animation-delay]="(i * 80) + 'ms'"
                     [class.active]="isFonteSelected(f.key)" (click)="toggleFonte(f.key)">
               <div class="fonte-check">
-                <mat-icon>{{ isFonteSelected(f.key) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+                <mat-icon aria-hidden="true">{{ isFonteSelected(f.key) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
               </div>
-              <mat-icon class="fonte-icon">{{ f.icon }}</mat-icon>
+              <mat-icon class="fonte-icon" aria-hidden="true">{{ f.icon }}</mat-icon>
               <div class="fonte-info">
                 <span class="fonte-key">{{ f.label }}</span>
                 <span class="fonte-sub">{{ f.sublabel }}</span>
@@ -76,8 +98,8 @@
             </button>
           }
         </div>
-        <button class="btn-fechar-busca" (click)="fecharBusca()" matTooltip="Fechar">
-          <mat-icon>close</mat-icon>
+        <button class="btn-fechar-busca" (click)="fecharBusca()" matTooltip="Fechar" aria-label="Fechar painel de busca">
+          <mat-icon aria-hidden="true">close</mat-icon>
         </button>
       </div>
 
@@ -89,10 +111,10 @@
 
           <div class="date-mode-toggle">
             <button class="mode-btn" [class.active]="dateMode() === 'single'" (click)="setDateMode('single')">
-              <mat-icon>event</mat-icon>Dia específico
+              <mat-icon aria-hidden="true">event</mat-icon>Dia específico
             </button>
             <button class="mode-btn" [class.active]="dateMode() === 'range'" (click)="setDateMode('range')">
-              <mat-icon>date_range</mat-icon>Período
+              <mat-icon aria-hidden="true">date_range</mat-icon>Período
             </button>
           </div>
 
@@ -121,28 +143,18 @@
               @if (rangeInfo()) { <span class="range-info">{{ rangeInfo() }}</span> }
             }
           </div>
-
           <div class="coleta-actions">
             @if (hasCollectableFonte()) {
               <button class="btn-coletar" (click)="coletar()" [disabled]="coletaAndamento.ativa() || !canSubmit()">
                 <span class="btn-coletar-inner">
-                  @if (coletaAndamento.ativa()) { <mat-spinner diameter="15" /> } @else { <mat-icon>download</mat-icon> }
+                  @if (coletaAndamento.ativa()) { <mat-spinner diameter="15" /> } @else { <mat-icon aria-hidden="true">download</mat-icon> }
                   {{ coletaAndamento.ativa() ? coletaProgress() : 'Coletar agora' }}
                 </span>
               </button>
             }
           </div>
-        </div>
 
-        @if (coletaResultado(); as r) {
-          <div class="coleta-resultado">
-            <span class="res-chip"><span class="res-val">{{ r.totalMaterias }}</span> matérias</span>
-            <span class="res-chip relevantes"><span class="res-val">{{ r.salvos }}</span> salvos</span>
-            <span class="res-chip"><span class="res-val">{{ r.duplicados }}</span> duplicados</span>
-          </div>
-        }
-
-        <!-- Painel de progresso por fonte -->
+          <!-- Painel de progresso por fonte -->
         @if (coletaAndamento.fontes().length > 0) {
           <div class="coleta-progress-panel">
             <div class="cpp-header">
@@ -182,6 +194,15 @@
             }
           </div>
         }
+        </div>
+
+        @if (coletaResultado(); as r) {
+          <div class="coleta-resultado">
+            <span class="res-chip"><span class="res-val">{{ r.totalMaterias }}</span> matérias</span>
+            <span class="res-chip relevantes"><span class="res-val">{{ r.salvos }}</span> salvos</span>
+            <span class="res-chip"><span class="res-val">{{ r.duplicados }}</span> duplicados</span>
+          </div>
+        }
       </div>
     } <!-- fim @if selectedFontes -->
   } <!-- fim @if buscaAtiva -->
@@ -193,12 +214,12 @@
 
       <div class="historico-head">
         <div class="historico-head-left">
-          <mat-icon>query_stats</mat-icon>
+          <mat-icon aria-hidden="true">query_stats</mat-icon>
           <span class="historico-titulo">Rastreabilidade de Coletas</span>
           <span class="historico-sub">{{ historicoTotal() }} sessão(ões) registrada(s)</span>
         </div>
-        <button class="btn-historico-refresh" (click)="carregarHistorico()" matTooltip="Recarregar">
-          <mat-icon>refresh</mat-icon>
+        <button class="btn-historico-refresh" (click)="carregarHistorico()" matTooltip="Recarregar" aria-label="Recarregar histórico">
+          <mat-icon aria-hidden="true">refresh</mat-icon>
         </button>
       </div>
 
@@ -258,7 +279,7 @@
         </div>
       } @else if (historicoEntradas().length === 0) {
         <div class="historico-vazio">
-          <mat-icon>history_toggle_off</mat-icon>
+          <mat-icon aria-hidden="true">history_toggle_off</mat-icon>
           <span>Nenhuma coleta registrada ainda. Colete matérias para ver o histórico aqui.</span>
         </div>
       } @else {
@@ -316,7 +337,7 @@
               @if (isHistoricoExpandido(entry.logId + '')) {
                 <div class="hist-rejected-list">
                   <div class="rejected-header">
-                    <mat-icon>block</mat-icon>
+                    <mat-icon aria-hidden="true">block</mat-icon>
                     {{ entry.rejeitados }} lead(s) rejeitado(s) nesta sessão — use para ajustar seus critérios
                   </div>
                   @for (lead of entry.leadsRejeitados; track lead.uuid) {
@@ -338,79 +359,135 @@
         </div>
 
         <p class="historico-note">
-          <mat-icon>info_outline</mat-icon>
+          <mat-icon aria-hidden="true">info_outline</mat-icon>
           <strong>Encontradas:</strong> total de matérias lidas no diário.
           <strong>Salvas:</strong> passaram pelos seus filtros de palavras-chave.
           <strong>Repetidas:</strong> já estavam no sistema.
           <strong>Rejeitadas:</strong> salvas, mas descartadas manualmente pelo analista — use para afinar seus filtros.
         </p>
 
-        @if (historicoTotal() > historicoPageSize()) {
-          <mat-paginator
-            [length]="historicoTotal()"
-            [pageSize]="historicoPageSize()"
-            [pageIndex]="historicoPage()"
-            [pageSizeOptions]="[10, 20, 50]"
-            [showFirstLastButtons]="true"
-            (page)="onHistoricoPageChange($event)"
-            class="historico-paginator">
-          </mat-paginator>
-        }
+        <mat-paginator
+          [length]="historicoTotal()"
+          [pageSize]="historicoPageSize()"
+          [pageIndex]="historicoPage()"
+          [pageSizeOptions]="[5,10, 20, 50]"
+          [showFirstLastButtons]="true"
+          (page)="onHistoricoPageChange($event)"
+          class="historico-paginator">
+        </mat-paginator>
       }
 
     </div>
   }
 
   <!-- ── Status Tabs ───────────────────────────────────────────────── -->
-  <div class="status-bar">
+  <div class="status-bar" role="group" aria-label="Filtros por status">
     @for (tab of statusTabs; track tab.label; let i = $index) {
-      <button class="status-pill" [class.active]="selectedTabIdx() === i" (click)="onTabChange(i)">
+      <button class="status-pill" [class.active]="selectedTabIdx() === i"
+              [attr.aria-pressed]="selectedTabIdx() === i"
+              (click)="onTabChange(i)">
         {{ tab.label }}
-        <span class="pill-count">{{ countByStatus(tab.value) }}</span>
+        <span class="pill-count" aria-hidden="true">{{ countByStatus(tab.value) }}</span>
       </button>
     }
   </div>
 
+  <!-- ── Filtro por fonte (grade) ──────────────────────────────────── -->
+  <div class="fonte-filter-bar" role="group" aria-label="Filtro por fonte">
+    <button class="status-pill" [class.active]="gridFonte() === null" (click)="setGridFonte(null)">
+      Todas as fontes
+    </button>
+    @for (f of fontes; track f.key) {
+      <button class="status-pill" [class.active]="gridFonte() === f.key" (click)="setGridFonte(f.key)">
+        {{ f.label }}
+      </button>
+    }
+  </div>
+
+  <!-- ── Filtro por score (grade) ─────────────────────────────────── -->
+  <div class="fonte-filter-bar" role="group" aria-label="Filtro por score mínimo">
+    <button class="status-pill" [class.active]="scoreMin() === null" (click)="setScoreMin(null)">
+      Todos os scores
+    </button>
+    <button class="status-pill" [class.active]="scoreMin() === 40" (click)="setScoreMin(40)">
+      Morno (40+)
+    </button>
+    <button class="status-pill" [class.active]="scoreMin() === 70" (click)="setScoreMin(70)">
+      Quente (70+)
+    </button>
+  </div>
+
   <!-- ── Card Grid ─────────────────────────────────────────────────── -->
+
+  <!-- Estado: carregando -->
   @if (loading()) {
-    <div class="leads-grid">
-      @for (n of [1,2,3,4,5,6]; track n) {
-        <div class="lead-card skeleton">
-          <div class="sk sk-meta"></div>
-          <div class="sk sk-title"></div>
-          <div class="sk sk-title short"></div>
-          <div class="sk sk-org"></div>
-          <div class="sk sk-footer"></div>
+    <div class="leads-skeleton" aria-label="Carregando leads..." role="status">
+      @for (i of [1,2,3,4,5,6]; track i) {
+        <div class="lsk-card">
+          <div class="lsk-row">
+            <div class="skeleton lsk-badge"></div>
+            <div class="skeleton lsk-date"></div>
+          </div>
+          <div class="skeleton lsk-title"></div>
+          <div class="skeleton lsk-org"></div>
+          <div class="lsk-footer">
+            <div class="skeleton lsk-chip"></div>
+            <div class="skeleton lsk-score"></div>
+          </div>
         </div>
       }
     </div>
-  } @else if (apiError()) {
-    <div class="empty-state error">
-      <mat-icon>cloud_off</mat-icon>
-      <strong>Não foi possível carregar os leads</strong>
-      <span>Verifique se o backend está rodando e tente novamente.</span>
-      <button mat-stroked-button (click)="carregarLeads()">
-        <mat-icon>refresh</mat-icon> Tentar novamente
+  }
+
+  <!-- Estado: erro -->
+  @if (!loading() && apiError()) {
+    <div class="leads-error-state" role="alert">
+      <mat-icon aria-hidden="true">cloud_off</mat-icon>
+      <h2>Não foi possível carregar os leads</h2>
+      <p>Verifique a conexão com o servidor e tente novamente.</p>
+      <button mat-flat-button (click)="carregarLeads()">
+        <mat-icon aria-hidden="true">refresh</mat-icon> Tentar novamente
       </button>
     </div>
-  } @else if (filteredLeads().length === 0) {
-    <div class="empty-state">
-      <mat-icon>inbox</mat-icon>
-      <strong>Nenhum lead encontrado</strong>
-      <span>{{ selectedStatus() || selectedFontes().length ? 'Nenhum lead com esses filtros.' : 'Selecione uma fonte e colete matérias do diário oficial para começar.' }}</span>
+  }
+
+  <!-- Estado: vazio -->
+  @if (!loading() && !apiError() && allLeads().length === 0) {
+    <div class="leads-empty-state">
+      <mat-icon aria-hidden="true">inbox</mat-icon>
+      @if (selectedStatus()) {
+        <h2>Nenhum lead com este status</h2>
+        <p>Tente outro filtro ou aguarde novas coletas.</p>
+        <button mat-stroked-button (click)="setStatusFilter(null, 0)">
+          <mat-icon aria-hidden="true">filter_list_off</mat-icon> Limpar filtros
+        </button>
+      } @else {
+        <h2>Nenhum lead encontrado</h2>
+        <p>Dispare uma busca nas fontes DODF, DOU ou PNCP para começar.</p>
+      }
     </div>
-  } @else {
-    <div class="leads-grid">
-      @for (lead of filteredLeads(); track lead.uuid) {
-        <div class="lead-card status-border-{{ lead.status }}" (click)="verDetalhe(lead)">
+  }
+
+  <!-- Grade de cards -->
+  @if (!loading() && !apiError() && allLeads().length > 0) {
+    <div class="leads-grid" role="list" [@listStagger]="allLeads().length">
+      @for (lead of allLeads(); track lead.uuid) {
+        <div class="lead-card status-border-{{ lead.status }}" role="listitem" (click)="verDetalhe(lead)" [@fadeSlideIn]>
 
           <!-- Meta row -->
           <div class="lc-meta">
+            <span class="edital-link-dot" [class.linked]="lead.editalId"
+                  [matTooltip]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"
+                  [attr.aria-label]="lead.editalId ? 'Edital vinculado com sucesso' : 'Edital ainda não vinculado'"></span>
             <span class="lc-fonte fonte-{{ lead.fonte?.toLowerCase() }}">{{ lead.fonte }}</span>
             <span class="lc-tipo">{{ lead.tipo }}</span>
-            <span class="lc-status status-{{ lead.status }}">
-              <span class="status-dot"></span>{{ statusLabel(lead.status) }}
-            </span>
+            @if (!(lead.leadCategoriaPrincipal | leadCategoria).hidden) {
+              <span class="lc-categoria"
+                    [style.background]="(lead.leadCategoriaPrincipal | leadCategoria).color + '1A'"
+                    [style.color]="(lead.leadCategoriaPrincipal | leadCategoria).color">
+                {{ (lead.leadCategoriaPrincipal | leadCategoria).label }}
+              </span>
+            }
           </div>
 
           <!-- Title -->
@@ -422,30 +499,48 @@
             <span class="org-name">{{ lead.orgao }}</span>
           </div>
 
-          <!-- Date + observacao -->
+          <!-- Date + observacao + score donut -->
           <div class="lc-bottom">
             <span class="lc-date">
-              <mat-icon>calendar_today</mat-icon>
+              <mat-icon aria-hidden="true">calendar_today</mat-icon>
               {{ formatDate(lead.dataPublicacao) }}
             </span>
             @if (lead.observacao) {
               <span class="lc-obs">{{ lead.observacao }}</span>
+            }
+            @if (lead.leadScore != null) {
+              <svg class="score-donut" width="44" height="44" viewBox="0 0 44 44"
+                   [attr.aria-label]="'Score ' + lead.leadScore + ' — ' + (lead.leadScore | scoreBadge).label">
+                <circle cx="22" cy="22" r="16" fill="none"
+                        stroke="rgba(255,255,255,0.08)" stroke-width="3.5"/>
+                <circle cx="22" cy="22" r="16" fill="none"
+                  [attr.stroke]="(lead.leadScore | scoreBadge).color"
+                  stroke-width="3.5" stroke-linecap="round"
+                  [attr.stroke-dasharray]="(lead.leadScore / 100 * 100.53) + ' 100.53'"
+                  stroke-dashoffset="25.13"
+                  transform="rotate(-90 22 22)"/>
+                <text x="22" y="27" text-anchor="middle"
+                  [attr.fill]="(lead.leadScore | scoreBadge).color"
+                  font-size="11" font-weight="700" font-family="inherit">
+                  {{ lead.leadScore }}
+                </text>
+              </svg>
             }
           </div>
 
           <!-- Actions -->
           <div class="lc-actions" (click)="$event.stopPropagation()">
             <button class="act-btn" matTooltip="Ver detalhes" (click)="verDetalhe(lead)">
-              <mat-icon>open_in_new</mat-icon>
+              <mat-icon aria-hidden="true">open_in_new</mat-icon>
               Detalhes
             </button>
             @if (lead.status === 'QUALIFICADO') {
-              <span class="act-done"><mat-icon>check_circle</mat-icon> Qualificado</span>
+              <span class="act-done"><mat-icon aria-hidden="true">check_circle</mat-icon> Qualificado</span>
             }
             @if (lead.status !== 'DESCARTADO' && lead.status !== 'QUALIFICADO') {
-              <button class="act-btn act-discard" matTooltip="Descartar"
+              <button class="act-btn act-discard" matTooltip="Descartar" aria-label="Descartar lead"
                       (click)="atualizarStatus(lead, 'DESCARTADO', $event)">
-                <mat-icon>block</mat-icon>
+                <mat-icon aria-hidden="true">block</mat-icon>
               </button>
             }
           </div>
@@ -460,8 +555,7 @@
       [pageIndex]="currentPage()"
       [pageSizeOptions]="[12, 24, 48]"
       [showFirstLastButtons]="true"
-      (page)="onPageChange($event)"
-      [style.display]="totalElements() <= pageSize() ? 'none' : ''">
+      (page)="onPageChange($event)">
     </mat-paginator>
   }
 
