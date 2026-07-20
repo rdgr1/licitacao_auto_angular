@@ -6,7 +6,7 @@ export const routes: Routes = [
   // Public: Login
   {
     path: 'login',
-    data: { title: 'Entrar — LicitaFlow' },
+    title: 'Entrar — LicitaFlow',
     canActivate: [guestGuard],
     loadComponent: () =>
       import('./features/auth/login/login.component').then((m) => m.LoginComponent),
@@ -15,6 +15,7 @@ export const routes: Routes = [
   // Public: Forgot password
   {
     path: 'forgot-password',
+    title: 'Esqueci minha senha — LicitaFlow',
     canActivate: [guestGuard],
     loadComponent: () =>
       import('./features/auth/forgot-password/forgot-password.component').then(
@@ -25,6 +26,7 @@ export const routes: Routes = [
   // Public: Reset password
   {
     path: 'reset-password',
+    title: 'Redefinir senha — LicitaFlow',
     canActivate: [guestGuard],
     loadComponent: () =>
       import('./features/auth/reset-password/reset-password.component').then(
@@ -45,19 +47,19 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
-        data: { title: 'Dashboard — LicitaFlow' },
+        title: 'Dashboard — LicitaFlow',
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
       {
         path: 'pipeline',
-        data: { title: 'Pipeline — LicitaFlow' },
+        title: 'Pipeline — LicitaFlow',
         loadComponent: () =>
           import('./features/pipeline/pipeline.component').then((m) => m.PipelineComponent),
       },
       {
         path: 'editais',
-        data: { title: 'Editais — LicitaFlow' },
+        title: 'Editais — LicitaFlow',
         loadComponent: () =>
           import('./features/editais/editais-list/editais-list.component').then(
             (m) => m.EditaisListComponent,
@@ -65,7 +67,7 @@ export const routes: Routes = [
       },
       {
         path: 'editais/:id',
-        data: { title: 'Edital — LicitaFlow' },
+        title: 'Edital — LicitaFlow',
         loadComponent: () =>
           import('./features/editais/edital-details/edital-details.component').then(
             (m) => m.EditalDetailsComponent,
@@ -73,16 +75,18 @@ export const routes: Routes = [
       },
       {
         path: 'impugnacao',
+        title: 'Impugnação — LicitaFlow',
         loadComponent: () =>
           import('./features/impugnacao/impugnacao.component').then((m) => m.ImpugnacaoComponent),
       },
       {
         path: 'assistente',
+        title: 'Assistente IA — LicitaFlow',
         loadComponent: () => import('./features/chat/chat.component').then((m) => m.ChatComponent),
       },
       {
         path: 'configuracoes',
-        data: { title: 'Configurações — LicitaFlow' },
+        title: 'Configurações — LicitaFlow',
         loadComponent: () =>
           import('./features/configuracoes/configuracoes.component').then(
             (m) => m.ConfiguracoesComponent,
@@ -96,13 +100,14 @@ export const routes: Routes = [
       },
       {
         path: 'leads',
-        data: { title: 'Leads — LicitaFlow' },
+        title: 'Leads — LicitaFlow',
         loadComponent: () =>
           import('./features/leads/leads.component').then((m) => m.LeadsComponent),
       },
       // Cotação domain
       {
         path: 'cotacao/fornecedores',
+        title: 'Fornecedores — LicitaFlow',
         loadComponent: () =>
           import('./features/cotacao/fornecedores/fornecedores.component').then(
             (m) => m.FornecedoresComponent,
@@ -110,12 +115,14 @@ export const routes: Routes = [
       },
       {
         path: 'cotacao/itens',
+        title: 'Itens — LicitaFlow',
         loadComponent: () =>
           import('./features/cotacao/itens/itens.component').then((m) => m.ItensComponent),
       },
       // Placeholder routes
       {
         path: 'perfil',
+        title: 'Perfil — LicitaFlow',
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
