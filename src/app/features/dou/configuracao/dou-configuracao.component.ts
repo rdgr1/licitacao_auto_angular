@@ -111,6 +111,12 @@ type Tab = 'keywords' | 'tipos' | 'regioes';
           </button>
         }
       </div>
+      @if (tab() === 'keywords') {
+        <p class="tab-hint">
+          Estas são as suas keywords — cada usuário mantém a própria lista, sem afetar outros
+          usuários do sistema.
+        </p>
+      }
 
       <!-- ── Keywords ─────────────────────────────────────────────── -->
       @if (tab() === 'keywords') {
@@ -288,6 +294,11 @@ type Tab = 'keywords' | 'tipos' | 'regioes';
         align-items: center;
         gap: 0.375rem;
         flex-wrap: wrap;
+      }
+      .tab-hint {
+        margin: 0;
+        font-size: 12px;
+        color: var(--text-muted, #64748b);
       }
       .tab-pill {
         display: inline-flex;

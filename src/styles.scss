@@ -83,13 +83,13 @@ html {
   --color-error:             #EF4444;
   --color-info:              #3B82F6;
 
-  // Fontes de coleta
-  --fonte-dodf-bg:    rgba(99,102,241,0.10);
-  --fonte-dodf-color: #4F46E5;
-  --fonte-dou-bg:     rgba(59,130,246,0.10);
-  --fonte-dou-color:  #2563EB;
-  --fonte-pncp-bg:    rgba(245,158,11,0.10);
-  --fonte-pncp-color: #D97706;
+  // Fontes de coleta — alias pros --tint-* (já têm par dark completo, ver bloco [data-theme='dark'])
+  --fonte-dodf-bg:    var(--tint-indigo-bg);
+  --fonte-dodf-color: var(--tint-indigo-text);
+  --fonte-dou-bg:     var(--tint-blue-bg);
+  --fonte-dou-color:  var(--tint-blue-text);
+  --fonte-pncp-bg:    var(--tint-amber-bg);
+  --fonte-pncp-color: var(--tint-amber-text);
 
   // Lead status
   --lead-novo-bg:      rgba(59,130,246,0.10);

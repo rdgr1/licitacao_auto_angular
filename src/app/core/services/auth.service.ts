@@ -3,7 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, throwError, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthResponse, LoginRequest, MeProfile, RefreshResponse, UserInfo } from '../models/auth.model';
+import {
+  AuthResponse,
+  LoginRequest,
+  MeProfile,
+  RefreshResponse,
+  UserInfo,
+} from '../models/auth.model';
 
 const TOKEN_KEY = 'lf_token';
 const REFRESH_KEY = 'lf_refresh_token';
@@ -26,14 +32,18 @@ export class AuthService {
     if (!user) return '?';
     return user.name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .slice(0, 2)
       .join('')
       .toUpperCase();
   });
 
   private loadToken(): string | null {
-    try { return localStorage.getItem(TOKEN_KEY); } catch { return null; }
+    try {
+      return localStorage.getItem(TOKEN_KEY);
+    } catch {
+      return null;
+    }
   }
 
   private loadUser(): UserInfo | null {
@@ -42,7 +52,9 @@ export class AuthService {
       if (!raw) return null;
       const user = JSON.parse(raw) as UserInfo;
       return this.normalizeUser(user);
-    } catch { return null; }
+    } catch {
+      return null;
+    }
   }
 
   private normalizeUser(user: UserInfo): UserInfo {
@@ -55,32 +67,34 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<UserInfo> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, credentials).pipe(
-      tap(response => this.persistSession(response)),
-      switchMap(response => {
+      tap((response) => this.persistSession(response)),
+      switchMap((response) => {
         if (response.user.role === 'ADMIN') {
           return this.fetchAndMergeProfile();
         }
         return [response.user];
       }),
-      catchError(error => {
+      catchError((error) => {
         const message = error.error?.message || 'Credenciais inválidas. Verifique e-mail e senha.';
         return throwError(() => new Error(message));
-      })
+      }),
     );
   }
 
   refresh(): Observable<RefreshResponse> {
     const refreshToken = localStorage.getItem(REFRESH_KEY);
-    return this.http.post<RefreshResponse>(`${environment.apiUrl}/auth/refresh-token`, { refreshToken }).pipe(
-      tap(response => {
-        localStorage.setItem(TOKEN_KEY, response.token);
-        this._token.set(response.token);
-      }),
-      catchError(() => {
-        this.logout();
-        return throwError(() => new Error('Sessão expirada. Faça login novamente.'));
-      })
-    );
+    return this.http
+      .post<RefreshResponse>(`${environment.apiUrl}/auth/refresh-token`, { refreshToken })
+      .pipe(
+        tap((response) => {
+          localStorage.setItem(TOKEN_KEY, response.token);
+          this._token.set(response.token);
+        }),
+        catchError(() => {
+          this.logout();
+          return throwError(() => new Error('Sessão expirada. Faça login novamente.'));
+        }),
+      );
   }
 
   logout(): void {
@@ -105,9 +119,18 @@ export class AuthService {
     this._currentUser.set(user);
   }
 
+  // Atualiza o cache local (signal + localStorage) após um PUT bem-sucedido em /auth/{userId}/update-dados.
+  updateCachedProfile(partial: Partial<UserInfo>): void {
+    const current = this._currentUser();
+    if (!current) return;
+    const merged = this.normalizeUser({ ...current, ...partial });
+    localStorage.setItem(USER_KEY, JSON.stringify(merged));
+    this._currentUser.set(merged);
+  }
+
   private fetchAndMergeProfile(): Observable<UserInfo> {
     return this.http.get<MeProfile>(`${environment.apiUrl}/auth/me`).pipe(
-      tap(profile => {
+      tap((profile) => {
         const current = this._currentUser()!;
         const merged: UserInfo = this.normalizeUser({
           ...current,
@@ -117,7 +140,7 @@ export class AuthService {
         localStorage.setItem(USER_KEY, JSON.stringify(merged));
         this._currentUser.set(merged);
       }),
-      switchMap(() => [this._currentUser()!])
+      switchMap(() => [this._currentUser()!]),
     );
   }
 }

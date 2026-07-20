@@ -1,17 +1,29 @@
-export interface UserPreferences {
-  notifNovoLead: boolean;
-  notifBuscaConcluida: boolean;
-  notifScoreMinimo: number;
-  buscaFontesDefault: string[];
-  buscaModoDataDefault: 'single' | 'range';
-  buscaPeriodoDias: number;
+export type FonteBusca = 'DODF' | 'DOU' | 'PNCP';
+export type DataBusca = 'DIA_UNICO' | 'PERIODO';
+
+/** Espelha BuscaPrefsDto do backend. `fontesPadrao` ainda não é lido por nenhum fluxo de coleta. */
+export interface BuscaPrefsDto {
+  fontesPadrao: FonteBusca[];
+  dataBuscaPadrao: DataBusca;
+  periodoDias: number;
 }
 
-export const DEFAULT_PREFERENCES: UserPreferences = {
-  notifNovoLead: true,
-  notifBuscaConcluida: true,
-  notifScoreMinimo: 40,
-  buscaFontesDefault: ['DODF', 'DOU'],
-  buscaModoDataDefault: 'single',
-  buscaPeriodoDias: 7,
+/** Espelha NotificaoPrefsDto do backend. `buscaConcluida` ainda não condiciona nenhuma notificação. */
+export interface NotificaoPrefsDto {
+  novoLead: boolean;
+  buscaConcluida: boolean;
+  score: number;
+}
+
+// Defaults devolvidos pelo GET quando o usuário nunca salvou nada (não persistem sozinhos).
+export const DEFAULT_BUSCA_PREFS: BuscaPrefsDto = {
+  fontesPadrao: ['PNCP'],
+  dataBuscaPadrao: 'DIA_UNICO',
+  periodoDias: 7,
+};
+
+export const DEFAULT_NOTIFICACAO_PREFS: NotificaoPrefsDto = {
+  novoLead: false,
+  buscaConcluida: false,
+  score: 40,
 };

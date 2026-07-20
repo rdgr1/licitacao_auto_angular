@@ -32,9 +32,19 @@ export interface DouRegiao {
 
 // ── Coleta ────────────────────────────────────────────────────────────────────
 
+/**
+ * Formato varia por fonte: DODF usa `data`/`totalMaterias`; DOU usa `data`/`totalAtos`;
+ * PNCP usa `dataInicial`+`dataFinal`/`totalBrutos` (sem `data` único). `salvos` pode ser
+ * maior que `totalRelevantes` — desde 2026-07-16 o PNCP salva todos os editais do período,
+ * `totalRelevantes` só conta os classificados como INTERESSE (não é mais igual a `salvos`).
+ */
 export interface ColetaResultado {
-  data: string;
-  totalMaterias: number;
+  data?: string;
+  dataInicial?: string;
+  dataFinal?: string;
+  totalMaterias?: number;
+  totalAtos?: number;
+  totalBrutos?: number;
   totalRelevantes: number;
   salvos: number;
   duplicados: number;

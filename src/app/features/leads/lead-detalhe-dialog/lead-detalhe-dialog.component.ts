@@ -7,10 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
-import { interval, switchMap, first, of, take } from 'rxjs';
+import { interval, switchMap, first, of, take, tap } from 'rxjs';
 import { Lead, LeadStatus } from '../../../core/models/lead.model';
 import { EditalResponse } from '../../../core/models/edital.model';
 import { BuscaEdital } from '../../../core/models/busca-edital.model';
+import { ColetaPncpLeadStatus } from '../../../core/models/coleta-pncp-lead.model';
 import { LeadService } from '../../../core/services/lead.service';
 import { EditaisService } from '../../../core/services/editais.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -18,28 +19,15 @@ import { OperationTrackerService } from '../../../core/services/operation-tracke
 import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { JustificativaDialogComponent } from '../../../shared/components/justificativa-dialog/justificativa-dialog.component';
 
-const STATUS_META: Record<LeadStatus, { label: string; bg: string; color: string; dot: string }> = {
-  DESCARTADO: { label: 'Descartado', bg: '#F1F5F9', color: '#334155', dot: '#64748B' },
-  NOVO: { label: 'Novo Lead', bg: '#EFF6FF', color: '#1E40AF', dot: '#3B82F6' },
-  APROVACAO_PRESIDENCIA: {
-    label: 'Aprov. Presidência',
-    bg: '#F5F3FF',
-    color: '#5B21B6',
-    dot: '#8B5CF6',
-  },
-  ESTUDO_VIABILIDADE: {
-    label: 'Estudo e Viabilidade',
-    bg: '#FFFBEB',
-    color: '#92400E',
-    dot: '#F59E0B',
-  },
-  SEGUNDA_APROVACAO_PRESIDENCIA: {
-    label: '2ª Aprov. Presidência',
-    bg: '#F0FDF4',
-    color: '#166534',
-    dot: '#10B981',
-  },
-  QUALIFICADO: { label: 'Qualificado', bg: '#F0FDF4', color: '#166534', dot: '#10B981' },
+// `cls` mapeia pra uma classe CSS (.status-pill.status-X), não pra hex direto — permite que
+// o dark mode funcione via `var(--tint-*)`, diferente do `[style.x]` inline que tinha antes.
+const STATUS_META: Record<LeadStatus, { label: string; cls: string }> = {
+  DESCARTADO: { label: 'Descartado', cls: 'status-neutral' },
+  NOVO: { label: 'Novo Lead', cls: 'status-blue' },
+  APROVACAO_PRESIDENCIA: { label: 'Aprov. Presidência', cls: 'status-purple' },
+  ESTUDO_VIABILIDADE: { label: 'Estudo e Viabilidade', cls: 'status-amber' },
+  SEGUNDA_APROVACAO_PRESIDENCIA: { label: '2ª Aprov. Presidência', cls: 'status-green' },
+  QUALIFICADO: { label: 'Qualificado', cls: 'status-green' },
 };
 
 const ORG_COLORS = [
@@ -78,12 +66,8 @@ const ORG_COLORS = [
             <span class="tipo-badge">{{ data.tipo }}</span>
           </div>
           <div class="ld-header-right">
-            <span
-              class="status-pill"
-              [style.background]="statusMeta.bg"
-              [style.color]="statusMeta.color"
-            >
-              <span class="sdot" [style.background]="statusMeta.dot"></span>{{ statusMeta.label }}
+            <span class="status-pill" [ngClass]="statusMeta.cls">
+              <span class="sdot"></span>{{ statusMeta.label }}
             </span>
             <button class="close-btn" mat-dialog-close aria-label="Fechar">
               <mat-icon aria-hidden="true">close</mat-icon>
@@ -135,7 +119,29 @@ const ORG_COLORS = [
 
       <!-- Edital PNCP -->
       <div class="ld-edital-section">
-        <span class="edital-label"><mat-icon>description</mat-icon>Edital PNCP</span>
+        <div class="edital-header">
+          <span class="edital-label"><mat-icon>description</mat-icon>Edital PNCP</span>
+          <button
+            class="btn-atualizar-editais"
+            (click)="coletarPncpDoLead()"
+            [disabled]="operationTracker.isLoading('coletar-pncp-' + data.uuid)()"
+            matTooltip="Coleta manual do PNCP na janela de 30 dias deste lead — pode demorar"
+          >
+            @if (operationTracker.isLoading('coletar-pncp-' + data.uuid)()) {
+              <mat-spinner diameter="14" />
+              @if (coletaPncpProgress()?.fatiaAtual != null) {
+                Coletando {{ coletaPncpProgress()!.fatiaAtual }}/{{
+                  coletaPncpProgress()!.totalFatias
+                }}
+              } @else {
+                Iniciando...
+              }
+            } @else {
+              <mat-icon>sync</mat-icon>
+              Atualizar editais
+            }
+          </button>
+        </div>
 
         @if (operationTracker.isLoading('busca-edital-' + data.uuid)()) {
           <div class="edital-loading">
@@ -302,7 +308,7 @@ const ORG_COLORS = [
       /* Header */
       .ld-header {
         padding: 1.25rem 1.375rem 1rem;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid var(--border);
       }
       .ld-header-top {
         display: flex;
@@ -325,26 +331,26 @@ const ORG_COLORS = [
         text-transform: uppercase;
         letter-spacing: 0.07em;
         &.fonte-dodf {
-          background: #fffbeb;
-          color: #92400e;
-          border: 1px solid #fde68a;
+          background: var(--fonte-dodf-bg);
+          color: var(--fonte-dodf-color);
+          border: 1px solid var(--border);
         }
         &.fonte-pncp {
-          background: #f5f3ff;
-          color: #5b21b6;
-          border: 1px solid #ddd6fe;
+          background: var(--fonte-pncp-bg);
+          color: var(--fonte-pncp-color);
+          border: 1px solid var(--border);
         }
         &.fonte-dou {
-          background: #eff6ff;
-          color: #1e40af;
-          border: 1px solid #bfdbfe;
+          background: var(--fonte-dou-bg);
+          color: var(--fonte-dou-color);
+          border: 1px solid var(--border);
         }
       }
       .tipo-badge {
         font-size: 10px;
         color: var(--text-muted, #94a3b8);
         background: var(--content-bg, #f8fafc);
-        border: 1px solid #e8edf5;
+        border: 1px solid var(--border);
         border-radius: 4px;
         padding: 1px 7px;
         font-family: var(--font-secondary);
@@ -369,6 +375,41 @@ const ORG_COLORS = [
         height: 5px;
         border-radius: 50%;
         flex-shrink: 0;
+      }
+      .status-pill.status-blue {
+        background: var(--tint-blue-bg);
+        color: var(--tint-blue-text);
+      }
+      .status-pill.status-purple {
+        background: var(--tint-purple-bg);
+        color: var(--tint-purple-text);
+      }
+      .status-pill.status-amber {
+        background: var(--tint-amber-bg);
+        color: var(--tint-amber-text);
+      }
+      .status-pill.status-green {
+        background: var(--tint-green-bg);
+        color: var(--tint-green-text);
+      }
+      .status-pill.status-neutral {
+        background: var(--lead-desc-bg);
+        color: var(--lead-desc-color);
+      }
+      .status-blue .sdot {
+        background: var(--tint-blue-text);
+      }
+      .status-purple .sdot {
+        background: var(--tint-purple-icon);
+      }
+      .status-amber .sdot {
+        background: var(--tint-amber-text);
+      }
+      .status-green .sdot {
+        background: var(--tint-green-text-strong);
+      }
+      .status-neutral .sdot {
+        background: var(--lead-desc-color);
       }
       .close-btn {
         display: flex;
@@ -407,7 +448,7 @@ const ORG_COLORS = [
         display: flex;
         align-items: stretch;
         background: var(--content-bg, #f8fafc);
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid var(--border);
         flex-wrap: wrap;
       }
       .info-item {
@@ -418,7 +459,7 @@ const ORG_COLORS = [
       }
       .infobar-sep {
         width: 1px;
-        background: #e8edf5;
+        background: var(--border);
         flex-shrink: 0;
         margin: 0.5rem 0;
       }
@@ -467,7 +508,7 @@ const ORG_COLORS = [
           width: 4px;
         }
         &::-webkit-scrollbar-thumb {
-          background: #e2e8f0;
+          background: var(--border);
           border-radius: 4px;
         }
       }
@@ -483,11 +524,11 @@ const ORG_COLORS = [
         gap: 0.5rem;
         margin-top: 0.875rem;
         padding: 0.625rem 0.875rem;
-        background: #fffbeb;
-        border: 1px solid #fde68a;
+        background: var(--tint-amber-bg);
+        border: 1px solid var(--border);
         border-radius: 0.5rem;
         font-size: 12.5px;
-        color: #92400e;
+        color: var(--tint-amber-text);
         mat-icon {
           font-size: 16px;
           width: 16px;
@@ -499,11 +540,17 @@ const ORG_COLORS = [
 
       /* Edital section */
       .ld-edital-section {
-        border-top: 1px solid #f1f5f9;
+        border-top: 1px solid var(--border);
         padding: 0.875rem 1.375rem;
         display: flex;
         flex-direction: column;
         gap: 0.625rem;
+      }
+      .edital-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
       }
       .edital-label {
         display: flex;
@@ -518,7 +565,34 @@ const ORG_COLORS = [
           font-size: 14px;
           width: 14px;
           height: 14px;
-          color: #11bf7f;
+          color: var(--brand-primary);
+        }
+      }
+      .btn-atualizar-editais {
+        display: flex;
+        align-items: center;
+        gap: 0.3125rem;
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0.25rem 0.5rem;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-secondary, #475569);
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+          background: var(--content-bg);
+          border-color: var(--text-muted);
+        }
+        &:disabled {
+          opacity: 0.6;
+          cursor: default;
+        }
+        mat-icon {
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
         }
       }
       .edital-loading {
@@ -530,8 +604,8 @@ const ORG_COLORS = [
       }
       .edital-card {
         background: var(--content-bg, #f8fafc);
-        border: 1px solid #e2e8f0;
-        border-left: 3px solid #11bf7f;
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--brand-primary);
         border-radius: 0.625rem;
         padding: 0.875rem 1rem;
         display: flex;
@@ -565,7 +639,7 @@ const ORG_COLORS = [
           font-size: 12px;
         }
         &.money {
-          color: #059669;
+          color: var(--tint-green-text-strong);
         }
       }
       .edital-links {
@@ -591,14 +665,14 @@ const ORG_COLORS = [
           height: 14px;
         }
         &.primary {
-          background: #11bf7f;
+          background: var(--brand-primary);
           color: #fff;
           &:hover {
-            background: #0da66e;
+            background: var(--brand-primary-hover);
           }
         }
         &:not(.primary):hover {
-          background: #e2e8f0;
+          background: var(--border);
         }
       }
       .edital-empty {
@@ -607,7 +681,7 @@ const ORG_COLORS = [
         gap: 0.75rem;
         padding: 0.75rem 1rem;
         background: var(--content-bg, #f8fafc);
-        border: 1px dashed #cbd5e1;
+        border: 1px dashed var(--text-muted);
         border-radius: 0.625rem;
         font-size: 13px;
         color: var(--text-muted, #64748b);
@@ -630,7 +704,7 @@ const ORG_COLORS = [
           }
         }
         &.error mat-icon {
-          color: #fca5a5;
+          color: var(--tint-red-text);
         }
       }
       .btn-buscar {
@@ -639,9 +713,9 @@ const ORG_COLORS = [
         gap: 0.3125rem;
         padding: 0.375rem 0.875rem;
         border-radius: 0.5rem;
-        border: 1.5px solid #11bf7f;
-        background: rgba(17, 191, 127, 0.06);
-        color: #059669;
+        border: 1.5px solid var(--brand-primary);
+        background: var(--brand-primary-light);
+        color: var(--tint-green-text-strong);
         font-size: 12px;
         font-weight: 700;
         font-family: inherit;
@@ -654,7 +728,7 @@ const ORG_COLORS = [
           height: 15px;
         }
         &:hover {
-          background: #11bf7f;
+          background: var(--brand-primary);
           color: #fff;
         }
         &:disabled {
@@ -670,7 +744,7 @@ const ORG_COLORS = [
         justify-content: space-between;
         gap: 0.625rem;
         padding: 0.875rem 1.125rem;
-        border-top: 1px solid #f1f5f9;
+        border-top: 1px solid var(--border);
         background: var(--content-bg, #fafbfc);
       }
       .act-close {
@@ -705,47 +779,47 @@ const ORG_COLORS = [
           cursor: not-allowed;
         }
         &.act-next {
-          background: #eff6ff;
-          border-color: #bfdbfe;
-          color: #1e40af;
+          background: var(--tint-blue-bg);
+          border-color: var(--tint-blue-text);
+          color: var(--tint-blue-text);
           &:hover:not(:disabled) {
-            background: #dbeafe;
+            background: var(--content-bg);
           }
         }
         &.act-discard {
           background: transparent;
-          border-color: #e2e8f0;
+          border-color: var(--border);
           color: var(--text-muted, #94a3b8);
           padding: 0.4375rem 0.625rem;
           &:hover:not(:disabled) {
-            background: #fee2e2;
-            border-color: #fca5a5;
-            color: #ef4444;
+            background: var(--tint-red-bg);
+            border-color: var(--tint-red-text);
+            color: var(--status-erro);
           }
         }
         &.act-qualify {
-          background: #11bf7f;
-          border-color: #11bf7f;
+          background: var(--brand-primary);
+          border-color: var(--brand-primary);
           color: #fff;
           box-shadow: 0 2px 8px rgba(17, 191, 127, 0.25);
           &:hover:not(:disabled) {
-            background: #0da66e;
+            background: var(--brand-primary-hover);
           }
         }
         &.act-impugnar {
-          background: #fff1f2;
-          border-color: #fca5a5;
-          color: #991b1b;
+          background: var(--tint-red-bg);
+          border-color: var(--tint-red-text);
+          color: var(--tint-red-text-strong);
           &:hover {
-            background: #fee2e2;
+            background: var(--content-bg);
           }
         }
         &.act-cotacao {
-          background: #eff6ff;
-          border-color: #bfdbfe;
-          color: #1e40af;
+          background: var(--tint-blue-bg);
+          border-color: var(--tint-blue-text);
+          color: var(--tint-blue-text);
           &:hover {
-            background: #dbeafe;
+            background: var(--content-bg);
           }
         }
       }
@@ -768,7 +842,7 @@ const ORG_COLORS = [
         gap: 5px;
         font-size: 12.5px;
         font-weight: 600;
-        color: #11bf7f;
+        color: var(--brand-primary);
         mat-icon {
           font-size: 16px;
           width: 16px;
@@ -781,7 +855,7 @@ const ORG_COLORS = [
         gap: 5px;
         font-size: 12px;
         font-weight: 500;
-        color: #8b5cf6;
+        color: var(--tint-purple-icon);
         mat-icon {
           font-size: 16px;
           width: 16px;
@@ -802,6 +876,7 @@ export class LeadDetalheDialogComponent implements OnInit {
   salvando = false;
   edital = signal<EditalResponse | null>(null);
   editalError = signal<string | null>(null);
+  coletaPncpProgress = signal<ColetaPncpLeadStatus | null>(null);
 
   constructor(
     public dialogRef: MatDialogRef<LeadDetalheDialogComponent>,
@@ -850,6 +925,41 @@ export class LeadDetalheDialogComponent implements OnInit {
           this.editalError.set('Nenhum edital encontrado no PNCP para este lead.');
         } else {
           this.editalError.set(registro.mensagem || 'Erro ao buscar edital. Tente novamente.');
+        }
+      },
+    });
+  }
+
+  coletarPncpDoLead(): void {
+    const key = `coletar-pncp-${this.data.uuid}`;
+    this.coletaPncpProgress.set(null);
+
+    // Coleta em fatias de ~7 dias (até 5 fatias numa janela de 30 dias) — cada fatia pagina a
+    // API do PNCP com rate limit/retry, pode demorar mais que a busca de edital (item 13).
+    const MAX_POLLS = 90;
+
+    const inicia$ = this.leadService.coletarPncp(this.data.uuid).pipe(
+      tap((r) => this.coletaPncpProgress.set(r)),
+      switchMap((registro) =>
+        registro.status === 'EM_ANDAMENTO'
+          ? interval(2000).pipe(
+              take(MAX_POLLS),
+              switchMap(() => this.leadService.statusColetaPncp(this.data.uuid)),
+              tap((r) => this.coletaPncpProgress.set(r)),
+              first((r) => r.status !== 'EM_ANDAMENTO'),
+            )
+          : of(registro),
+      ),
+    );
+
+    this.operationTracker.run(key, inicia$, {
+      errorMessage: 'Erro ao coletar editais PNCP para este lead.',
+      onSuccess: (r) => {
+        this.coletaPncpProgress.set(null);
+        if (r.status === 'CONCLUIDA') {
+          this.toast.success(`${r.salvos} edital(is) salvos, ${r.totalRelevantes} de interesse.`);
+        } else {
+          this.toast.error(r.mensagem || 'Erro ao coletar editais PNCP para este lead.');
         }
       },
     });

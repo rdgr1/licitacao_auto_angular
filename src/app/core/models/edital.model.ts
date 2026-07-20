@@ -1,3 +1,5 @@
+export type EstadoClassificacaoEdital = 'INTERESSE' | 'REJEITADO';
+
 export enum EditalStatus {
   PROCESSADO = 'PROCESSADO',
   PENDENTE = 'PENDENTE',

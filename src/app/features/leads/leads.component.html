@@ -482,9 +482,7 @@
             <span class="lc-fonte fonte-{{ lead.fonte?.toLowerCase() }}">{{ lead.fonte }}</span>
             <span class="lc-tipo">{{ lead.tipo }}</span>
             @if (!(lead.leadCategoriaPrincipal | leadCategoria).hidden) {
-              <span class="lc-categoria"
-                    [style.background]="(lead.leadCategoriaPrincipal | leadCategoria).color + '1A'"
-                    [style.color]="(lead.leadCategoriaPrincipal | leadCategoria).color">
+              <span class="lc-categoria" [ngClass]="(lead.leadCategoriaPrincipal | leadCategoria).cls">
                 {{ (lead.leadCategoriaPrincipal | leadCategoria).label }}
               </span>
             }
@@ -512,7 +510,7 @@
               <svg class="score-donut" width="44" height="44" viewBox="0 0 44 44"
                    [attr.aria-label]="'Score ' + lead.leadScore + ' — ' + (lead.leadScore | scoreBadge).label">
                 <circle cx="22" cy="22" r="16" fill="none"
-                        stroke="rgba(255,255,255,0.08)" stroke-width="3.5"/>
+                        stroke="var(--border)" stroke-width="3.5"/>
                 <circle cx="22" cy="22" r="16" fill="none"
                   [attr.stroke]="(lead.leadScore | scoreBadge).color"
                   stroke-width="3.5" stroke-linecap="round"

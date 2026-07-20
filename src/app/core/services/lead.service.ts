@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { Lead, LeadStatus, AtualizarStatusRequest } from '../models/lead.model';
 import { Page } from '../models/edital.model';
 import { BuscaEdital } from '../models/busca-edital.model';
+import { ColetaPncpLeadStatus } from '../models/coleta-pncp-lead.model';
 
 const toPage = <T>(res: Page<T> | T[]): Page<T> =>
   Array.isArray(res)
@@ -57,5 +58,14 @@ export class LeadService {
 
   statusBuscaEdital(uuid: string): Observable<BuscaEdital> {
     return this.http.get<BuscaEdital>(`${this.base}/${uuid}/buscar-edital/status`);
+  }
+
+  // Dispara a coleta PNCP assíncrona na janela de 30 dias a partir da data do lead (202 Accepted — conclui via statusColetaPncp)
+  coletarPncp(uuid: string): Observable<ColetaPncpLeadStatus> {
+    return this.http.post<ColetaPncpLeadStatus>(`${this.base}/${uuid}/coletar-pncp`, {});
+  }
+
+  statusColetaPncp(uuid: string): Observable<ColetaPncpLeadStatus> {
+    return this.http.get<ColetaPncpLeadStatus>(`${this.base}/${uuid}/coletar-pncp/status`);
   }
 }

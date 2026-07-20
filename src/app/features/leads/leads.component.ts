@@ -387,7 +387,7 @@ export class LeadsComponent implements OnInit {
         const r = await this.coletaService.dispararColeta(fonte, datesParaFonte[i]).toPromise();
         if (r) {
           totalSalvos += r.salvos ?? 0;
-          totalMaterias += r.totalMaterias ?? 0;
+          totalMaterias += r.totalMaterias ?? r.totalAtos ?? r.totalBrutos ?? 0;
         }
       } catch {
         this.toast.error(`Erro ao coletar ${fonte} em ${this.formatDate(datesParaFonte[i])}`);

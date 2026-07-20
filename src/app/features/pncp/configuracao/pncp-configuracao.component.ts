@@ -10,11 +10,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { PncpService } from '../../../core/services/pncp.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { PncpModalidade, PncpUf } from '../../../core/models/pncp.model';
+import { PncpModalidade, PncpUf, PncpKeyword } from '../../../core/models/pncp.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { PncpItemDialogComponent } from './pncp-item-dialog.component';
+import { PncpKeywordDialogComponent } from './pncp-keyword-dialog.component';
 
-type Tab = 'modalidades' | 'ufs';
+type Tab = 'modalidades' | 'ufs' | 'keywords';
 
 @Component({
   selector: 'app-pncp-configuracao',
@@ -42,8 +43,19 @@ type Tab = 'modalidades' | 'ufs';
         <button class="tab-pill" [class.active]="tab() === 'ufs'" (click)="tab.set('ufs')">
           UFs monitoradas <span class="pill-count">{{ ufTotal() }}</span>
         </button>
+        <button
+          class="tab-pill"
+          [class.active]="tab() === 'keywords'"
+          (click)="tab.set('keywords')"
+        >
+          Keywords <span class="pill-count">{{ kwTotal() }}</span>
+        </button>
         <span class="tab-spacer"></span>
-        @if (tab() === 'modalidades') {
+        @if (tab() === 'keywords') {
+          <button mat-flat-button color="primary" (click)="openKw()">
+            <mat-icon>add</mat-icon>Nova Keyword
+          </button>
+        } @else if (tab() === 'modalidades') {
           <button
             class="bulk-btn desat"
             [disabled]="bulkLoading()"
@@ -85,6 +97,54 @@ type Tab = 'modalidades' | 'ufs';
           </button>
         }
       </div>
+      @if (tab() === 'keywords') {
+        <p class="tab-hint">
+          Estas são as suas keywords — cada usuário mantém a própria lista, sem afetar outros
+          usuários do sistema. Editar/excluir ainda não é possível aqui (pendência de backend, ver
+          docs/BACKEND_TODO.md).
+        </p>
+      }
+
+      <!-- Keywords -->
+      @if (tab() === 'keywords') {
+        <div class="table-wrap">
+          @if (loadingKw()) {
+            <div class="table-state"><span>Carregando...</span></div>
+          } @else if (keywords().length === 0) {
+            <div class="table-state">
+              <mat-icon>search_off</mat-icon><span>Nenhuma keyword cadastrada</span>
+            </div>
+          } @else {
+            <table mat-table [dataSource]="keywords()" class="cfg-table">
+              <ng-container matColumnDef="termo">
+                <th mat-header-cell *matHeaderCellDef>Termo</th>
+                <td mat-cell *matCellDef="let row">
+                  <code class="termo">{{ row.termo }}</code>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ativo">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="status-chip" [class.inativo]="!row.ativo">
+                    {{ row.ativo ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="kwCols"></tr>
+              <tr mat-row *matRowDef="let row; columns: kwCols" class="cfg-row"></tr>
+            </table>
+          }
+          <mat-paginator
+            [length]="kwTotal()"
+            [pageSize]="pageSize"
+            [pageIndex]="kwPage"
+            [pageSizeOptions]="[10, 20]"
+            [style.display]="kwTotal() > pageSize ? '' : 'none'"
+            (page)="onKwPage($event)"
+            showFirstLastButtons
+          />
+        </div>
+      }
 
       <!-- Modalidades -->
       @if (tab() === 'modalidades') {
@@ -212,6 +272,11 @@ type Tab = 'modalidades' | 'ufs';
         gap: 0.375rem;
         flex-wrap: wrap;
       }
+      .tab-hint {
+        margin: 0;
+        font-size: 12px;
+        color: var(--text-muted, #64748b);
+      }
       .tab-pill {
         display: inline-flex;
         align-items: center;
@@ -296,6 +361,19 @@ type Tab = 'modalidades' | 'ufs';
         color: var(--text-primary, #0f172a);
         font-weight: 500;
       }
+      .status-chip {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        color: #059669;
+        background: rgba(17, 191, 127, 0.1);
+        border-radius: 0.375rem;
+        padding: 0.125rem 0.5rem;
+        &.inativo {
+          color: var(--text-muted, #94a3b8);
+          background: var(--content-bg, #f1f5f9);
+        }
+      }
       .actions-cell {
         text-align: right;
         white-space: nowrap;
@@ -367,6 +445,7 @@ export class PncpConfiguracaoComponent implements OnInit {
   pageSize = 10;
   mdCols = ['codigo', 'nome', 'ativo', 'acoes'];
   ufCols = ['uf', 'ativo', 'acoes'];
+  kwCols = ['termo', 'ativo'];
 
   modalidades = signal<PncpModalidade[]>([]);
   mdTotal = signal(0);
@@ -376,10 +455,47 @@ export class PncpConfiguracaoComponent implements OnInit {
   ufTotal = signal(0);
   ufPage = 0;
   loadingUf = signal(true);
+  keywords = signal<PncpKeyword[]>([]);
+  kwTotal = signal(0);
+  kwPage = 0;
+  loadingKw = signal(true);
 
   ngOnInit(): void {
     this.loadMd();
     this.loadUf();
+    this.loadKw();
+  }
+
+  // ── Keywords ──────────────────────────────────────────────────────────────
+  loadKw(): void {
+    this.loadingKw.set(true);
+    this.svc.getKeywords(this.kwPage, this.pageSize).subscribe({
+      next: (p) => {
+        this.keywords.set(p.content);
+        this.kwTotal.set(p.totalElements);
+        this.loadingKw.set(false);
+      },
+      error: () => this.loadingKw.set(false),
+    });
+  }
+  onKwPage(e: PageEvent): void {
+    this.kwPage = e.pageIndex;
+    this.loadKw();
+  }
+  openKw(): void {
+    this.dialog
+      .open(PncpKeywordDialogComponent, { width: '420px' })
+      .afterClosed()
+      .subscribe((r) => {
+        if (!r) return;
+        this.svc.createKeyword(r).subscribe({
+          next: () => {
+            this.toast.success('Criada');
+            this.loadKw();
+          },
+          error: () => this.toast.error('Erro'),
+        });
+      });
   }
 
   // ── Modalidades ───────────────────────────────────────────────────────────
