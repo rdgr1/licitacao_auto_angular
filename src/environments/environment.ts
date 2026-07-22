@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8083/licitaflow/api',
+  apiUrl: 'http://localhost:8083/api',
   apiTimeout: 30000,
   enableDebugLogs: true
 };

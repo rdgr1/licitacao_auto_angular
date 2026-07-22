@@ -15,7 +15,6 @@ import { BackgroundLayerComponent } from '../../../shared/components/background-
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    RouterLink,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -448,8 +447,8 @@ import { BackgroundLayerComponent } from '../../../shared/components/background-
       display: flex;
       flex-direction: column;
       gap: 4px;
-
-      .full-width { width: 100%; }
+      
+      .full-width { width: 100%; margin-bottom: 0.7rem; }
 
       /* tighten up Material outline fields */
       ::ng-deep .mat-mdc-form-field {

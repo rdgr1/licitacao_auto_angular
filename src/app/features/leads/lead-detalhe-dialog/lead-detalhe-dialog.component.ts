@@ -6,16 +6,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router } from '@angular/router';
-import { interval, switchMap, first, of, take, tap } from 'rxjs';
+import { interval, switchMap, first, of, take } from 'rxjs';
 import { Lead, LeadStatus } from '../../../core/models/lead.model';
 import { EditalResponse } from '../../../core/models/edital.model';
 import { BuscaEdital } from '../../../core/models/busca-edital.model';
 import { ColetaPncpLeadStatus } from '../../../core/models/coleta-pncp-lead.model';
 import { LeadService } from '../../../core/services/lead.service';
 import { EditaisService } from '../../../core/services/editais.service';
-import { ToastService } from '../../../core/services/toast.service';
 import { OperationTrackerService } from '../../../core/services/operation-tracker.service';
+import { ColetaPncpLeadService } from '../../../core/services/coleta-pncp-lead.service';
 import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { JustificativaDialogComponent } from '../../../shared/components/justificativa-dialog/justificativa-dialog.component';
 
@@ -53,6 +54,7 @@ const ORG_COLORS = [
     MatIconModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     CurrencyBrPipe,
     JustificativaDialogComponent,
   ],
@@ -124,24 +126,28 @@ const ORG_COLORS = [
           <button
             class="btn-atualizar-editais"
             (click)="coletarPncpDoLead()"
-            [disabled]="operationTracker.isLoading('coletar-pncp-' + data.uuid)()"
+            [disabled]="pncpColeta.isLoading(data.uuid)()"
             matTooltip="Coleta manual do PNCP na janela de 30 dias deste lead — pode demorar"
           >
-            @if (operationTracker.isLoading('coletar-pncp-' + data.uuid)()) {
+            @if (pncpColeta.isLoading(data.uuid)()) {
               <mat-spinner diameter="14" />
-              @if (coletaPncpProgress()?.fatiaAtual != null) {
-                Coletando {{ coletaPncpProgress()!.fatiaAtual }}/{{
-                  coletaPncpProgress()!.totalFatias
-                }}
-              } @else {
-                Iniciando...
-              }
+              Atualizando...
             } @else {
               <mat-icon>sync</mat-icon>
               Atualizar editais
             }
           </button>
         </div>
+
+        @if (pncpColeta.isLoading(data.uuid)()) {
+          <div class="pncp-progress">
+            <span class="pncp-progress-label">{{ pncpProgressLabel() }}</span>
+            <mat-progress-bar
+              [mode]="pncpProgress()?.totalFatias ? 'determinate' : 'indeterminate'"
+              [value]="pncpProgressPercent()"
+            />
+          </div>
+        }
 
         @if (operationTracker.isLoading('busca-edital-' + data.uuid)()) {
           <div class="edital-loading">
@@ -602,6 +608,24 @@ const ORG_COLORS = [
         font-size: 13px;
         color: var(--text-muted, #64748b);
       }
+      .pncp-progress {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+        padding: 0.625rem 0.75rem;
+        background: var(--content-bg, #f8fafc);
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+      }
+      .pncp-progress-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-secondary, #475569);
+      }
+      .pncp-progress mat-progress-bar {
+        border-radius: 4px;
+        height: 5px;
+      }
       .edital-card {
         background: var(--content-bg, #f8fafc);
         border: 1px solid var(--border);
@@ -868,15 +892,14 @@ const ORG_COLORS = [
 export class LeadDetalheDialogComponent implements OnInit {
   private leadService = inject(LeadService);
   private editaisService = inject(EditaisService);
-  private toast = inject(ToastService);
   private dialog = inject(MatDialog);
   private router = inject(Router);
   readonly operationTracker = inject(OperationTrackerService);
+  readonly pncpColeta = inject(ColetaPncpLeadService);
 
   salvando = false;
   edital = signal<EditalResponse | null>(null);
   editalError = signal<string | null>(null);
-  coletaPncpProgress = signal<ColetaPncpLeadStatus | null>(null);
 
   constructor(
     public dialogRef: MatDialogRef<LeadDetalheDialogComponent>,
@@ -931,38 +954,25 @@ export class LeadDetalheDialogComponent implements OnInit {
   }
 
   coletarPncpDoLead(): void {
-    const key = `coletar-pncp-${this.data.uuid}`;
-    this.coletaPncpProgress.set(null);
+    this.pncpColeta.iniciar(this.data.uuid);
+  }
 
-    // Coleta em fatias de ~7 dias (até 5 fatias numa janela de 30 dias) — cada fatia pagina a
-    // API do PNCP com rate limit/retry, pode demorar mais que a busca de edital (item 13).
-    const MAX_POLLS = 90;
+  pncpProgress(): ColetaPncpLeadStatus | null {
+    return this.pncpColeta.progress(this.data.uuid)();
+  }
 
-    const inicia$ = this.leadService.coletarPncp(this.data.uuid).pipe(
-      tap((r) => this.coletaPncpProgress.set(r)),
-      switchMap((registro) =>
-        registro.status === 'EM_ANDAMENTO'
-          ? interval(2000).pipe(
-              take(MAX_POLLS),
-              switchMap(() => this.leadService.statusColetaPncp(this.data.uuid)),
-              tap((r) => this.coletaPncpProgress.set(r)),
-              first((r) => r.status !== 'EM_ANDAMENTO'),
-            )
-          : of(registro),
-      ),
-    );
+  pncpProgressLabel(): string {
+    const p = this.pncpProgress();
+    if (p?.fatiaAtual != null && p.totalFatias != null) {
+      return `Buscando editais no PNCP — etapa ${p.fatiaAtual} de ${p.totalFatias}`;
+    }
+    return 'Iniciando busca no PNCP...';
+  }
 
-    this.operationTracker.run(key, inicia$, {
-      errorMessage: 'Erro ao coletar editais PNCP para este lead.',
-      onSuccess: (r) => {
-        this.coletaPncpProgress.set(null);
-        if (r.status === 'CONCLUIDA') {
-          this.toast.success(`${r.salvos} edital(is) salvos, ${r.totalRelevantes} de interesse.`);
-        } else {
-          this.toast.error(r.mensagem || 'Erro ao coletar editais PNCP para este lead.');
-        }
-      },
-    });
+  pncpProgressPercent(): number {
+    const p = this.pncpProgress();
+    if (!p?.fatiaAtual || !p.totalFatias) return 0;
+    return Math.round((p.fatiaAtual / p.totalFatias) * 100);
   }
 
   moverPara(status: LeadStatus): void {
